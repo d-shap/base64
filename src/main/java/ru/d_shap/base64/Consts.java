@@ -231,6 +231,60 @@ final class Consts {
         FROM_BASE64['/'] = 63;
     }
 
+    static final int[] FROM_BASE64_FIRST_BYTE_POSITION_1;
+
+    static {
+        FROM_BASE64_FIRST_BYTE_POSITION_1 = new int[FROM_BASE64.length];
+        for (int i = 0; i < FROM_BASE64_FIRST_BYTE_POSITION_1.length; i++) {
+            FROM_BASE64_FIRST_BYTE_POSITION_1[i] = Consts.FROM_BASE64[i] << 2;
+        }
+    }
+
+    static final int[] FROM_BASE64_FIRST_BYTE_POSITION_2;
+
+    static {
+        FROM_BASE64_FIRST_BYTE_POSITION_2 = new int[FROM_BASE64.length];
+        for (int i = 0; i < FROM_BASE64_FIRST_BYTE_POSITION_2.length; i++) {
+            FROM_BASE64_FIRST_BYTE_POSITION_2[i] = (Consts.FROM_BASE64[i] & 0x30) >> 4;
+        }
+    }
+
+    static final int[] FROM_BASE64_SECOND_BYTE_POSITION_1;
+
+    static {
+        FROM_BASE64_SECOND_BYTE_POSITION_1 = new int[FROM_BASE64.length];
+        for (int i = 0; i < FROM_BASE64_SECOND_BYTE_POSITION_1.length; i++) {
+            FROM_BASE64_SECOND_BYTE_POSITION_1[i] = (Consts.FROM_BASE64[i] & 0x0F) << 4;
+        }
+    }
+
+    static final int[] FROM_BASE64_SECOND_BYTE_POSITION_2;
+
+    static {
+        FROM_BASE64_SECOND_BYTE_POSITION_2 = new int[FROM_BASE64.length];
+        for (int i = 0; i < FROM_BASE64_SECOND_BYTE_POSITION_2.length; i++) {
+            FROM_BASE64_SECOND_BYTE_POSITION_2[i] = (Consts.FROM_BASE64[i] & 0x3C) >> 2;
+        }
+    }
+
+    static final int[] FROM_BASE64_THIRD_BYTE_POSITION_1;
+
+    static {
+        FROM_BASE64_THIRD_BYTE_POSITION_1 = new int[FROM_BASE64.length];
+        for (int i = 0; i < FROM_BASE64_THIRD_BYTE_POSITION_1.length; i++) {
+            FROM_BASE64_THIRD_BYTE_POSITION_1[i] = (Consts.FROM_BASE64[i] & 0x03) << 6;
+        }
+    }
+
+    static final int[] FROM_BASE64_THIRD_BYTE_POSITION_2;
+
+    static {
+        FROM_BASE64_THIRD_BYTE_POSITION_2 = new int[FROM_BASE64.length];
+        for (int i = 0; i < FROM_BASE64_THIRD_BYTE_POSITION_2.length; i++) {
+            FROM_BASE64_THIRD_BYTE_POSITION_2[i] = Consts.FROM_BASE64[i];
+        }
+    }
+
     static final int PAD = '=';
 
     private Consts() {
