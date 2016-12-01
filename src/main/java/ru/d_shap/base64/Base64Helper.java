@@ -108,7 +108,18 @@ public final class Base64Helper {
 
     public static byte[] toBytes(final String base64) {
         int length = base64.length() / 4;
-        byte[] result = new byte[length * 3];
+        int lengthM1 = length - 1;
+        int mod;
+        if (base64.charAt(lengthM1) == Consts.PAD) {
+            if (base64.charAt(lengthM1 - 1) == Consts.PAD) {
+                mod = 2;
+            } else {
+                mod = 1;
+            }
+        } else {
+            mod = 0;
+        }
+        byte[] result = new byte[length * 3 - mod];
 
         int index = 0;
         int resultIndex = 0;
@@ -117,7 +128,7 @@ public final class Base64Helper {
         int symbol3;
         int symbol4;
 
-        for (int i = 0; i < length; i++) {
+        for (int i = 0; i < lengthM1; i++) {
             symbol1 = base64.charAt(index);
             index++;
             symbol2 = base64.charAt(index);
@@ -135,25 +146,42 @@ public final class Base64Helper {
             resultIndex++;
         }
 
+        symbol1 = base64.charAt(index);
+        index++;
+        symbol2 = base64.charAt(index);
+        index++;
+        symbol3 = base64.charAt(index);
+        index++;
+        symbol4 = base64.charAt(index);
+        if (symbol4 == Consts.PAD) {
+            if (symbol3 == Consts.PAD) {
+                result[resultIndex] = (byte) getFirstOriginalByte(symbol1, symbol2);
+            } else {
+                result[resultIndex] = (byte) getFirstOriginalByte(symbol1, symbol2);
+                resultIndex++;
+                result[resultIndex] = (byte) getSecondOriginalByte(symbol2, symbol3);
+            }
+        } else {
+            result[resultIndex] = (byte) getFirstOriginalByte(symbol1, symbol2);
+            resultIndex++;
+            result[resultIndex] = (byte) getSecondOriginalByte(symbol2, symbol3);
+            resultIndex++;
+            result[resultIndex] = (byte) getThirdOriginalByte(symbol3, symbol4);
+        }
+
         return result;
     }
 
     static int getFirstOriginalByte(final int byte1, final int byte2) {
-        int value1 = Consts.FROM_BASE64[byte1];
-        int value2 = Consts.FROM_BASE64[byte2];
-        return (value1 << 2) + ((value2 & 0x30) >> 4);
+        return Consts.FROM_BASE64_FIRST_BYTE_POSITION_1[byte1] + Consts.FROM_BASE64_FIRST_BYTE_POSITION_2[byte2];
     }
 
     static int getSecondOriginalByte(final int byte2, final int byte3) {
-        int value2 = Consts.FROM_BASE64[byte2];
-        int value3 = Consts.FROM_BASE64[byte3];
-        return ((value2 & 0x0F) << 4) + ((value3 & 0x3C) >> 2);
+        return Consts.FROM_BASE64_SECOND_BYTE_POSITION_1[byte2] + Consts.FROM_BASE64_SECOND_BYTE_POSITION_2[byte3];
     }
 
     static int getThirdOriginalByte(final int byte3, final int byte4) {
-        int value3 = Consts.FROM_BASE64[byte3];
-        int value4 = Consts.FROM_BASE64[byte4];
-        return ((value3 & 0x03) << 6) + value4;
+        return Consts.FROM_BASE64_THIRD_BYTE_POSITION_1[byte3] + Consts.FROM_BASE64_THIRD_BYTE_POSITION_2[byte4];
     }
 
 }
