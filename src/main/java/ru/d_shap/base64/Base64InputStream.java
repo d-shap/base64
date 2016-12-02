@@ -1,0 +1,236 @@
+///////////////////////////////////////////////////////////////////////////////////////////////////
+// Base64 library converts bytes to base64 representation and vice versa.
+// Copyright (C) 2016 Dmitry Shapovalov.
+//
+// This file is part of Base64 library.
+//
+// Base64 library is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Base64 library is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU Lesser General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public License
+// along with this program. If not, see <http://www.gnu.org/licenses/>.
+///////////////////////////////////////////////////////////////////////////////////////////////////
+package ru.d_shap.base64;
+
+import java.io.IOException;
+import java.io.InputStream;
+
+/**
+ * Input stream to read base64 representation of bytes.
+ *
+ * @author Dmitry Shapovalov
+ */
+public final class Base64InputStream extends InputStream {
+
+    private final InputStream _inputStream;
+
+    private final IntegerHolder _resultHolder;
+
+    private final IntegerHolder _lastReadValueHolder;
+
+    private AbstractState _currentState;
+
+    /**
+     * Create new object.
+     *
+     * @param inputStream input stream to read bytes.
+     */
+    public Base64InputStream(final InputStream inputStream) {
+        super();
+        _inputStream = inputStream;
+        _resultHolder = new IntegerHolder();
+        _lastReadValueHolder = new IntegerHolder();
+        _currentState = State1.INSTANCE;
+    }
+
+    @Override
+    public int read() throws IOException {
+        if (_currentState == null) {
+            return -1;
+        } else {
+            _currentState = _currentState.read(_inputStream, _resultHolder, _lastReadValueHolder);
+            return _resultHolder.getValue();
+        }
+    }
+
+    @Override
+    public void close() throws IOException {
+        _inputStream.close();
+    }
+
+    /**
+     * Class for mutable integer.
+     *
+     * @author Dmitry Shapovalov
+     */
+    private static final class IntegerHolder {
+
+        private int _value;
+
+        IntegerHolder() {
+            super();
+            _value = 0;
+        }
+
+        int getValue() {
+            return _value;
+        }
+
+        void setValue(final int value) {
+            _value = value;
+        }
+
+    }
+
+    /**
+     * Base class for object state.
+     *
+     * @author Dmitry Shapovalov
+     */
+    private abstract static class AbstractState {
+
+        AbstractState() {
+            super();
+        }
+
+        abstract AbstractState read(InputStream inputStream, IntegerHolder resultHolder, IntegerHolder lastReadValueHolder) throws IOException;
+
+    }
+
+    /**
+     * State to process the first byte.
+     *
+     * @author Dmitry Shapovalov
+     */
+    private static final class State1 extends AbstractState {
+
+        static final AbstractState INSTANCE = new State1();
+
+        private State1() {
+            super();
+        }
+
+        @Override
+        AbstractState read(final InputStream inputStream, final IntegerHolder resultHolder, final IntegerHolder lastReadValueHolder) throws IOException {
+            int symbol1 = inputStream.read();
+            if (symbol1 < 0) {
+                resultHolder.setValue(-1);
+                return null;
+            }
+
+            int symbol2 = inputStream.read();
+            if (symbol2 < 0) {
+                throw new IOException(ExceptionMessageHelper.createEndOfStreamMessage());
+            }
+
+            int byteRead = Base64Helper.getFirstBase64Byte(symbol1, symbol2);
+            if (byteRead < 0) {
+                if (Base64Helper.isBase64SymbolValid(symbol1)) {
+                    throw new IOException(ExceptionMessageHelper.createWrongBase64Symbol(symbol2));
+                } else {
+                    throw new IOException(ExceptionMessageHelper.createWrongBase64Symbol(symbol1));
+                }
+            }
+
+            resultHolder.setValue(byteRead);
+            lastReadValueHolder.setValue(symbol2);
+            return State2.INSTANCE;
+        }
+
+    }
+
+    /**
+     * State to process the second byte.
+     *
+     * @author Dmitry Shapovalov
+     */
+    private static final class State2 extends AbstractState {
+
+        static final AbstractState INSTANCE = new State2();
+
+        private State2() {
+            super();
+        }
+
+        @Override
+        AbstractState read(final InputStream inputStream, final IntegerHolder resultHolder, final IntegerHolder lastReadValueHolder) throws IOException {
+            int symbol3 = inputStream.read();
+            if (symbol3 < 0) {
+                throw new IOException(ExceptionMessageHelper.createEndOfStreamMessage());
+            }
+
+            int byteRead;
+            if (symbol3 == Consts.PAD) {
+                byteRead = Base64Helper.getSecondBase64Byte(lastReadValueHolder.getValue(), 0);
+            } else {
+                byteRead = Base64Helper.getSecondBase64Byte(lastReadValueHolder.getValue(), symbol3);
+            }
+            if (byteRead < 0) {
+                if (Base64Helper.isBase64SymbolValid(symbol3)) {
+                    throw new IOException(ExceptionMessageHelper.createWrongBase64Symbol(lastReadValueHolder.getValue()));
+                } else {
+                    throw new IOException(ExceptionMessageHelper.createWrongBase64Symbol(symbol3));
+                }
+            }
+
+            resultHolder.setValue(byteRead);
+            lastReadValueHolder.setValue(symbol3);
+            return State3.INSTANCE;
+        }
+
+    }
+
+    /**
+     * State to process the third byte.
+     *
+     * @author Dmitry Shapovalov
+     */
+    private static final class State3 extends AbstractState {
+
+        static final AbstractState INSTANCE = new State3();
+
+        private State3() {
+            super();
+        }
+
+        @Override
+        AbstractState read(final InputStream inputStream, final IntegerHolder resultHolder, final IntegerHolder lastReadValueHolder) throws IOException {
+            int symbol4 = inputStream.read();
+            if (symbol4 < 0) {
+                throw new IOException(ExceptionMessageHelper.createEndOfStreamMessage());
+            }
+
+            int byteRead;
+            if (symbol4 == Consts.PAD) {
+                if (lastReadValueHolder.getValue() == Consts.PAD) {
+                    resultHolder.setValue(-1);
+                    return null;
+                } else {
+                    byteRead = Base64Helper.getThirdBase64Byte(lastReadValueHolder.getValue(), 0);
+                }
+            } else {
+                byteRead = Base64Helper.getThirdBase64Byte(lastReadValueHolder.getValue(), symbol4);
+            }
+            if (byteRead < 0) {
+                if (Base64Helper.isBase64SymbolValid(symbol4)) {
+                    throw new IOException(ExceptionMessageHelper.createWrongBase64Symbol(lastReadValueHolder.getValue()));
+                } else {
+                    throw new IOException(ExceptionMessageHelper.createWrongBase64Symbol(symbol4));
+                }
+            }
+
+            resultHolder.setValue(byteRead);
+            lastReadValueHolder.setValue(symbol4);
+            return State1.INSTANCE;
+        }
+
+    }
+
+}
