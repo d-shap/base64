@@ -37,151 +37,281 @@ public final class Base64Helper {
      * @return base64 string.
      */
     public static String toBase64(final byte[] bytes) {
-        int length = bytes.length / 3 + 1;
-        int lengthM1 = length - 1;
-        int mod = bytes.length % 3;
+        if (bytes == null) {
+            return "";
+        }
 
-        int resultLength = length * 4;
-        StringBuilder buffer = new StringBuilder(resultLength);
+        int bytesLength = bytes.length / 3 + 1;
+        int bytesLengthM1 = bytesLength - 1;
+        int bytesMod = bytes.length % 3;
 
-        int index = 0;
+        int resultLength;
+        if (bytesMod == 0) {
+            resultLength = bytesLengthM1 * 4;
+        } else {
+            resultLength = bytesLength * 4;
+        }
+        StringBuilder result = new StringBuilder(resultLength);
+
+        int bytesIndex = 0;
         int byte1;
         int byte2;
         int byte3;
-        for (int i = 0; i < lengthM1; i++) {
-            byte1 = bytes[index];
-            index++;
-            byte2 = bytes[index];
-            index++;
-            byte3 = bytes[index];
-            index++;
+        for (int i = 0; i < bytesLengthM1; i++) {
+            byte1 = bytes[bytesIndex] & 0xFF;
+            bytesIndex++;
+            byte2 = bytes[bytesIndex] & 0xFF;
+            bytesIndex++;
+            byte3 = bytes[bytesIndex] & 0xFF;
+            bytesIndex++;
 
-            buffer.append((char) getFirstBase64Byte(byte1));
-            buffer.append((char) getSecondBase64Byte(byte1, byte2));
-            buffer.append((char) getThirdBase64Byte(byte2, byte3));
-            buffer.append((char) getFourthBase64Byte(byte3));
+            result.append((char) getFirstBase64Symbol(byte1));
+            result.append((char) getSecondBase64Symbol(byte1, byte2));
+            result.append((char) getThirdBase64Symbol(byte2, byte3));
+            result.append((char) getFourthBase64Symbol(byte3));
         }
 
-        switch (mod) {
+        switch (bytesMod) {
             case 1:
-                byte1 = bytes[index];
-                buffer.append((char) getFirstBase64Byte(byte1));
-                buffer.append((char) getSecondBase64Byte(byte1, 0));
-                buffer.append((char) Consts.PAD);
-                buffer.append((char) Consts.PAD);
+                byte1 = bytes[bytesIndex] & 0xFF;
+
+                result.append((char) getFirstBase64Symbol(byte1));
+                result.append((char) getSecondBase64Symbol(byte1, 0));
+                result.append((char) Consts.PAD);
+                result.append((char) Consts.PAD);
                 break;
             case 2:
-                byte1 = bytes[index];
-                index++;
-                byte2 = bytes[index];
-                buffer.append((char) getFirstBase64Byte(byte1));
-                buffer.append((char) getSecondBase64Byte(byte1, byte2));
-                buffer.append((char) getThirdBase64Byte(byte2, 0));
-                buffer.append((char) Consts.PAD);
+                byte1 = bytes[bytesIndex] & 0xFF;
+                byte2 = bytes[bytesIndex + 1] & 0xFF;
+
+                result.append((char) getFirstBase64Symbol(byte1));
+                result.append((char) getSecondBase64Symbol(byte1, byte2));
+                result.append((char) getThirdBase64Symbol(byte2, 0));
+                result.append((char) Consts.PAD);
                 break;
             default:
                 break;
         }
 
-        return buffer.toString();
+        return result.toString();
     }
 
-    static int getFirstBase64Byte(final int byte1) {
-        int idx = Consts.TO_BASE64_FIRST_BYTE_POSITION[byte1];
+    static int getFirstBase64Symbol(final int byte1) {
+        int idx = Consts.TO_BASE64_FIRST_SYMBOL_INDEX[byte1];
         return Consts.TO_BASE64[idx];
     }
 
-    static int getSecondBase64Byte(final int byte1, final int byte2) {
-        int idx = Consts.TO_BASE64_SECOND_BYTE_POSITION_1[byte1] + Consts.TO_BASE64_SECOND_BYTE_POSITION_2[byte2];
+    static int getSecondBase64Symbol(final int byte1, final int byte2) {
+        int idx = Consts.TO_BASE64_SECOND_SYMBOL_INDEX_1[byte1] + Consts.TO_BASE64_SECOND_SYMBOL_INDEX_2[byte2];
         return Consts.TO_BASE64[idx];
     }
 
-    static int getThirdBase64Byte(final int byte2, final int byte3) {
-        int idx = Consts.TO_BASE64_THIRD_BYTE_POSITION_1[byte2] + Consts.TO_BASE64_THIRD_BYTE_POSITION_2[byte3];
+    static int getThirdBase64Symbol(final int byte2, final int byte3) {
+        int idx = Consts.TO_BASE64_THIRD_SYMBOL_INDEX_1[byte2] + Consts.TO_BASE64_THIRD_SYMBOL_INDEX_2[byte3];
         return Consts.TO_BASE64[idx];
     }
 
-    static int getFourthBase64Byte(final int byte3) {
-        int idx = Consts.TO_BASE64_FOURTH_BYTE_POSITION[byte3];
+    static int getFourthBase64Symbol(final int byte3) {
+        int idx = Consts.TO_BASE64_FOURTH_SYMBOL_INDEX[byte3];
         return Consts.TO_BASE64[idx];
     }
 
+    /**
+     * Convert base64 string to byte array.
+     *
+     * @param base64 base64 string.
+     * @param result byte array to write result.
+     * @return number of bytes affected in byte array.
+     */
+    public static int toBytes(final String base64, final byte[] result) {
+        if (base64 == null) {
+            return 0;
+        }
+        if ("".equals(base64)) {
+            return 0;
+        }
+
+        int base64Length = base64.length();
+        if (base64Length % 4 != 0) {
+            throw new Base64RuntimeException(ExceptionMessageHelper.createWrongBase64StringSizeMessage(base64Length));
+        }
+        int emptyBytesCount = getEmptyBytesCount(base64);
+        int resultLength = base64Length * 3 / 4 - emptyBytesCount;
+        if (result.length < resultLength) {
+            throw new Base64RuntimeException(ExceptionMessageHelper.createWrongResultArrayMessage(resultLength, result.length));
+        }
+
+        convertToBytes(base64, result);
+        return resultLength;
+    }
+
+    /**
+     * Convert base64 string to byte array.
+     *
+     * @param base64 base64 string.
+     * @return new byte array with conversion result.
+     */
     public static byte[] toBytes(final String base64) {
-        int length = base64.length() / 4;
-        int lengthM1 = length - 1;
-        int mod;
-        if (base64.charAt(lengthM1) == Consts.PAD) {
-            if (base64.charAt(lengthM1 - 1) == Consts.PAD) {
-                mod = 2;
+        if (base64 == null) {
+            return new byte[0];
+        }
+        if ("".equals(base64)) {
+            return new byte[0];
+        }
+
+        int base64Length = base64.length();
+        if (base64Length % 4 != 0) {
+            throw new Base64RuntimeException(ExceptionMessageHelper.createWrongBase64StringSizeMessage(base64Length));
+        }
+        int emptyBytesCount = getEmptyBytesCount(base64);
+        int resultLength = base64Length * 3 / 4 - emptyBytesCount;
+        byte[] result = new byte[resultLength];
+
+        convertToBytes(base64, result);
+        return result;
+    }
+
+    private static int getEmptyBytesCount(final String base64) {
+        int base64Length = base64.length();
+        if (base64.charAt(base64Length - 1) == Consts.PAD) {
+            if (base64.charAt(base64Length - 2) == Consts.PAD) {
+                return 2;
             } else {
-                mod = 1;
+                return 1;
             }
         } else {
-            mod = 0;
+            return 0;
         }
-        byte[] result = new byte[length * 3 - mod];
+    }
 
-        int index = 0;
-        int resultIndex = 0;
+    private static void convertToBytes(final String base64, final byte[] result) {
+        int blockCountM1 = base64.length() / 4 - 1;
+
+        int base64Index = 0;
         int symbol1;
         int symbol2;
         int symbol3;
         int symbol4;
+        int resultIndex = 0;
+        for (int i = 0; i < blockCountM1; i++) {
+            symbol1 = base64.charAt(base64Index);
+            base64Index++;
+            symbol2 = base64.charAt(base64Index);
+            base64Index++;
+            symbol3 = base64.charAt(base64Index);
+            base64Index++;
+            symbol4 = base64.charAt(base64Index);
+            base64Index++;
 
-        for (int i = 0; i < lengthM1; i++) {
-            symbol1 = base64.charAt(index);
-            index++;
-            symbol2 = base64.charAt(index);
-            index++;
-            symbol3 = base64.charAt(index);
-            index++;
-            symbol4 = base64.charAt(index);
-            index++;
-
-            result[resultIndex] = (byte) getFirstOriginalByte(symbol1, symbol2);
+            updateBase64ByteArray(result, resultIndex, getFirstBase64Byte(symbol1, symbol2));
             resultIndex++;
-            result[resultIndex] = (byte) getSecondOriginalByte(symbol2, symbol3);
+            updateBase64ByteArray(result, resultIndex, getSecondBase64Byte(symbol2, symbol3));
             resultIndex++;
-            result[resultIndex] = (byte) getThirdOriginalByte(symbol3, symbol4);
+            updateBase64ByteArray(result, resultIndex, getThirdBase64Byte(symbol3, symbol4));
             resultIndex++;
         }
 
-        symbol1 = base64.charAt(index);
-        index++;
-        symbol2 = base64.charAt(index);
-        index++;
-        symbol3 = base64.charAt(index);
-        index++;
-        symbol4 = base64.charAt(index);
+        symbol1 = base64.charAt(base64Index);
+        base64Index++;
+        symbol2 = base64.charAt(base64Index);
+        base64Index++;
+        symbol3 = base64.charAt(base64Index);
+        base64Index++;
+        symbol4 = base64.charAt(base64Index);
         if (symbol4 == Consts.PAD) {
             if (symbol3 == Consts.PAD) {
-                result[resultIndex] = (byte) getFirstOriginalByte(symbol1, symbol2);
+                updateBase64ByteArray(result, resultIndex, getFirstBase64Byte(symbol1, symbol2));
             } else {
-                result[resultIndex] = (byte) getFirstOriginalByte(symbol1, symbol2);
-                resultIndex++;
-                result[resultIndex] = (byte) getSecondOriginalByte(symbol2, symbol3);
+                updateBase64ByteArray(result, resultIndex, getFirstBase64Byte(symbol1, symbol2));
+                updateBase64ByteArray(result, resultIndex + 1, getSecondBase64Byte(symbol2, symbol3));
             }
         } else {
-            result[resultIndex] = (byte) getFirstOriginalByte(symbol1, symbol2);
-            resultIndex++;
-            result[resultIndex] = (byte) getSecondOriginalByte(symbol2, symbol3);
-            resultIndex++;
-            result[resultIndex] = (byte) getThirdOriginalByte(symbol3, symbol4);
+            updateBase64ByteArray(result, resultIndex, getFirstBase64Byte(symbol1, symbol2));
+            updateBase64ByteArray(result, resultIndex + 1, getSecondBase64Byte(symbol2, symbol3));
+            updateBase64ByteArray(result, resultIndex + 2, getThirdBase64Byte(symbol3, symbol4));
+        }
+    }
+
+    static int getFirstBase64Byte(final int symbol1, final int symbol2) {
+        if (isBase64SymbolValid(symbol1) && isBase64SymbolValid(symbol2)) {
+            return Consts.FROM_BASE64_FIRST_BYTE_1[symbol1] + Consts.FROM_BASE64_FIRST_BYTE_2[symbol2];
+        } else {
+            return -1;
+        }
+    }
+
+    static int getSecondBase64Byte(final int symbol2, final int symbol3) {
+        if (isBase64SymbolValid(symbol2) && isBase64SymbolValid(symbol3)) {
+            return Consts.FROM_BASE64_SECOND_BYTE_1[symbol2] + Consts.FROM_BASE64_SECOND_BYTE_2[symbol3];
+        } else {
+            return -1;
+        }
+    }
+
+    static int getThirdBase64Byte(final int symbol3, final int symbol4) {
+        if (isBase64SymbolValid(symbol3) && isBase64SymbolValid(symbol4)) {
+            return Consts.FROM_BASE64_THIRD_BYTE_1[symbol3] + Consts.FROM_BASE64_THIRD_BYTE_2[symbol4];
+        } else {
+            return -1;
+        }
+    }
+
+    static boolean isBase64SymbolValid(final int symbol) {
+        return symbol >= 0 && symbol < Consts.FROM_BASE64.length && Consts.FROM_BASE64[symbol] >= 0;
+    }
+
+    private static void updateBase64ByteArray(final byte[] result, final int resultIndex, final int resultByte) {
+        if (resultByte < 0) {
+            throw new Base64RuntimeException(ExceptionMessageHelper.createWrongBase64Symbol(resultByte));
+        }
+        result[resultIndex] = (byte) resultByte;
+    }
+
+    /**
+     * Define, whether input string contains only base64 symbols or not.
+     *
+     * @param base64 base64 string.
+     * @return true, if input string contains only base64 symbols.
+     */
+    public static boolean isBase64String(final String base64) {
+        if (base64 == null) {
+            return false;
+        }
+        if ("".equals(base64)) {
+            return false;
         }
 
-        return result;
-    }
+        int base64Length = base64.length();
+        if (base64Length % 4 != 0) {
+            return false;
+        }
 
-    static int getFirstOriginalByte(final int byte1, final int byte2) {
-        return Consts.FROM_BASE64_FIRST_BYTE_POSITION_1[byte1] + Consts.FROM_BASE64_FIRST_BYTE_POSITION_2[byte2];
-    }
+        int base64LengthM2 = base64Length - 2;
 
-    static int getSecondOriginalByte(final int byte2, final int byte3) {
-        return Consts.FROM_BASE64_SECOND_BYTE_POSITION_1[byte2] + Consts.FROM_BASE64_SECOND_BYTE_POSITION_2[byte3];
-    }
+        int symbol;
+        for (int i = 0; i < base64LengthM2; i++) {
+            symbol = base64.charAt(i);
+            if (!isBase64SymbolValid(symbol)) {
+                return false;
+            }
+        }
 
-    static int getThirdOriginalByte(final int byte3, final int byte4) {
-        return Consts.FROM_BASE64_THIRD_BYTE_POSITION_1[byte3] + Consts.FROM_BASE64_THIRD_BYTE_POSITION_2[byte4];
+        int preLastSymbol = base64.charAt(base64Length - 2);
+        int lastSymbol = base64.charAt(base64Length - 1);
+        if (lastSymbol == Consts.PAD) {
+            if (preLastSymbol != Consts.PAD && !isBase64SymbolValid(preLastSymbol)) {
+                return false;
+            }
+        } else {
+            if (!isBase64SymbolValid(preLastSymbol)) {
+                return false;
+            }
+            if (!isBase64SymbolValid(lastSymbol)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
 }
