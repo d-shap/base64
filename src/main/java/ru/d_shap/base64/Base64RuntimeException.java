@@ -33,7 +33,7 @@ public class Base64RuntimeException extends RuntimeException {
      *
      * @param message excepton message.
      */
-    public Base64RuntimeException(final String message) {
+    Base64RuntimeException(final String message) {
         super(message);
     }
 
