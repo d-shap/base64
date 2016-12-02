@@ -97,57 +97,57 @@ final class Consts {
         TO_BASE64[63] = '/';
     }
 
-    static final int[] TO_BASE64_FIRST_BYTE_POSITION;
+    static final int[] TO_BASE64_FIRST_SYMBOL_INDEX;
 
     static {
-        TO_BASE64_FIRST_BYTE_POSITION = new int[256];
-        for (int i = 0; i < TO_BASE64_FIRST_BYTE_POSITION.length; i++) {
-            TO_BASE64_FIRST_BYTE_POSITION[i] = (i & 0xFC) >> 2;
+        TO_BASE64_FIRST_SYMBOL_INDEX = new int[256];
+        for (int i = 0; i < TO_BASE64_FIRST_SYMBOL_INDEX.length; i++) {
+            TO_BASE64_FIRST_SYMBOL_INDEX[i] = (i & 0xFC) >> 2;
         }
     }
 
-    static final int[] TO_BASE64_SECOND_BYTE_POSITION_1;
+    static final int[] TO_BASE64_SECOND_SYMBOL_INDEX_1;
 
     static {
-        TO_BASE64_SECOND_BYTE_POSITION_1 = new int[256];
-        for (int i = 0; i < TO_BASE64_SECOND_BYTE_POSITION_1.length; i++) {
-            TO_BASE64_SECOND_BYTE_POSITION_1[i] = (i & 0x3) << 4;
+        TO_BASE64_SECOND_SYMBOL_INDEX_1 = new int[256];
+        for (int i = 0; i < TO_BASE64_SECOND_SYMBOL_INDEX_1.length; i++) {
+            TO_BASE64_SECOND_SYMBOL_INDEX_1[i] = (i & 0x3) << 4;
         }
     }
 
-    static final int[] TO_BASE64_SECOND_BYTE_POSITION_2;
+    static final int[] TO_BASE64_SECOND_SYMBOL_INDEX_2;
 
     static {
-        TO_BASE64_SECOND_BYTE_POSITION_2 = new int[256];
-        for (int i = 0; i < TO_BASE64_SECOND_BYTE_POSITION_2.length; i++) {
-            TO_BASE64_SECOND_BYTE_POSITION_2[i] = (i & 0xF0) >> 4;
+        TO_BASE64_SECOND_SYMBOL_INDEX_2 = new int[256];
+        for (int i = 0; i < TO_BASE64_SECOND_SYMBOL_INDEX_2.length; i++) {
+            TO_BASE64_SECOND_SYMBOL_INDEX_2[i] = (i & 0xF0) >> 4;
         }
     }
 
-    static final int[] TO_BASE64_THIRD_BYTE_POSITION_1;
+    static final int[] TO_BASE64_THIRD_SYMBOL_INDEX_1;
 
     static {
-        TO_BASE64_THIRD_BYTE_POSITION_1 = new int[256];
-        for (int i = 0; i < TO_BASE64_THIRD_BYTE_POSITION_1.length; i++) {
-            TO_BASE64_THIRD_BYTE_POSITION_1[i] = (i & 0xF) << 2;
+        TO_BASE64_THIRD_SYMBOL_INDEX_1 = new int[256];
+        for (int i = 0; i < TO_BASE64_THIRD_SYMBOL_INDEX_1.length; i++) {
+            TO_BASE64_THIRD_SYMBOL_INDEX_1[i] = (i & 0xF) << 2;
         }
     }
 
-    static final int[] TO_BASE64_THIRD_BYTE_POSITION_2;
+    static final int[] TO_BASE64_THIRD_SYMBOL_INDEX_2;
 
     static {
-        TO_BASE64_THIRD_BYTE_POSITION_2 = new int[256];
-        for (int i = 0; i < TO_BASE64_THIRD_BYTE_POSITION_2.length; i++) {
-            TO_BASE64_THIRD_BYTE_POSITION_2[i] = (i & 0xC0) >> 6;
+        TO_BASE64_THIRD_SYMBOL_INDEX_2 = new int[256];
+        for (int i = 0; i < TO_BASE64_THIRD_SYMBOL_INDEX_2.length; i++) {
+            TO_BASE64_THIRD_SYMBOL_INDEX_2[i] = (i & 0xC0) >> 6;
         }
     }
 
-    static final int[] TO_BASE64_FOURTH_BYTE_POSITION;
+    static final int[] TO_BASE64_FOURTH_SYMBOL_INDEX;
 
     static {
-        TO_BASE64_FOURTH_BYTE_POSITION = new int[256];
-        for (int i = 0; i < TO_BASE64_FOURTH_BYTE_POSITION.length; i++) {
-            TO_BASE64_FOURTH_BYTE_POSITION[i] = i & 0x3F;
+        TO_BASE64_FOURTH_SYMBOL_INDEX = new int[256];
+        for (int i = 0; i < TO_BASE64_FOURTH_SYMBOL_INDEX.length; i++) {
+            TO_BASE64_FOURTH_SYMBOL_INDEX[i] = i & 0x3F;
         }
     }
 
@@ -231,57 +231,77 @@ final class Consts {
         FROM_BASE64['/'] = 63;
     }
 
-    static final int[] FROM_BASE64_FIRST_BYTE_POSITION_1;
+    static final int[] FROM_BASE64_FIRST_BYTE_1;
 
     static {
-        FROM_BASE64_FIRST_BYTE_POSITION_1 = new int[FROM_BASE64.length];
-        for (int i = 0; i < FROM_BASE64_FIRST_BYTE_POSITION_1.length; i++) {
-            FROM_BASE64_FIRST_BYTE_POSITION_1[i] = Consts.FROM_BASE64[i] << 2;
+        FROM_BASE64_FIRST_BYTE_1 = new int[FROM_BASE64.length];
+        for (int i = 0; i < FROM_BASE64_FIRST_BYTE_1.length; i++) {
+            if (Consts.FROM_BASE64[i] == -1) {
+                FROM_BASE64_FIRST_BYTE_1[i] = -1;
+            } else {
+                FROM_BASE64_FIRST_BYTE_1[i] = Consts.FROM_BASE64[i] << 2;
+            }
         }
     }
 
-    static final int[] FROM_BASE64_FIRST_BYTE_POSITION_2;
+    static final int[] FROM_BASE64_FIRST_BYTE_2;
 
     static {
-        FROM_BASE64_FIRST_BYTE_POSITION_2 = new int[FROM_BASE64.length];
-        for (int i = 0; i < FROM_BASE64_FIRST_BYTE_POSITION_2.length; i++) {
-            FROM_BASE64_FIRST_BYTE_POSITION_2[i] = (Consts.FROM_BASE64[i] & 0x30) >> 4;
+        FROM_BASE64_FIRST_BYTE_2 = new int[FROM_BASE64.length];
+        for (int i = 0; i < FROM_BASE64_FIRST_BYTE_2.length; i++) {
+            if (Consts.FROM_BASE64[i] == -1) {
+                FROM_BASE64_FIRST_BYTE_2[i] = -1;
+            } else {
+                FROM_BASE64_FIRST_BYTE_2[i] = (Consts.FROM_BASE64[i] & 0x30) >> 4;
+            }
         }
     }
 
-    static final int[] FROM_BASE64_SECOND_BYTE_POSITION_1;
+    static final int[] FROM_BASE64_SECOND_BYTE_1;
 
     static {
-        FROM_BASE64_SECOND_BYTE_POSITION_1 = new int[FROM_BASE64.length];
-        for (int i = 0; i < FROM_BASE64_SECOND_BYTE_POSITION_1.length; i++) {
-            FROM_BASE64_SECOND_BYTE_POSITION_1[i] = (Consts.FROM_BASE64[i] & 0x0F) << 4;
+        FROM_BASE64_SECOND_BYTE_1 = new int[FROM_BASE64.length];
+        for (int i = 0; i < FROM_BASE64_SECOND_BYTE_1.length; i++) {
+            if (Consts.FROM_BASE64[i] == -1) {
+                FROM_BASE64_SECOND_BYTE_1[i] = -1;
+            } else {
+                FROM_BASE64_SECOND_BYTE_1[i] = (Consts.FROM_BASE64[i] & 0x0F) << 4;
+            }
         }
     }
 
-    static final int[] FROM_BASE64_SECOND_BYTE_POSITION_2;
+    static final int[] FROM_BASE64_SECOND_BYTE_2;
 
     static {
-        FROM_BASE64_SECOND_BYTE_POSITION_2 = new int[FROM_BASE64.length];
-        for (int i = 0; i < FROM_BASE64_SECOND_BYTE_POSITION_2.length; i++) {
-            FROM_BASE64_SECOND_BYTE_POSITION_2[i] = (Consts.FROM_BASE64[i] & 0x3C) >> 2;
+        FROM_BASE64_SECOND_BYTE_2 = new int[FROM_BASE64.length];
+        for (int i = 0; i < FROM_BASE64_SECOND_BYTE_2.length; i++) {
+            if (Consts.FROM_BASE64[i] == -1) {
+                FROM_BASE64_SECOND_BYTE_2[i] = -1;
+            } else {
+                FROM_BASE64_SECOND_BYTE_2[i] = (Consts.FROM_BASE64[i] & 0x3C) >> 2;
+            }
         }
     }
 
-    static final int[] FROM_BASE64_THIRD_BYTE_POSITION_1;
+    static final int[] FROM_BASE64_THIRD_BYTE_1;
 
     static {
-        FROM_BASE64_THIRD_BYTE_POSITION_1 = new int[FROM_BASE64.length];
-        for (int i = 0; i < FROM_BASE64_THIRD_BYTE_POSITION_1.length; i++) {
-            FROM_BASE64_THIRD_BYTE_POSITION_1[i] = (Consts.FROM_BASE64[i] & 0x03) << 6;
+        FROM_BASE64_THIRD_BYTE_1 = new int[FROM_BASE64.length];
+        for (int i = 0; i < FROM_BASE64_THIRD_BYTE_1.length; i++) {
+            if (Consts.FROM_BASE64[i] == -1) {
+                FROM_BASE64_THIRD_BYTE_1[i] = -1;
+            } else {
+                FROM_BASE64_THIRD_BYTE_1[i] = (Consts.FROM_BASE64[i] & 0x03) << 6;
+            }
         }
     }
 
-    static final int[] FROM_BASE64_THIRD_BYTE_POSITION_2;
+    static final int[] FROM_BASE64_THIRD_BYTE_2;
 
     static {
-        FROM_BASE64_THIRD_BYTE_POSITION_2 = new int[FROM_BASE64.length];
-        for (int i = 0; i < FROM_BASE64_THIRD_BYTE_POSITION_2.length; i++) {
-            FROM_BASE64_THIRD_BYTE_POSITION_2[i] = Consts.FROM_BASE64[i];
+        FROM_BASE64_THIRD_BYTE_2 = new int[FROM_BASE64.length];
+        for (int i = 0; i < FROM_BASE64_THIRD_BYTE_2.length; i++) {
+            FROM_BASE64_THIRD_BYTE_2[i] = Consts.FROM_BASE64[i];
         }
     }
 
