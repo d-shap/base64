@@ -22,6 +22,9 @@
  * Package contains classes to convert bytes to base64 representation and vice versa.
  * </p>
  * <p>
+ * Base64 encoding is described in RFC 1421 and RFC 2045.
+ * </p>
+ * <p>
  * {@link ru.d_shap.base64.Base64Helper} class contains methods to convert byte array to base64 string, to convert
  * base64 string to byte array and to check, if the string is a base64 representation of bytes.
  * </p>
