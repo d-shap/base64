@@ -248,12 +248,20 @@ public final class Base64Helper {
         }
     }
 
+    static boolean ensureSecondBase64ByteZero(final int symbol2) {
+        return isBase64SymbolValid(symbol2) && Consts.FROM_BASE64_SECOND_BYTE_1[symbol2] == 0;
+    }
+
     static int getThirdBase64Byte(final int symbol3, final int symbol4) {
         if (isBase64SymbolValid(symbol3) && isBase64SymbolValid(symbol4)) {
             return Consts.FROM_BASE64_THIRD_BYTE_1[symbol3] + Consts.FROM_BASE64_THIRD_BYTE_2[symbol4];
         } else {
             return -1;
         }
+    }
+
+    static boolean ensureThirdBase64ByteZero(final int symbol3) {
+        return isBase64SymbolValid(symbol3) && Consts.FROM_BASE64_THIRD_BYTE_1[symbol3] == 0;
     }
 
     static boolean isBase64SymbolValid(final int symbol) {
