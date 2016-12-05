@@ -49,8 +49,9 @@ public final class Base64OutputStream extends OutputStream {
 
     @Override
     public void write(final int value) throws IOException {
-        _currentState = _currentState.write(_outputStream, _previousValue, value);
-        _previousValue = value;
+        int currentValue = value & 0xFF;
+        _currentState = _currentState.write(_outputStream, _previousValue, currentValue);
+        _previousValue = currentValue;
     }
 
     @Override
