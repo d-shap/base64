@@ -165,19 +165,24 @@ public final class Base64InputStream extends InputStream {
             if (symbol3 < 0) {
                 throw new IOException(ExceptionMessageHelper.createEndOfStreamMessage());
             }
-
-            int byteRead;
             if (symbol3 == Consts.PAD) {
-                byteRead = Base64Helper.getSecondBase64Byte(lastReadValueHolder.getValue(), 0);
-            } else {
-                byteRead = Base64Helper.getSecondBase64Byte(lastReadValueHolder.getValue(), symbol3);
-            }
-            if (byteRead < 0) {
-                if (Base64Helper.isBase64SymbolValid(symbol3)) {
-                    throw new IOException(ExceptionMessageHelper.createWrongBase64Symbol(lastReadValueHolder.getValue()));
-                } else {
-                    throw new IOException(ExceptionMessageHelper.createWrongBase64Symbol(symbol3));
+                if (Base64Helper.ensureSecondBase64ByteZero(lastReadValueHolder.getValue())) {
+                    int symbol4 = inputStream.read();
+                    if (symbol4 < 0) {
+                        throw new IOException(ExceptionMessageHelper.createEndOfStreamMessage());
+                    }
+                    if (symbol4 == Consts.PAD) {
+                        resultHolder.setValue(-1);
+                        return null;
+                    }
+                    throw new IOException(ExceptionMessageHelper.createWrongBase64Symbol(symbol4));
                 }
+                throw new IOException(ExceptionMessageHelper.createWrongBase64Symbol(lastReadValueHolder.getValue()));
+            }
+
+            int byteRead = Base64Helper.getSecondBase64Byte(lastReadValueHolder.getValue(), symbol3);
+            if (byteRead < 0) {
+                throw new IOException(ExceptionMessageHelper.createWrongBase64Symbol(symbol3));
             }
 
             resultHolder.setValue(byteRead);
@@ -206,24 +211,17 @@ public final class Base64InputStream extends InputStream {
             if (symbol4 < 0) {
                 throw new IOException(ExceptionMessageHelper.createEndOfStreamMessage());
             }
-
-            int byteRead;
             if (symbol4 == Consts.PAD) {
-                if (lastReadValueHolder.getValue() == Consts.PAD) {
+                if (Base64Helper.ensureThirdBase64ByteZero(lastReadValueHolder.getValue())) {
                     resultHolder.setValue(-1);
                     return null;
-                } else {
-                    byteRead = Base64Helper.getThirdBase64Byte(lastReadValueHolder.getValue(), 0);
                 }
-            } else {
-                byteRead = Base64Helper.getThirdBase64Byte(lastReadValueHolder.getValue(), symbol4);
+                throw new IOException(ExceptionMessageHelper.createWrongBase64Symbol(lastReadValueHolder.getValue()));
             }
+
+            int byteRead = Base64Helper.getThirdBase64Byte(lastReadValueHolder.getValue(), symbol4);
             if (byteRead < 0) {
-                if (Base64Helper.isBase64SymbolValid(symbol4)) {
-                    throw new IOException(ExceptionMessageHelper.createWrongBase64Symbol(lastReadValueHolder.getValue()));
-                } else {
-                    throw new IOException(ExceptionMessageHelper.createWrongBase64Symbol(symbol4));
-                }
+                throw new IOException(ExceptionMessageHelper.createWrongBase64Symbol(symbol4));
             }
 
             resultHolder.setValue(byteRead);
