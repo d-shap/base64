@@ -9,8 +9,8 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.target>1.6</maven.compiler.target>
-        <maven.compiler.source>1.6</maven.compiler.source>
+        <maven.compiler.target>1.7</maven.compiler.target>
+        <maven.compiler.source>1.7</maven.compiler.source>
     </properties>
 
     <dependencies>
@@ -55,13 +55,14 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-pmd-plugin</artifactId>
-                <version>3.6</version>
+                <version>3.7</version>
                 <executions>
                     <execution>
                         <id>check-pmd</id>
                         <phase>process-classes</phase>
                         <goals>
                             <goal>check</goal>
+                            <goal>cpd-check</goal>
                         </goals>
                     </execution>
                 </executions>
@@ -71,6 +72,9 @@
                     <rulesets>
                         <ruleset>pmd-strict.xml</ruleset>
                     </rulesets>
+                    <ignoreIdentifiers>false</ignoreIdentifiers>
+                    <ignoreLiterals>true</ignoreLiterals>
+                    <minimumTokens>200</minimumTokens>
                 </configuration>
             </plugin>
             <plugin>
@@ -92,6 +96,20 @@
                     <threshold>Low</threshold>
                     <xmlOutput>true</xmlOutput>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>jdepend-maven-plugin</artifactId>
+                <version>2.0</version>
+                <executions>
+                    <execution>
+                        <id>generate-jdepend</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.jacoco</groupId>
@@ -154,14 +172,34 @@
                 <version>1.1.10</version>
                 <executions>
                     <execution>
-                        <id>check-pitest</id>
+                        <id>mutationCoverage-pitest</id>
                         <goals>
                             <goal>mutationCoverage</goal>
                         </goals>
                     </execution>
                 </executions>
                 <configuration>
+                    <threads>5</threads>
+                    <mutateStaticInitializers>true</mutateStaticInitializers>
+                    <mutators>
+                        <mutator>CONDITIONALS_BOUNDARY</mutator>
+                        <mutator>NEGATE_CONDITIONALS</mutator>
+                        <mutator>REMOVE_CONDITIONALS</mutator>
+                        <mutator>MATH</mutator>
+                        <mutator>INCREMENTS</mutator>
+                        <mutator>INVERT_NEGS</mutator>
+                        <mutator>INLINE_CONSTS</mutator>
+                        <mutator>RETURN_VALS</mutator>
+                        <mutator>VOID_METHOD_CALLS</mutator>
+                        <mutator>NON_VOID_METHOD_CALLS</mutator>
+                        <mutator>CONSTRUCTOR_CALLS</mutator>
+                    </mutators>
+                    <jvmArgs>
+                        <value>-Xms256M</value>
+                        <value>-Xmx256M</value>
+                    </jvmArgs>
                     <failWhenNoMutations>true</failWhenNoMutations>
+                    <timestampedReports>false</timestampedReports>
                     <skip>true</skip>
                 </configuration>
             </plugin>
@@ -171,7 +209,7 @@
                 <version>3.0.0</version>
                 <executions>
                     <execution>
-                        <id>attach-source</id>
+                        <id>jar-source</id>
                         <goals>
                             <goal>jar</goal>
                         </goals>
@@ -184,7 +222,7 @@
                 <version>2.10.4</version>
                 <executions>
                     <execution>
-                        <id>attach-javadoc</id>
+                        <id>jar-javadoc</id>
                         <goals>
                             <goal>jar</goal>
                         </goals>
