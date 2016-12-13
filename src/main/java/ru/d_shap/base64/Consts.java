@@ -97,12 +97,12 @@ final class Consts {
         TO_BASE64[63] = '/';
     }
 
-    static final int[] TO_BASE64_FIRST_SYMBOL_INDEX;
+    static final int[] TO_BASE64_FIRST_SYMBOL;
 
     static {
-        TO_BASE64_FIRST_SYMBOL_INDEX = new int[256];
-        for (int i = 0; i < TO_BASE64_FIRST_SYMBOL_INDEX.length; i++) {
-            TO_BASE64_FIRST_SYMBOL_INDEX[i] = (i & 0xFC) >> 2;
+        TO_BASE64_FIRST_SYMBOL = new int[256];
+        for (int i = 0; i < TO_BASE64_FIRST_SYMBOL.length; i++) {
+            TO_BASE64_FIRST_SYMBOL[i] = TO_BASE64[(i & 0xFC) >> 2];
         }
     }
 
@@ -142,12 +142,12 @@ final class Consts {
         }
     }
 
-    static final int[] TO_BASE64_FOURTH_SYMBOL_INDEX;
+    static final int[] TO_BASE64_FOURTH_SYMBOL;
 
     static {
-        TO_BASE64_FOURTH_SYMBOL_INDEX = new int[256];
-        for (int i = 0; i < TO_BASE64_FOURTH_SYMBOL_INDEX.length; i++) {
-            TO_BASE64_FOURTH_SYMBOL_INDEX[i] = i & 0x3F;
+        TO_BASE64_FOURTH_SYMBOL = new int[256];
+        for (int i = 0; i < TO_BASE64_FOURTH_SYMBOL.length; i++) {
+            TO_BASE64_FOURTH_SYMBOL[i] = TO_BASE64[i & 0x3F];
         }
     }
 
