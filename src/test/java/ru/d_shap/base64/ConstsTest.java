@@ -87,14 +87,14 @@ public final class ConstsTest {
      * {@link Consts} class test.
      */
     @Test
-    public void toBase64FirstSymbolIndexTest() {
-        Assert.assertEquals(0x3F, Consts.TO_BASE64_FIRST_SYMBOL_INDEX[0xFF]);
-        Assert.assertEquals(0x3F, Consts.TO_BASE64_FIRST_SYMBOL_INDEX[0xFD]);
-        Assert.assertEquals(0x2A, Consts.TO_BASE64_FIRST_SYMBOL_INDEX[0xAA]);
-        Assert.assertEquals(0x3C, Consts.TO_BASE64_FIRST_SYMBOL_INDEX[0xF0]);
-        Assert.assertEquals(0x3C, Consts.TO_BASE64_FIRST_SYMBOL_INDEX[0xF3]);
-        Assert.assertEquals(0x03, Consts.TO_BASE64_FIRST_SYMBOL_INDEX[0x0C]);
-        Assert.assertEquals(0x03, Consts.TO_BASE64_FIRST_SYMBOL_INDEX[0x0D]);
+    public void toBase64FirstSymbolTest() {
+        Assert.assertEquals('/', Consts.TO_BASE64_FIRST_SYMBOL[0xFF]);
+        Assert.assertEquals('/', Consts.TO_BASE64_FIRST_SYMBOL[0xFD]);
+        Assert.assertEquals('q', Consts.TO_BASE64_FIRST_SYMBOL[0xAA]);
+        Assert.assertEquals('8', Consts.TO_BASE64_FIRST_SYMBOL[0xF0]);
+        Assert.assertEquals('8', Consts.TO_BASE64_FIRST_SYMBOL[0xF3]);
+        Assert.assertEquals('D', Consts.TO_BASE64_FIRST_SYMBOL[0x0C]);
+        Assert.assertEquals('D', Consts.TO_BASE64_FIRST_SYMBOL[0x0D]);
     }
 
     /**
@@ -141,14 +141,14 @@ public final class ConstsTest {
      * {@link Consts} class test.
      */
     @Test
-    public void toBase64FourthSymbolIndexTest() {
-        Assert.assertEquals(0x3F, Consts.TO_BASE64_FOURTH_SYMBOL_INDEX[0xFF]);
-        Assert.assertEquals(0x3D, Consts.TO_BASE64_FOURTH_SYMBOL_INDEX[0xFD]);
-        Assert.assertEquals(0x2A, Consts.TO_BASE64_FOURTH_SYMBOL_INDEX[0xAA]);
-        Assert.assertEquals(0x30, Consts.TO_BASE64_FOURTH_SYMBOL_INDEX[0xF0]);
-        Assert.assertEquals(0x33, Consts.TO_BASE64_FOURTH_SYMBOL_INDEX[0xF3]);
-        Assert.assertEquals(0x0C, Consts.TO_BASE64_FOURTH_SYMBOL_INDEX[0x0C]);
-        Assert.assertEquals(0x0D, Consts.TO_BASE64_FOURTH_SYMBOL_INDEX[0x0D]);
+    public void toBase64FourthSymbolTest() {
+        Assert.assertEquals('/', Consts.TO_BASE64_FOURTH_SYMBOL[0xFF]);
+        Assert.assertEquals('9', Consts.TO_BASE64_FOURTH_SYMBOL[0xFD]);
+        Assert.assertEquals('q', Consts.TO_BASE64_FOURTH_SYMBOL[0xAA]);
+        Assert.assertEquals('w', Consts.TO_BASE64_FOURTH_SYMBOL[0xF0]);
+        Assert.assertEquals('z', Consts.TO_BASE64_FOURTH_SYMBOL[0xF3]);
+        Assert.assertEquals('M', Consts.TO_BASE64_FOURTH_SYMBOL[0x0C]);
+        Assert.assertEquals('N', Consts.TO_BASE64_FOURTH_SYMBOL[0x0D]);
     }
 
     /**
