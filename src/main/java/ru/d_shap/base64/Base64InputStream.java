@@ -166,7 +166,7 @@ public final class Base64InputStream extends InputStream {
                 throw new IOException(ExceptionMessageHelper.createEndOfStreamMessage());
             }
             if (symbol3 == Consts.PAD) {
-                if (Base64Helper.ensureSecondBase64ByteZero(lastReadValueHolder.getValue())) {
+                if (Base64Helper.isSecondBase64ByteZero(lastReadValueHolder.getValue())) {
                     int symbol4 = inputStream.read();
                     if (symbol4 < 0) {
                         throw new IOException(ExceptionMessageHelper.createEndOfStreamMessage());
@@ -212,7 +212,7 @@ public final class Base64InputStream extends InputStream {
                 throw new IOException(ExceptionMessageHelper.createEndOfStreamMessage());
             }
             if (symbol4 == Consts.PAD) {
-                if (Base64Helper.ensureThirdBase64ByteZero(lastReadValueHolder.getValue())) {
+                if (Base64Helper.isThirdBase64ByteZero(lastReadValueHolder.getValue())) {
                     resultHolder.setValue(-1);
                     return null;
                 }
