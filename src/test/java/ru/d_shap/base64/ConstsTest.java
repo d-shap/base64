@@ -71,6 +71,27 @@ public final class ConstsTest {
      * {@link Consts} class test.
      */
     @Test
+    public void lengthTest() {
+        Assert.assertEquals(64, Consts.TO_BASE64.length);
+        Assert.assertEquals(256, Consts.TO_BASE64_FIRST_SYMBOL.length);
+        Assert.assertEquals(256, Consts.TO_BASE64_SECOND_SYMBOL_INDEX_1.length);
+        Assert.assertEquals(256, Consts.TO_BASE64_SECOND_SYMBOL_INDEX_2.length);
+        Assert.assertEquals(256, Consts.TO_BASE64_THIRD_SYMBOL_INDEX_1.length);
+        Assert.assertEquals(256, Consts.TO_BASE64_THIRD_SYMBOL_INDEX_2.length);
+        Assert.assertEquals(256, Consts.TO_BASE64_FOURTH_SYMBOL.length);
+        Assert.assertEquals(123, Consts.FROM_BASE64.length);
+        Assert.assertEquals(123, Consts.FROM_BASE64_FIRST_BYTE_1.length);
+        Assert.assertEquals(123, Consts.FROM_BASE64_FIRST_BYTE_2.length);
+        Assert.assertEquals(123, Consts.FROM_BASE64_SECOND_BYTE_1.length);
+        Assert.assertEquals(123, Consts.FROM_BASE64_SECOND_BYTE_2.length);
+        Assert.assertEquals(123, Consts.FROM_BASE64_THIRD_BYTE_1.length);
+        Assert.assertEquals(123, Consts.FROM_BASE64_THIRD_BYTE_2.length);
+    }
+
+    /**
+     * {@link Consts} class test.
+     */
+    @Test
     public void valueConsistencyTest() {
         for (int i = 0; i < Consts.TO_BASE64.length; i++) {
             int toBase64Value = Consts.TO_BASE64[i];
