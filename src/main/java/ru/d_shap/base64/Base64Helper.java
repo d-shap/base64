@@ -241,14 +241,10 @@ public final class Base64Helper {
 
     private static int base64CharAt(final String base64, final int base64Index, final boolean checkValid) {
         int symbol = base64.charAt(base64Index);
-        if (checkValid) {
-            if (isBase64SymbolValid(symbol)) {
-                return symbol;
-            } else {
-                throw new Base64RuntimeException(ExceptionMessageHelper.createWrongBase64Symbol(symbol));
-            }
-        } else {
+        if (!checkValid || isBase64SymbolValid(symbol)) {
             return symbol;
+        } else {
+            throw new Base64RuntimeException(ExceptionMessageHelper.createWrongBase64Symbol(symbol));
         }
     }
 
@@ -305,10 +301,10 @@ public final class Base64Helper {
             }
         }
 
-        int symbol1 = base64.charAt(base64Length - 4);
-        int symbol2 = base64.charAt(base64Length - 3);
-        int symbol3 = base64.charAt(base64Length - 2);
-        int symbol4 = base64.charAt(base64Length - 1);
+        int symbol1 = base64.charAt(base64LengthM4);
+        int symbol2 = base64.charAt(base64LengthM4 + 1);
+        int symbol3 = base64.charAt(base64LengthM4 + 2);
+        int symbol4 = base64.charAt(base64LengthM4 + 3);
 
         if (symbol4 == Consts.PAD) {
             if (symbol3 == Consts.PAD) {
