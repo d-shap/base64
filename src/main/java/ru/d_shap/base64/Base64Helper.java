@@ -192,13 +192,13 @@ public final class Base64Helper {
         int symbol4;
         int resultIndex = 0;
         for (int i = 0; i < blockCountM1; i++) {
-            symbol1 = base64CharAt(base64, base64Index, true);
+            symbol1 = getCharFromBase64String(base64, base64Index, true);
             base64Index++;
-            symbol2 = base64CharAt(base64, base64Index, true);
+            symbol2 = getCharFromBase64String(base64, base64Index, true);
             base64Index++;
-            symbol3 = base64CharAt(base64, base64Index, true);
+            symbol3 = getCharFromBase64String(base64, base64Index, true);
             base64Index++;
-            symbol4 = base64CharAt(base64, base64Index, true);
+            symbol4 = getCharFromBase64String(base64, base64Index, true);
             base64Index++;
 
             result[resultIndex] = (byte) getFirstBase64Byte(symbol1, symbol2);
@@ -209,10 +209,10 @@ public final class Base64Helper {
             resultIndex++;
         }
 
-        symbol1 = base64CharAt(base64, base64Index, true);
-        symbol2 = base64CharAt(base64, base64Index + 1, true);
-        symbol3 = base64CharAt(base64, base64Index + 2, false);
-        symbol4 = base64CharAt(base64, base64Index + 3, false);
+        symbol1 = getCharFromBase64String(base64, base64Index, true);
+        symbol2 = getCharFromBase64String(base64, base64Index + 1, true);
+        symbol3 = getCharFromBase64String(base64, base64Index + 2, false);
+        symbol4 = getCharFromBase64String(base64, base64Index + 3, false);
         if (symbol4 == Consts.PAD) {
             if (symbol3 == Consts.PAD) {
                 if (!isSecondBase64ByteZero(symbol2)) {
@@ -239,12 +239,16 @@ public final class Base64Helper {
         }
     }
 
-    private static int base64CharAt(final String base64, final int base64Index, final boolean checkValid) {
+    private static int getCharFromBase64String(final String base64, final int base64Index, final boolean checkValid) {
         int symbol = base64.charAt(base64Index);
-        if (!checkValid || isBase64SymbolValid(symbol)) {
-            return symbol;
+        if (checkValid) {
+            if (isBase64SymbolValid(symbol)) {
+                return symbol;
+            } else {
+                throw new Base64RuntimeException(ExceptionMessageHelper.createWrongBase64Symbol(symbol));
+            }
         } else {
-            throw new Base64RuntimeException(ExceptionMessageHelper.createWrongBase64Symbol(symbol));
+            return symbol;
         }
     }
 
