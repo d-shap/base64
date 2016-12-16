@@ -549,8 +549,13 @@ public final class Base64HelperTest {
         Assert.assertTrue(Base64Helper.isBase64String("43093+df"));
         Assert.assertTrue(Base64Helper.isBase64String("KLdfLe+/"));
         Assert.assertFalse(Base64Helper.isBase64String("aaaaaaa="));
+        Assert.assertFalse(Base64Helper.isBase64String("aaaa,aa="));
+        Assert.assertFalse(Base64Helper.isBase64String("aaaaa,a="));
+        Assert.assertFalse(Base64Helper.isBase64String("aaaaaa,="));
         Assert.assertTrue(Base64Helper.isBase64String("aaaaaaQ="));
         Assert.assertFalse(Base64Helper.isBase64String("aaaaaa=="));
+        Assert.assertFalse(Base64Helper.isBase64String("aaaa,a=="));
+        Assert.assertFalse(Base64Helper.isBase64String("aaaaa,=="));
         Assert.assertTrue(Base64Helper.isBase64String("aaaaaQ=="));
     }
 
