@@ -21,6 +21,7 @@ package ru.d_shap.base64;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -49,9 +50,9 @@ public final class Base64OutputStreamTest {
     @Test
     public void writeZeroByteEndingTest() throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        Base64OutputStream b64os = new Base64OutputStream(baos);
-        b64os.write(new byte[]{(byte) 240, 120, 15, 30, (byte) 193, (byte) 201});
-        b64os.close();
+        Base64OutputStream base64OutputStream = new Base64OutputStream(baos);
+        base64OutputStream.write(new byte[]{(byte) 240, 120, 15, 30, (byte) 193, (byte) 201});
+        base64OutputStream.close();
         Assert.assertEquals("8HgPHsHJ", new String(baos.toByteArray(), ENCODING));
     }
 
@@ -63,9 +64,9 @@ public final class Base64OutputStreamTest {
     @Test
     public void writeOneByteEndingTest() throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        Base64OutputStream b64os = new Base64OutputStream(baos);
-        b64os.write(new byte[]{(byte) 240, 120, 15, 30, (byte) 193});
-        b64os.close();
+        Base64OutputStream base64OutputStream = new Base64OutputStream(baos);
+        base64OutputStream.write(new byte[]{(byte) 240, 120, 15, 30, (byte) 193});
+        base64OutputStream.close();
         Assert.assertEquals("8HgPHsE=", new String(baos.toByteArray(), ENCODING));
     }
 
@@ -77,10 +78,56 @@ public final class Base64OutputStreamTest {
     @Test
     public void writeTwoByteEndingTest() throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        Base64OutputStream b64os = new Base64OutputStream(baos);
-        b64os.write(new byte[]{(byte) 240, 120, 15, 30});
-        b64os.close();
+        Base64OutputStream base64OutputStream = new Base64OutputStream(baos);
+        base64OutputStream.write(new byte[]{(byte) 240, 120, 15, 30});
+        base64OutputStream.close();
         Assert.assertEquals("8HgPHg==", new String(baos.toByteArray(), ENCODING));
+    }
+
+    /**
+     * {@link Base64OutputStream} class test.
+     *
+     * @throws IOException IO exception.
+     */
+    @Test
+    public void closeTest() throws IOException {
+        CloseStream closeStream = new CloseStream();
+        Base64OutputStream base64OutputStream = new Base64OutputStream(closeStream);
+        base64OutputStream.write(123);
+
+        Assert.assertFalse(closeStream.isClosed());
+        base64OutputStream.close();
+        Assert.assertTrue(closeStream.isClosed());
+    }
+
+    /**
+     * Output stream to test close method.
+     *
+     * @author Dmitry Shapovalov
+     */
+    private static final class CloseStream extends OutputStream {
+
+        private boolean _closed;
+
+        CloseStream() {
+            super();
+            _closed = false;
+        }
+
+        @Override
+        public void write(final int value) throws IOException {
+            // Ignore
+        }
+
+        boolean isClosed() {
+            return _closed;
+        }
+
+        @Override
+        public void close() throws IOException {
+            _closed = true;
+        }
+
     }
 
 }

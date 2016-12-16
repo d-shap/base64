@@ -21,6 +21,7 @@ package ru.d_shap.base64;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -271,6 +272,52 @@ public final class Base64InputStreamTest {
         } catch (IOException ex) {
             Assert.assertEquals("Wrong symbol obtained: '?' (63)", ex.getMessage());
         }
+    }
+
+    /**
+     * {@link Base64InputStream} class test.
+     *
+     * @throws IOException IO exception.
+     */
+    @Test
+    public void closeTest() throws IOException {
+        CloseStream closeStream = new CloseStream();
+        Base64InputStream base64InputStream = new Base64InputStream(closeStream);
+        Assert.assertEquals(-1, base64InputStream.read());
+
+        Assert.assertFalse(closeStream.isClosed());
+        base64InputStream.close();
+        Assert.assertTrue(closeStream.isClosed());
+    }
+
+    /**
+     * Input stream to test close method.
+     *
+     * @author Dmitry Shapovalov
+     */
+    private static final class CloseStream extends InputStream {
+
+        private boolean _closed;
+
+        CloseStream() {
+            super();
+            _closed = false;
+        }
+
+        @Override
+        public int read() throws IOException {
+            return -1;
+        }
+
+        boolean isClosed() {
+            return _closed;
+        }
+
+        @Override
+        public void close() throws IOException {
+            _closed = true;
+        }
+
     }
 
 }
