@@ -60,6 +60,22 @@ public final class Base64InputStream extends InputStream {
         }
     }
 
+    private static int getCharFromBase64Stream(final InputStream inputStream, final boolean checkEnfOfInput, final boolean padIsValid) throws IOException {
+        int symbol = inputStream.read();
+        if (symbol < 0) {
+            if (checkEnfOfInput) {
+                throw new IOException(ExceptionMessageHelper.createEndOfStreamMessage());
+            } else {
+                return -1;
+            }
+        }
+        if (Base64Helper.isBase64SymbolValid(symbol) || padIsValid && symbol == Consts.PAD) {
+            return symbol;
+        } else {
+            throw new IOException(ExceptionMessageHelper.createWrongBase64Symbol(symbol));
+        }
+    }
+
     @Override
     public void close() throws IOException {
         _inputStream.close();
@@ -119,26 +135,14 @@ public final class Base64InputStream extends InputStream {
 
         @Override
         AbstractState read(final InputStream inputStream, final IntegerHolder resultHolder, final IntegerHolder lastReadValueHolder) throws IOException {
-            int symbol1 = inputStream.read();
+            int symbol1 = getCharFromBase64Stream(inputStream, false, false);
             if (symbol1 < 0) {
                 resultHolder.setValue(-1);
                 return null;
             }
-
-            int symbol2 = inputStream.read();
-            if (symbol2 < 0) {
-                throw new IOException(ExceptionMessageHelper.createEndOfStreamMessage());
-            }
+            int symbol2 = getCharFromBase64Stream(inputStream, true, false);
 
             int byteRead = Base64Helper.getFirstBase64Byte(symbol1, symbol2);
-            if (byteRead < 0) {
-                if (Base64Helper.isBase64SymbolValid(symbol1)) {
-                    throw new IOException(ExceptionMessageHelper.createWrongBase64Symbol(symbol2));
-                } else {
-                    throw new IOException(ExceptionMessageHelper.createWrongBase64Symbol(symbol1));
-                }
-            }
-
             resultHolder.setValue(byteRead);
             lastReadValueHolder.setValue(symbol2);
             return State2.INSTANCE;
@@ -161,30 +165,22 @@ public final class Base64InputStream extends InputStream {
 
         @Override
         AbstractState read(final InputStream inputStream, final IntegerHolder resultHolder, final IntegerHolder lastReadValueHolder) throws IOException {
-            int symbol3 = inputStream.read();
-            if (symbol3 < 0) {
-                throw new IOException(ExceptionMessageHelper.createEndOfStreamMessage());
-            }
+            int symbol3 = getCharFromBase64Stream(inputStream, true, true);
             if (symbol3 == Consts.PAD) {
                 if (Base64Helper.isSecondBase64ByteZero(lastReadValueHolder.getValue())) {
-                    int symbol4 = inputStream.read();
-                    if (symbol4 < 0) {
-                        throw new IOException(ExceptionMessageHelper.createEndOfStreamMessage());
-                    }
+                    int symbol4 = getCharFromBase64Stream(inputStream, true, true);
                     if (symbol4 == Consts.PAD) {
                         resultHolder.setValue(-1);
                         return null;
+                    } else {
+                        throw new IOException(ExceptionMessageHelper.createWrongBase64Symbol(symbol4));
                     }
-                    throw new IOException(ExceptionMessageHelper.createWrongBase64Symbol(symbol4));
+                } else {
+                    throw new IOException(ExceptionMessageHelper.createWrongBase64Symbol(lastReadValueHolder.getValue()));
                 }
-                throw new IOException(ExceptionMessageHelper.createWrongBase64Symbol(lastReadValueHolder.getValue()));
             }
 
             int byteRead = Base64Helper.getSecondBase64Byte(lastReadValueHolder.getValue(), symbol3);
-            if (byteRead < 0) {
-                throw new IOException(ExceptionMessageHelper.createWrongBase64Symbol(symbol3));
-            }
-
             resultHolder.setValue(byteRead);
             lastReadValueHolder.setValue(symbol3);
             return State3.INSTANCE;
@@ -207,23 +203,17 @@ public final class Base64InputStream extends InputStream {
 
         @Override
         AbstractState read(final InputStream inputStream, final IntegerHolder resultHolder, final IntegerHolder lastReadValueHolder) throws IOException {
-            int symbol4 = inputStream.read();
-            if (symbol4 < 0) {
-                throw new IOException(ExceptionMessageHelper.createEndOfStreamMessage());
-            }
+            int symbol4 = getCharFromBase64Stream(inputStream, true, true);
             if (symbol4 == Consts.PAD) {
                 if (Base64Helper.isThirdBase64ByteZero(lastReadValueHolder.getValue())) {
                     resultHolder.setValue(-1);
                     return null;
+                } else {
+                    throw new IOException(ExceptionMessageHelper.createWrongBase64Symbol(lastReadValueHolder.getValue()));
                 }
-                throw new IOException(ExceptionMessageHelper.createWrongBase64Symbol(lastReadValueHolder.getValue()));
             }
 
             int byteRead = Base64Helper.getThirdBase64Byte(lastReadValueHolder.getValue(), symbol4);
-            if (byteRead < 0) {
-                throw new IOException(ExceptionMessageHelper.createWrongBase64Symbol(symbol4));
-            }
-
             resultHolder.setValue(byteRead);
             lastReadValueHolder.setValue(symbol4);
             return State1.INSTANCE;
