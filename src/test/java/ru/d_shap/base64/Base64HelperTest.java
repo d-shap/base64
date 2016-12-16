@@ -523,7 +523,12 @@ public final class Base64HelperTest {
      */
     @Test
     public void getThirdBase64ByteTest() {
-
+        Assert.assertEquals(154, Base64Helper.getThirdBase64Byte('a', 'a'));
+        Assert.assertEquals(0, Base64Helper.getThirdBase64Byte('A', 'A'));
+        Assert.assertEquals(62, Base64Helper.getThirdBase64Byte('8', '+'));
+        Assert.assertEquals(94, Base64Helper.getThirdBase64Byte('F', 'e'));
+        Assert.assertEquals(246, Base64Helper.getThirdBase64Byte('P', '2'));
+        Assert.assertEquals(241, Base64Helper.getThirdBase64Byte('/', 'x'));
     }
 
     /**
@@ -531,7 +536,22 @@ public final class Base64HelperTest {
      */
     @Test
     public void isBase64StringTest() {
-
+        Assert.assertTrue(Base64Helper.isBase64String("aaaaaaaa"));
+        Assert.assertFalse(Base64Helper.isBase64String(",aaaaaaa"));
+        Assert.assertFalse(Base64Helper.isBase64String("a,aaaaaa"));
+        Assert.assertFalse(Base64Helper.isBase64String("aa,aaaaa"));
+        Assert.assertFalse(Base64Helper.isBase64String("aaa,aaaa"));
+        Assert.assertFalse(Base64Helper.isBase64String("aaaa,aaa"));
+        Assert.assertFalse(Base64Helper.isBase64String("aaaaa,aa"));
+        Assert.assertFalse(Base64Helper.isBase64String("aaaaaa,a"));
+        Assert.assertFalse(Base64Helper.isBase64String("aaaaaaa,"));
+        Assert.assertTrue(Base64Helper.isBase64String("12kdId65"));
+        Assert.assertTrue(Base64Helper.isBase64String("43093+df"));
+        Assert.assertTrue(Base64Helper.isBase64String("KLdfLe+/"));
+        Assert.assertFalse(Base64Helper.isBase64String("aaaaaaa="));
+        Assert.assertTrue(Base64Helper.isBase64String("aaaaaaQ="));
+        Assert.assertFalse(Base64Helper.isBase64String("aaaaaa=="));
+        Assert.assertTrue(Base64Helper.isBase64String("aaaaaQ=="));
     }
 
     /**
