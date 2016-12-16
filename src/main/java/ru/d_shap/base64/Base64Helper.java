@@ -192,13 +192,13 @@ public final class Base64Helper {
         int symbol4;
         int resultIndex = 0;
         for (int i = 0; i < blockCountM1; i++) {
-            symbol1 = getCharFromBase64String(base64, base64Index, true);
+            symbol1 = getCharFromBase64String(base64, base64Index, false);
             base64Index++;
-            symbol2 = getCharFromBase64String(base64, base64Index, true);
+            symbol2 = getCharFromBase64String(base64, base64Index, false);
             base64Index++;
-            symbol3 = getCharFromBase64String(base64, base64Index, true);
+            symbol3 = getCharFromBase64String(base64, base64Index, false);
             base64Index++;
-            symbol4 = getCharFromBase64String(base64, base64Index, true);
+            symbol4 = getCharFromBase64String(base64, base64Index, false);
             base64Index++;
 
             result[resultIndex] = (byte) getFirstBase64Byte(symbol1, symbol2);
@@ -209,46 +209,38 @@ public final class Base64Helper {
             resultIndex++;
         }
 
-        symbol1 = getCharFromBase64String(base64, base64Index, true);
-        symbol2 = getCharFromBase64String(base64, base64Index + 1, true);
-        symbol3 = getCharFromBase64String(base64, base64Index + 2, false);
-        symbol4 = getCharFromBase64String(base64, base64Index + 3, false);
+        symbol1 = getCharFromBase64String(base64, base64Index, false);
+        symbol2 = getCharFromBase64String(base64, base64Index + 1, false);
+        symbol3 = getCharFromBase64String(base64, base64Index + 2, true);
+        symbol4 = getCharFromBase64String(base64, base64Index + 3, true);
         if (symbol4 == Consts.PAD) {
             if (symbol3 == Consts.PAD) {
-                if (!isSecondBase64ByteZero(symbol2)) {
+                if (isSecondBase64ByteZero(symbol2)) {
+                    result[resultIndex] = (byte) getFirstBase64Byte(symbol1, symbol2);
+                } else {
                     throw new Base64RuntimeException(ExceptionMessageHelper.createWrongBase64Symbol(symbol2));
                 }
-                result[resultIndex] = (byte) getFirstBase64Byte(symbol1, symbol2);
             } else {
-                if (!isBase64SymbolValid(symbol3) || !isThirdBase64ByteZero(symbol3)) {
+                if (isThirdBase64ByteZero(symbol3)) {
+                    result[resultIndex] = (byte) getFirstBase64Byte(symbol1, symbol2);
+                    result[resultIndex + 1] = (byte) getSecondBase64Byte(symbol2, symbol3);
+                } else {
                     throw new Base64RuntimeException(ExceptionMessageHelper.createWrongBase64Symbol(symbol3));
                 }
-                result[resultIndex] = (byte) getFirstBase64Byte(symbol1, symbol2);
-                result[resultIndex + 1] = (byte) getSecondBase64Byte(symbol2, symbol3);
             }
         } else {
-            if (!isBase64SymbolValid(symbol3)) {
-                throw new Base64RuntimeException(ExceptionMessageHelper.createWrongBase64Symbol(symbol3));
-            }
-            if (!isBase64SymbolValid(symbol4)) {
-                throw new Base64RuntimeException(ExceptionMessageHelper.createWrongBase64Symbol(symbol4));
-            }
             result[resultIndex] = (byte) getFirstBase64Byte(symbol1, symbol2);
             result[resultIndex + 1] = (byte) getSecondBase64Byte(symbol2, symbol3);
             result[resultIndex + 2] = (byte) getThirdBase64Byte(symbol3, symbol4);
         }
     }
 
-    private static int getCharFromBase64String(final String base64, final int base64Index, final boolean checkValid) {
+    private static int getCharFromBase64String(final String base64, final int base64Index, final boolean padIsValid) {
         int symbol = base64.charAt(base64Index);
-        if (checkValid) {
-            if (isBase64SymbolValid(symbol)) {
-                return symbol;
-            } else {
-                throw new Base64RuntimeException(ExceptionMessageHelper.createWrongBase64Symbol(symbol));
-            }
-        } else {
+        if (isBase64SymbolValid(symbol) || padIsValid && symbol == Consts.PAD) {
             return symbol;
+        } else {
+            throw new Base64RuntimeException(ExceptionMessageHelper.createWrongBase64Symbol(symbol));
         }
     }
 
