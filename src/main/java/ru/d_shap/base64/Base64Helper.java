@@ -76,7 +76,7 @@ public final class Base64Helper {
                 byte1 = bytes[bytesIndex] & 0xFF;
 
                 result.append((char) getFirstBase64Symbol(byte1));
-                result.append((char) getSecondBase64Symbol(byte1, 0));
+                result.append((char) getSecondBase64Symbol(byte1));
                 result.append((char) Consts.PAD);
                 result.append((char) Consts.PAD);
                 break;
@@ -86,7 +86,7 @@ public final class Base64Helper {
 
                 result.append((char) getFirstBase64Symbol(byte1));
                 result.append((char) getSecondBase64Symbol(byte1, byte2));
-                result.append((char) getThirdBase64Symbol(byte2, 0));
+                result.append((char) getThirdBase64Symbol(byte2));
                 result.append((char) Consts.PAD);
                 break;
             default:
@@ -100,8 +100,18 @@ public final class Base64Helper {
         return Consts.TO_BASE64_FIRST_SYMBOL[byte1];
     }
 
+    static int getSecondBase64Symbol(final int byte1) {
+        int idx = Consts.TO_BASE64_SECOND_SYMBOL_INDEX_1[byte1];
+        return Consts.TO_BASE64[idx];
+    }
+
     static int getSecondBase64Symbol(final int byte1, final int byte2) {
         int idx = Consts.TO_BASE64_SECOND_SYMBOL_INDEX_1[byte1] + Consts.TO_BASE64_SECOND_SYMBOL_INDEX_2[byte2];
+        return Consts.TO_BASE64[idx];
+    }
+
+    static int getThirdBase64Symbol(final int byte2) {
+        int idx = Consts.TO_BASE64_THIRD_SYMBOL_INDEX_1[byte2];
         return Consts.TO_BASE64[idx];
     }
 
@@ -147,7 +157,7 @@ public final class Base64Helper {
      * Convert base64 string to byte array.
      *
      * @param base64 base64 string.
-     * @return new byte array with conversion result.
+     * @return new byte array with the conversion result.
      */
     public static byte[] toBytes(final String base64) {
         if (base64 == null) {
@@ -229,9 +239,13 @@ public final class Base64Helper {
                 }
             }
         } else {
-            result[resultIndex] = (byte) getFirstBase64Byte(symbol1, symbol2);
-            result[resultIndex + 1] = (byte) getSecondBase64Byte(symbol2, symbol3);
-            result[resultIndex + 2] = (byte) getThirdBase64Byte(symbol3, symbol4);
+            if (symbol3 == Consts.PAD) {
+                throw new Base64RuntimeException(ExceptionMessageHelper.createWrongBase64Symbol(symbol3));
+            } else {
+                result[resultIndex] = (byte) getFirstBase64Byte(symbol1, symbol2);
+                result[resultIndex + 1] = (byte) getSecondBase64Byte(symbol2, symbol3);
+                result[resultIndex + 2] = (byte) getThirdBase64Byte(symbol3, symbol4);
+            }
         }
     }
 

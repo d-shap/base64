@@ -124,7 +124,7 @@ public final class Base64OutputStream extends OutputStream {
 
         @Override
         void close(final OutputStream outputStream, final int previousValue) throws IOException {
-            outputStream.write(Base64Helper.getSecondBase64Symbol(previousValue, 0));
+            outputStream.write(Base64Helper.getSecondBase64Symbol(previousValue));
             outputStream.write(Consts.PAD);
             outputStream.write(Consts.PAD);
         }
@@ -153,7 +153,7 @@ public final class Base64OutputStream extends OutputStream {
 
         @Override
         void close(final OutputStream outputStream, final int previousValue) throws IOException {
-            outputStream.write(Base64Helper.getThirdBase64Symbol(previousValue, 0));
+            outputStream.write(Base64Helper.getThirdBase64Symbol(previousValue));
             outputStream.write(Consts.PAD);
         }
 

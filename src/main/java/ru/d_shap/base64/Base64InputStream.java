@@ -60,10 +60,10 @@ public final class Base64InputStream extends InputStream {
         }
     }
 
-    private static int getCharFromBase64Stream(final InputStream inputStream, final boolean checkEnfOfInput, final boolean padIsValid) throws IOException {
+    private static int getCharFromBase64Stream(final InputStream inputStream, final boolean checkEndOfInput, final boolean padIsValid) throws IOException {
         int symbol = inputStream.read();
         if (symbol < 0) {
-            if (checkEnfOfInput) {
+            if (checkEndOfInput) {
                 throw new IOException(ExceptionMessageHelper.createEndOfStreamMessage());
             } else {
                 return -1;
@@ -215,7 +215,6 @@ public final class Base64InputStream extends InputStream {
 
             int byteRead = Base64Helper.getThirdBase64Byte(lastReadValueHolder.getValue(), symbol4);
             resultHolder.setValue(byteRead);
-            lastReadValueHolder.setValue(symbol4);
             return State1.INSTANCE;
         }
 
