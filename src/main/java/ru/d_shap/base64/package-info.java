@@ -32,17 +32,17 @@
  * An example, how to convert bytes to base64 symbols:
  * </p>
  * <pre>{@code
- * String str1 = Base64Helper.toBase64(new byte[]{1, 5, (byte) 140, (byte) 250, -14}); // str1 = "AQWM+vI="
- * String str2 = Base64Helper.toBase64(new byte[]{17, 28, (byte) 179, -14}); // str2 = "ERyz8g=="
- * String str3 = Base64Helper.toBase64(new byte[]{(byte) 255, (byte) 250, (byte) 180, 17, 94}); // str3 = "//q0EV4="
+ * String str1 = Base64Helper.toBase64(new byte[]{1, 5, (byte) 140, (byte) 250, -14, 25}); // str1 = "AQWM+vIZ"
+ * String str2 = Base64Helper.toBase64(new byte[]{(byte) 255, (byte) 250, (byte) 180, 17, 94}); // str2 = "//q0EV4="
+ * String str3 = Base64Helper.toBase64(new byte[]{17, 28, (byte) 179, -14}); // str3 = "ERyz8g=="
  * }</pre>
  * <p>
  * An example, how to convert base64 symbols to bytes:
  * </p>
  * <pre>{@code
  * byte[] bytes1 = Base64Helper.toBytes("a+Z/fF12"); // bytes1 = new byte[]{(107, (byte) 230, 127, 124, 93, 118}
- * byte[] bytes2 = Base64Helper.toBytes("12gE3Jr="); // bytes2 = new byte[]{(byte) 215, 104, 4, (byte) 220, (byte) 154}
- * byte[] bytes3 = Base64Helper.toBytes("0FFTyv=="); // bytes3 = new byte[]{(byte) 208, 81, 83, (byte) 202}
+ * byte[] bytes2 = Base64Helper.toBytes("12gE3JQ="); // bytes2 = new byte[]{(byte) 215, 104, 4, (byte) 220, (byte) 148}
+ * byte[] bytes3 = Base64Helper.toBytes("0FFTyQ=="); // bytes3 = new byte[]{(byte) 208, 81, 83, (byte) 201}
  * }</pre>
  * <p>
  * {@link ru.d_shap.base64.Base64Helper} class contains all data in memory. For a large data (for example, big files)
@@ -54,19 +54,18 @@
  * An example, how to write base64 symbols to the file:
  * </p>
  * <pre>{@code
- * FileInputStream inputStream = new FileInputStream("some input file");
- * FileOutputStream outputStream = new FileOutputStream("some output file");
- * Base64OutputStream base64OutputStream = new Base64OutputStream(outputStream);
- * int read;
- * while (true) {
- *     read = inputStream.read();
- *     if (read < 0) {
- *         break;
+ * try (FileInputStream inputStream = new FileInputStream("some input file");
+ *      FileOutputStream outputStream = new FileOutputStream("some output file");
+ *      Base64OutputStream base64OutputStream = new Base64OutputStream(outputStream);) {
+ *     int read;
+ *     while (true) {
+ *         read = inputStream.read();
+ *         if (read < 0) {
+ *             break;
+ *         }
+ *         base64OutputStream.write(read);
  *     }
- *     base64OutputStream.write(read);
  * }
- * base64OutputStream.close();
- * inputStream.close();
  * }</pre>
  * <p>
  * Each 3 original bytes are represented with 4 base64 symbols. Convertion to base64 increases the original size by 33 percent.
