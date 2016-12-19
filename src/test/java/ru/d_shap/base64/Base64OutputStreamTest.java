@@ -90,6 +90,20 @@ public final class Base64OutputStreamTest {
      * @throws IOException IO exception.
      */
     @Test
+    public void emptyStreamTest() throws IOException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        Base64OutputStream base64OutputStream = new Base64OutputStream(baos);
+        base64OutputStream.write(new byte[0]);
+        base64OutputStream.close();
+        Assert.assertEquals("", new String(baos.toByteArray(), ENCODING));
+    }
+
+    /**
+     * {@link Base64OutputStream} class test.
+     *
+     * @throws IOException IO exception.
+     */
+    @Test
     public void closeTest() throws IOException {
         CloseStream closeStream = new CloseStream();
         Base64OutputStream base64OutputStream = new Base64OutputStream(closeStream);

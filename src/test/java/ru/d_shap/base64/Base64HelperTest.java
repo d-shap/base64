@@ -126,6 +126,13 @@ public final class Base64HelperTest {
      */
     @Test
     public void getSecondBase64SymbolTest() {
+        Assert.assertEquals('A', Base64Helper.getSecondBase64Symbol(0x00));
+        Assert.assertEquals('g', Base64Helper.getSecondBase64Symbol(0xA2));
+        Assert.assertEquals('g', Base64Helper.getSecondBase64Symbol(0x02));
+        Assert.assertEquals('g', Base64Helper.getSecondBase64Symbol(0x92));
+        Assert.assertEquals('g', Base64Helper.getSecondBase64Symbol(0x12));
+        Assert.assertEquals('w', Base64Helper.getSecondBase64Symbol(0xA3));
+
         Assert.assertEquals('A', Base64Helper.getSecondBase64Symbol(0x00, 0x00));
         Assert.assertEquals('v', Base64Helper.getSecondBase64Symbol(0xA2, 0xF0));
         Assert.assertEquals('v', Base64Helper.getSecondBase64Symbol(0xA2, 0xF5));
@@ -142,6 +149,14 @@ public final class Base64HelperTest {
      */
     @Test
     public void getThirdBase64SymbolTest() {
+        Assert.assertEquals('A', Base64Helper.getThirdBase64Symbol(0x00));
+        Assert.assertEquals('8', Base64Helper.getThirdBase64Symbol(0x0F));
+        Assert.assertEquals('8', Base64Helper.getThirdBase64Symbol(0x2F));
+        Assert.assertEquals('8', Base64Helper.getThirdBase64Symbol(0xAF));
+        Assert.assertEquals('Q', Base64Helper.getThirdBase64Symbol(0x74));
+        Assert.assertEquals('A', Base64Helper.getThirdBase64Symbol(0x90));
+        Assert.assertEquals('Y', Base64Helper.getThirdBase64Symbol(0xF6));
+
         Assert.assertEquals('A', Base64Helper.getThirdBase64Symbol(0x00, 0x00));
         Assert.assertEquals('8', Base64Helper.getThirdBase64Symbol(0x0F, 0x0F));
         Assert.assertEquals('8', Base64Helper.getThirdBase64Symbol(0x0F, 0x3A));
@@ -434,6 +449,68 @@ public final class Base64HelperTest {
      * {@link Base64Helper} class test.
      */
     @Test
+    public void toBytesWrongPadPositionTest() {
+        try {
+            Base64Helper.toBytes("++++=+++++++");
+            Assert.fail("Wrong pad processed");
+        } catch (Base64RuntimeException ex) {
+            Assert.assertEquals("Wrong symbol obtained: '=' (61)", ex.getMessage());
+        }
+        try {
+            Base64Helper.toBytes("+++++=++++++");
+            Assert.fail("Wrong pad processed");
+        } catch (Base64RuntimeException ex) {
+            Assert.assertEquals("Wrong symbol obtained: '=' (61)", ex.getMessage());
+        }
+        try {
+            Base64Helper.toBytes("++++++=+++++");
+            Assert.fail("Wrong pad processed");
+        } catch (Base64RuntimeException ex) {
+            Assert.assertEquals("Wrong symbol obtained: '=' (61)", ex.getMessage());
+        }
+        try {
+            Base64Helper.toBytes("+++++++=++++");
+            Assert.fail("Wrong pad processed");
+        } catch (Base64RuntimeException ex) {
+            Assert.assertEquals("Wrong symbol obtained: '=' (61)", ex.getMessage());
+        }
+        try {
+            Base64Helper.toBytes("++++++++=+++");
+            Assert.fail("Wrong pad processed");
+        } catch (Base64RuntimeException ex) {
+            Assert.assertEquals("Wrong symbol obtained: '=' (61)", ex.getMessage());
+        }
+        try {
+            Base64Helper.toBytes("+++++++++=++");
+            Assert.fail("Wrong pad processed");
+        } catch (Base64RuntimeException ex) {
+            Assert.assertEquals("Wrong symbol obtained: '=' (61)", ex.getMessage());
+        }
+    }
+
+    /**
+     * {@link Base64Helper} class test.
+     */
+    @Test
+    public void toBytesWrongSymbolAfterPadTest() {
+        try {
+            Base64Helper.toBytes("++++++=+");
+            Assert.fail("Wrong symbol after pad processed");
+        } catch (Base64RuntimeException ex) {
+            Assert.assertEquals("Wrong symbol obtained: '=' (61)", ex.getMessage());
+        }
+        try {
+            Base64Helper.toBytes("++++++=,");
+            Assert.fail("Wrong symbol after pad processed");
+        } catch (Base64RuntimeException ex) {
+            Assert.assertEquals("Wrong symbol obtained: ',' (44)", ex.getMessage());
+        }
+    }
+
+    /**
+     * {@link Base64Helper} class test.
+     */
+    @Test
     public void isBase64SymbolValidTest() {
         Assert.assertFalse(Base64Helper.isBase64SymbolValid(-2));
         Assert.assertFalse(Base64Helper.isBase64SymbolValid(-1));
@@ -452,6 +529,8 @@ public final class Base64HelperTest {
         Assert.assertFalse(Base64Helper.isBase64SymbolValid('*'));
         Assert.assertFalse(Base64Helper.isBase64SymbolValid('='));
         Assert.assertFalse(Base64Helper.isBase64SymbolValid(220));
+        Assert.assertTrue(Base64Helper.isBase64SymbolValid(122));
+        Assert.assertFalse(Base64Helper.isBase64SymbolValid(123));
     }
 
     /**
@@ -545,18 +624,26 @@ public final class Base64HelperTest {
         Assert.assertFalse(Base64Helper.isBase64String("aaaaa,aa"));
         Assert.assertFalse(Base64Helper.isBase64String("aaaaaa,a"));
         Assert.assertFalse(Base64Helper.isBase64String("aaaaaaa,"));
+
         Assert.assertTrue(Base64Helper.isBase64String("12kdId65"));
         Assert.assertTrue(Base64Helper.isBase64String("43093+df"));
         Assert.assertTrue(Base64Helper.isBase64String("KLdfLe+/"));
+
+        Assert.assertTrue(Base64Helper.isBase64String("aaaaaaQ="));
+        Assert.assertFalse(Base64Helper.isBase64String("aaaa,aQ="));
+        Assert.assertFalse(Base64Helper.isBase64String("aaaaa,Q="));
         Assert.assertFalse(Base64Helper.isBase64String("aaaaaaa="));
         Assert.assertFalse(Base64Helper.isBase64String("aaaa,aa="));
         Assert.assertFalse(Base64Helper.isBase64String("aaaaa,a="));
         Assert.assertFalse(Base64Helper.isBase64String("aaaaaa,="));
-        Assert.assertTrue(Base64Helper.isBase64String("aaaaaaQ="));
+
+        Assert.assertTrue(Base64Helper.isBase64String("aaaaaQ=="));
+        Assert.assertFalse(Base64Helper.isBase64String("aaaa,Q=="));
         Assert.assertFalse(Base64Helper.isBase64String("aaaaaa=="));
         Assert.assertFalse(Base64Helper.isBase64String("aaaa,a=="));
         Assert.assertFalse(Base64Helper.isBase64String("aaaaa,=="));
-        Assert.assertTrue(Base64Helper.isBase64String("aaaaaQ=="));
+        Assert.assertFalse(Base64Helper.isBase64String("aaaaaQ=a"));
+        Assert.assertFalse(Base64Helper.isBase64String("aaaaaQ=,"));
     }
 
     /**
