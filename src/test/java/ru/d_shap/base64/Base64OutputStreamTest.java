@@ -115,6 +115,53 @@ public final class Base64OutputStreamTest {
     }
 
     /**
+     * {@link Base64OutputStream} class test.
+     *
+     * @throws IOException IO exception.
+     */
+    @Test
+    public void writeToClosedTest() throws IOException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        Base64OutputStream base64OutputStream = new Base64OutputStream(baos);
+
+        base64OutputStream.write(new byte[]{(byte) 240, 120, 15});
+        base64OutputStream.close();
+        Assert.assertEquals("8HgP", new String(baos.toByteArray(), ENCODING));
+
+        base64OutputStream.write(new byte[]{17, 32});
+        base64OutputStream.close();
+        Assert.assertEquals("8HgPESA=", new String(baos.toByteArray(), ENCODING));
+
+        base64OutputStream.write(176);
+        base64OutputStream.close();
+        Assert.assertEquals("8HgPESA=sA==", new String(baos.toByteArray(), ENCODING));
+
+        base64OutputStream.write(new byte[]{30, (byte) 193, (byte) 201});
+        base64OutputStream.close();
+        Assert.assertEquals("8HgPESA=sA==HsHJ", new String(baos.toByteArray(), ENCODING));
+    }
+
+    /**
+     * {@link Base64OutputStream} class test.
+     *
+     * @throws IOException IO exception.
+     */
+    @Test
+    public void closeClosedTest() throws IOException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        Base64OutputStream base64OutputStream = new Base64OutputStream(baos);
+        base64OutputStream.write(new byte[]{30, (byte) 193});
+        base64OutputStream.close();
+        Assert.assertEquals("HsE=", new String(baos.toByteArray(), ENCODING));
+
+        base64OutputStream.close();
+        Assert.assertEquals("HsE=", new String(baos.toByteArray(), ENCODING));
+
+        base64OutputStream.close();
+        Assert.assertEquals("HsE=", new String(baos.toByteArray(), ENCODING));
+    }
+
+    /**
      * Output stream to test close method.
      *
      * @author Dmitry Shapovalov
