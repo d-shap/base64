@@ -497,7 +497,7 @@ public final class Base64HelperTest {
             Base64Helper.toBytes("++++++=+");
             Assert.fail("Wrong symbol after pad processed");
         } catch (Base64RuntimeException ex) {
-            Assert.assertEquals("Wrong symbol obtained: '=' (61)", ex.getMessage());
+            Assert.assertEquals("Wrong symbol obtained: '+' (43)", ex.getMessage());
         }
         try {
             Base64Helper.toBytes("++++++=,");
