@@ -31,9 +31,11 @@ public final class Base64OutputStream extends OutputStream {
 
     private final OutputStream _outputStream;
 
-    private AbstractState _currentState;
+    private final int[] _buffer;
 
-    private int _previousValue;
+    private int _bufferPosition;
+
+    private boolean _closed;
 
     /**
      * Create new object.
@@ -43,120 +45,53 @@ public final class Base64OutputStream extends OutputStream {
     public Base64OutputStream(final OutputStream outputStream) {
         super();
         _outputStream = outputStream;
-        _currentState = State1.INSTANCE;
-        _previousValue = 0;
+        _buffer = new int[3];
+        _bufferPosition = 0;
+        _closed = false;
     }
 
     @Override
     public void write(final int value) throws IOException {
-        int currentValue = value & 0xFF;
-        _currentState = _currentState.write(_outputStream, _previousValue, currentValue);
-        _previousValue = currentValue;
+        if (_closed) {
+            return;
+        }
+
+        _buffer[_bufferPosition] = value & 0xFF;
+        _bufferPosition++;
+        if (_bufferPosition == _buffer.length) {
+            flushBuffer();
+            _bufferPosition = 0;
+        }
     }
 
     @Override
     public void close() throws IOException {
-        _currentState.close(_outputStream, _previousValue);
+        if (_closed) {
+            return;
+        }
+
+        flushBuffer();
         _outputStream.close();
+        _closed = true;
     }
 
-    /**
-     * Base class for object state.
-     *
-     * @author Dmitry Shapovalov
-     */
-    private abstract static class AbstractState {
-
-        AbstractState() {
-            super();
+    private void flushBuffer() throws IOException {
+        if (_bufferPosition == 1) {
+            _outputStream.write(Base64Helper.getFirstBase64Symbol(_buffer[0]));
+            _outputStream.write(Base64Helper.getSecondBase64Symbol(_buffer[0]));
+            _outputStream.write(Consts.PAD);
+            _outputStream.write(Consts.PAD);
+        } else if (_bufferPosition == 2) {
+            _outputStream.write(Base64Helper.getFirstBase64Symbol(_buffer[0]));
+            _outputStream.write(Base64Helper.getSecondBase64Symbol(_buffer[0], _buffer[1]));
+            _outputStream.write(Base64Helper.getThirdBase64Symbol(_buffer[1]));
+            _outputStream.write(Consts.PAD);
+        } else if (_bufferPosition == 3) {
+            _outputStream.write(Base64Helper.getFirstBase64Symbol(_buffer[0]));
+            _outputStream.write(Base64Helper.getSecondBase64Symbol(_buffer[0], _buffer[1]));
+            _outputStream.write(Base64Helper.getThirdBase64Symbol(_buffer[1], _buffer[2]));
+            _outputStream.write(Base64Helper.getFourthBase64Symbol(_buffer[2]));
         }
-
-        abstract AbstractState write(OutputStream outputStream, int previousValue, int value) throws IOException;
-
-        abstract void close(OutputStream outputStream, int previousValue) throws IOException;
-
-    }
-
-    /**
-     * State to process the first byte.
-     *
-     * @author Dmitry Shapovalov
-     */
-    private static final class State1 extends AbstractState {
-
-        static final AbstractState INSTANCE = new State1();
-
-        private State1() {
-            super();
-        }
-
-        @Override
-        AbstractState write(final OutputStream outputStream, final int previousValue, final int value) throws IOException {
-            outputStream.write(Base64Helper.getFirstBase64Symbol(value));
-            return State2.INSTANCE;
-        }
-
-        @Override
-        void close(final OutputStream outputStream, final int previousValue) throws IOException {
-            // Ignore
-        }
-
-    }
-
-    /**
-     * State to process the second byte.
-     *
-     * @author Dmitry Shapovalov
-     */
-    private static final class State2 extends AbstractState {
-
-        static final AbstractState INSTANCE = new State2();
-
-        private State2() {
-            super();
-        }
-
-        @Override
-        AbstractState write(final OutputStream outputStream, final int previousValue, final int value) throws IOException {
-            outputStream.write(Base64Helper.getSecondBase64Symbol(previousValue, value));
-            return State3.INSTANCE;
-        }
-
-        @Override
-        void close(final OutputStream outputStream, final int previousValue) throws IOException {
-            outputStream.write(Base64Helper.getSecondBase64Symbol(previousValue));
-            outputStream.write(Consts.PAD);
-            outputStream.write(Consts.PAD);
-        }
-
-    }
-
-    /**
-     * State to process the third byte.
-     *
-     * @author Dmitry Shapovalov
-     */
-    private static final class State3 extends AbstractState {
-
-        static final AbstractState INSTANCE = new State3();
-
-        private State3() {
-            super();
-        }
-
-        @Override
-        AbstractState write(final OutputStream outputStream, final int previousValue, final int value) throws IOException {
-            outputStream.write(Base64Helper.getThirdBase64Symbol(previousValue, value));
-            outputStream.write(Base64Helper.getFourthBase64Symbol(value));
-            return State1.INSTANCE;
-        }
-
-        @Override
-        void close(final OutputStream outputStream, final int previousValue) throws IOException {
-            outputStream.write(Base64Helper.getThirdBase64Symbol(previousValue));
-            outputStream.write(Consts.PAD);
-        }
-
     }
 
 }
