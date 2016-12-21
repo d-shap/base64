@@ -44,7 +44,7 @@ public final class Base64InputStream extends InputStream {
         super();
         _inputStream = inputStream;
         _buffer = new int[3];
-        _bufferPosition = _buffer.length;
+        _bufferPosition = _buffer.length - 1;
     }
 
     @Override
@@ -53,6 +53,7 @@ public final class Base64InputStream extends InputStream {
             return -1;
         }
 
+        _bufferPosition++;
         if (_bufferPosition == _buffer.length) {
             _bufferPosition = updateBuffer();
             if (_bufferPosition < 0) {
@@ -60,9 +61,7 @@ public final class Base64InputStream extends InputStream {
             }
         }
 
-        int result = _buffer[_bufferPosition];
-        _bufferPosition++;
-        return result;
+        return _buffer[_bufferPosition];
     }
 
     private int updateBuffer() throws IOException {
