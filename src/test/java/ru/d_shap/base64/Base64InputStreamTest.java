@@ -118,7 +118,6 @@ public final class Base64InputStreamTest {
             byte[] base64Bytes = new byte[]{'a', 'b'};
             ByteArrayInputStream bais = new ByteArrayInputStream(base64Bytes);
             Base64InputStream base64InputStream = new Base64InputStream(bais);
-            Assert.assertEquals(0x69, base64InputStream.read());
             base64InputStream.read();
             Assert.fail("End of stream not processed");
         } catch (IOException ex) {
@@ -128,7 +127,6 @@ public final class Base64InputStreamTest {
             byte[] base64Bytes = new byte[]{'a', 'Q', '='};
             ByteArrayInputStream bais = new ByteArrayInputStream(base64Bytes);
             Base64InputStream base64InputStream = new Base64InputStream(bais);
-            Assert.assertEquals(0x69, base64InputStream.read());
             base64InputStream.read();
             Assert.fail("End of stream not processed");
         } catch (IOException ex) {
@@ -138,8 +136,6 @@ public final class Base64InputStreamTest {
             byte[] base64Bytes = new byte[]{'a', 'b', 'c'};
             ByteArrayInputStream bais = new ByteArrayInputStream(base64Bytes);
             Base64InputStream base64InputStream = new Base64InputStream(bais);
-            Assert.assertEquals(0x69, base64InputStream.read());
-            Assert.assertEquals(0xB7, base64InputStream.read());
             base64InputStream.read();
             Assert.fail("End of stream not processed");
         } catch (IOException ex) {
@@ -153,31 +149,54 @@ public final class Base64InputStreamTest {
      * @throws IOException IO exception.
      */
     @Test
-    public void symbolsAfterEndTest() throws IOException {
-        byte[] base64Bytes1 = new byte[]{'a', 'b', 'Q', '=', 'a'};
+    public void symbolsAfterPadTest() throws IOException {
+        byte[] base64Bytes1 = new byte[]{'a', 'b', 'Q', '=', 'a', 'b', 'c', 'd'};
         ByteArrayInputStream bais1 = new ByteArrayInputStream(base64Bytes1);
         Base64InputStream base64InputStream1 = new Base64InputStream(bais1);
         Assert.assertEquals(0x69, base64InputStream1.read());
         Assert.assertEquals(0xB4, base64InputStream1.read());
+        Assert.assertEquals(0x69, base64InputStream1.read());
+        Assert.assertEquals(0xB7, base64InputStream1.read());
+        Assert.assertEquals(0x1D, base64InputStream1.read());
         Assert.assertEquals(-1, base64InputStream1.read());
         Assert.assertEquals(-1, base64InputStream1.read());
         Assert.assertEquals(-1, base64InputStream1.read());
-        Assert.assertEquals('a', bais1.read());
         Assert.assertEquals(-1, bais1.read());
         Assert.assertEquals(-1, bais1.read());
         Assert.assertEquals(-1, bais1.read());
 
-        byte[] base64Bytes2 = new byte[]{'a', 'Q', '=', '=', 'a'};
+        byte[] base64Bytes2 = new byte[]{'a', 'Q', '=', '=', 'a', 'b', 'c', 'd'};
         ByteArrayInputStream bais2 = new ByteArrayInputStream(base64Bytes2);
         Base64InputStream base64InputStream2 = new Base64InputStream(bais2);
         Assert.assertEquals(0x69, base64InputStream2.read());
+        Assert.assertEquals(0x69, base64InputStream2.read());
+        Assert.assertEquals(0xB7, base64InputStream2.read());
+        Assert.assertEquals(0x1D, base64InputStream2.read());
         Assert.assertEquals(-1, base64InputStream2.read());
         Assert.assertEquals(-1, base64InputStream2.read());
         Assert.assertEquals(-1, base64InputStream2.read());
-        Assert.assertEquals('a', bais2.read());
         Assert.assertEquals(-1, bais2.read());
         Assert.assertEquals(-1, bais2.read());
         Assert.assertEquals(-1, bais2.read());
+
+        byte[] base64Bytes3 = new byte[]{'8', 'H', 'g', 'P', 'E', 'S', 'A', '=', 's', 'A', '=', '=', 'H', 's', 'H', 'J'};
+        ByteArrayInputStream bais3 = new ByteArrayInputStream(base64Bytes3);
+        Base64InputStream base64InputStream3 = new Base64InputStream(bais3);
+        Assert.assertEquals(0xF0, base64InputStream3.read());
+        Assert.assertEquals(0x78, base64InputStream3.read());
+        Assert.assertEquals(0x0F, base64InputStream3.read());
+        Assert.assertEquals(0x11, base64InputStream3.read());
+        Assert.assertEquals(0x20, base64InputStream3.read());
+        Assert.assertEquals(0xB0, base64InputStream3.read());
+        Assert.assertEquals(0x1E, base64InputStream3.read());
+        Assert.assertEquals(0xC1, base64InputStream3.read());
+        Assert.assertEquals(0xC9, base64InputStream3.read());
+        Assert.assertEquals(-1, base64InputStream3.read());
+        Assert.assertEquals(-1, base64InputStream3.read());
+        Assert.assertEquals(-1, base64InputStream3.read());
+        Assert.assertEquals(-1, bais3.read());
+        Assert.assertEquals(-1, bais3.read());
+        Assert.assertEquals(-1, bais3.read());
     }
 
     /**
@@ -207,7 +226,6 @@ public final class Base64InputStreamTest {
             byte[] base64Bytes = new byte[]{'a', 'b', '?', 'c'};
             ByteArrayInputStream bais = new ByteArrayInputStream(base64Bytes);
             Base64InputStream base64InputStream = new Base64InputStream(bais);
-            Assert.assertEquals(0x69, base64InputStream.read());
             base64InputStream.read();
             Assert.fail("Wrong symbol not processed");
         } catch (IOException ex) {
@@ -217,8 +235,6 @@ public final class Base64InputStreamTest {
             byte[] base64Bytes = new byte[]{'a', 'b', 'c', '?'};
             ByteArrayInputStream bais = new ByteArrayInputStream(base64Bytes);
             Base64InputStream base64InputStream = new Base64InputStream(bais);
-            Assert.assertEquals(0x69, base64InputStream.read());
-            Assert.assertEquals(0xB7, base64InputStream.read());
             base64InputStream.read();
             Assert.fail("Wrong symbol not processed");
         } catch (IOException ex) {
@@ -235,8 +251,6 @@ public final class Base64InputStreamTest {
             byte[] base64Bytes = new byte[]{0, 'a', 'b', 'c'};
             ByteArrayInputStream bais = new ByteArrayInputStream(base64Bytes);
             Base64InputStream base64InputStream = new Base64InputStream(bais);
-            Assert.assertEquals(0x69, base64InputStream.read());
-            Assert.assertEquals(0xB7, base64InputStream.read());
             base64InputStream.read();
             Assert.fail("Wrong symbol not processed");
         } catch (IOException ex) {
@@ -246,8 +260,6 @@ public final class Base64InputStreamTest {
             byte[] base64Bytes = new byte[]{'a', 0, 'b', 'c'};
             ByteArrayInputStream bais = new ByteArrayInputStream(base64Bytes);
             Base64InputStream base64InputStream = new Base64InputStream(bais);
-            Assert.assertEquals(0x69, base64InputStream.read());
-            Assert.assertEquals(0xB7, base64InputStream.read());
             base64InputStream.read();
             Assert.fail("Wrong symbol not processed");
         } catch (IOException ex) {
@@ -257,8 +269,6 @@ public final class Base64InputStreamTest {
             byte[] base64Bytes = new byte[]{'a', 'b', 0, 'c'};
             ByteArrayInputStream bais = new ByteArrayInputStream(base64Bytes);
             Base64InputStream base64InputStream = new Base64InputStream(bais);
-            Assert.assertEquals(0x69, base64InputStream.read());
-            Assert.assertEquals(0xB7, base64InputStream.read());
             base64InputStream.read();
             Assert.fail("Wrong symbol not processed");
         } catch (IOException ex) {
@@ -268,8 +278,6 @@ public final class Base64InputStreamTest {
             byte[] base64Bytes = new byte[]{'a', 'b', 'c', 0};
             ByteArrayInputStream bais = new ByteArrayInputStream(base64Bytes);
             Base64InputStream base64InputStream = new Base64InputStream(bais);
-            Assert.assertEquals(0x69, base64InputStream.read());
-            Assert.assertEquals(0xB7, base64InputStream.read());
             base64InputStream.read();
             Assert.fail("Wrong symbol not processed");
         } catch (IOException ex) {
@@ -301,7 +309,6 @@ public final class Base64InputStreamTest {
             Assert.assertEquals(0x69, base64InputStream.read());
             Assert.assertEquals(0xB7, base64InputStream.read());
             Assert.assertEquals(0x1D, base64InputStream.read());
-            Assert.assertEquals(0x69, base64InputStream.read());
             base64InputStream.read();
             Assert.fail("Wrong symbol not processed");
         } catch (IOException ex) {
@@ -338,7 +345,6 @@ public final class Base64InputStreamTest {
             Assert.assertEquals(0x69, base64InputStream.read());
             Assert.assertEquals(0xB7, base64InputStream.read());
             Assert.assertEquals(0x1D, base64InputStream.read());
-            Assert.assertEquals(0x69, base64InputStream.read());
             base64InputStream.read();
             Assert.fail("Wrong symbol not processed");
         } catch (IOException ex) {
@@ -351,7 +357,6 @@ public final class Base64InputStreamTest {
             Assert.assertEquals(0x69, base64InputStream.read());
             Assert.assertEquals(0xB7, base64InputStream.read());
             Assert.assertEquals(0x1D, base64InputStream.read());
-            Assert.assertEquals(0x69, base64InputStream.read());
             base64InputStream.read();
             Assert.fail("Wrong symbol not processed");
         } catch (IOException ex) {
@@ -395,8 +400,6 @@ public final class Base64InputStreamTest {
             Assert.assertEquals(0x69, base64InputStream.read());
             Assert.assertEquals(0xB7, base64InputStream.read());
             Assert.assertEquals(0x1D, base64InputStream.read());
-            Assert.assertEquals(0x69, base64InputStream.read());
-            Assert.assertEquals(0xA6, base64InputStream.read());
             base64InputStream.read();
             Assert.fail("Wrong symbol not processed");
         } catch (IOException ex) {
@@ -433,7 +436,6 @@ public final class Base64InputStreamTest {
             Assert.assertEquals(0x69, base64InputStream.read());
             Assert.assertEquals(0xB7, base64InputStream.read());
             Assert.assertEquals(0x1D, base64InputStream.read());
-            Assert.assertEquals(0x69, base64InputStream.read());
             base64InputStream.read();
             Assert.fail("Wrong symbol not processed");
         } catch (IOException ex) {
@@ -501,6 +503,60 @@ public final class Base64InputStreamTest {
         Assert.assertFalse(closeStream.isClosed());
         base64InputStream.close();
         Assert.assertTrue(closeStream.isClosed());
+    }
+
+    /**
+     * {@link Base64InputStream} class test.
+     *
+     * @throws IOException IO exception.
+     */
+    @Test
+    public void readFromClosedTest() throws IOException {
+        byte[] base64Bytes = new byte[]{'M', 'T', '+', '6', 'p', 'w', '=', '='};
+        ByteArrayInputStream bais = new ByteArrayInputStream(base64Bytes);
+        Base64InputStream base64InputStream = new Base64InputStream(bais);
+        Assert.assertEquals(0x31, base64InputStream.read());
+        Assert.assertEquals(0x3F, base64InputStream.read());
+
+        base64InputStream.close();
+        Assert.assertEquals(0xBA, base64InputStream.read());
+        Assert.assertEquals(0xA7, base64InputStream.read());
+        Assert.assertEquals(-1, base64InputStream.read());
+        Assert.assertEquals(-1, base64InputStream.read());
+        Assert.assertEquals(-1, base64InputStream.read());
+        Assert.assertEquals(-1, bais.read());
+        Assert.assertEquals(-1, bais.read());
+        Assert.assertEquals(-1, bais.read());
+    }
+
+    /**
+     * {@link Base64InputStream} class test.
+     *
+     * @throws IOException IO exception.
+     */
+    @Test
+    public void closeClosedTest() throws IOException {
+        byte[] base64Bytes = new byte[]{'M', 'T', '+', '6', 'p', 'w', '=', '='};
+        ByteArrayInputStream bais = new ByteArrayInputStream(base64Bytes);
+        Base64InputStream base64InputStream = new Base64InputStream(bais);
+        Assert.assertEquals(0x31, base64InputStream.read());
+
+        base64InputStream.close();
+        Assert.assertEquals(0x3F, base64InputStream.read());
+
+        base64InputStream.close();
+        Assert.assertEquals(0xBA, base64InputStream.read());
+
+        base64InputStream.close();
+        Assert.assertEquals(0xA7, base64InputStream.read());
+
+        base64InputStream.close();
+        Assert.assertEquals(-1, base64InputStream.read());
+        Assert.assertEquals(-1, base64InputStream.read());
+        Assert.assertEquals(-1, base64InputStream.read());
+        Assert.assertEquals(-1, bais.read());
+        Assert.assertEquals(-1, bais.read());
+        Assert.assertEquals(-1, bais.read());
     }
 
     /**
