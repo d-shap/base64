@@ -55,15 +55,14 @@
  * </p>
  * <pre>{@code
  * try (FileInputStream inputStream = new FileInputStream("some input file");
- *      FileOutputStream outputStream = new FileOutputStream("some output file");
- *      Base64OutputStream base64OutputStream = new Base64OutputStream(outputStream);) {
+ *      Base64OutputStream outputStream = new Base64OutputStream(new FileOutputStream("some output file"));) {
  *     int read;
  *     while (true) {
  *         read = inputStream.read();
  *         if (read < 0) {
  *             break;
  *         }
- *         base64OutputStream.write(read);
+ *         outputStream.write(read);
  *     }
  * }
  * }</pre>
