@@ -35,8 +35,6 @@ public final class Base64OutputStream extends OutputStream {
 
     private int _bufferPosition;
 
-    private boolean _closed;
-
     /**
      * Create new object.
      *
@@ -47,15 +45,10 @@ public final class Base64OutputStream extends OutputStream {
         _outputStream = outputStream;
         _buffer = new int[3];
         _bufferPosition = 0;
-        _closed = false;
     }
 
     @Override
     public void write(final int value) throws IOException {
-        if (_closed) {
-            return;
-        }
-
         _buffer[_bufferPosition] = value & 0xFF;
         _bufferPosition++;
         if (_bufferPosition == _buffer.length) {
@@ -66,13 +59,9 @@ public final class Base64OutputStream extends OutputStream {
 
     @Override
     public void close() throws IOException {
-        if (_closed) {
-            return;
-        }
-
         flushBuffer();
         _outputStream.close();
-        _closed = true;
+        _bufferPosition = 0;
     }
 
     private void flushBuffer() throws IOException {
