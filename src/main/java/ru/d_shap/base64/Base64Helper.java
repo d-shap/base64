@@ -71,26 +71,21 @@ public final class Base64Helper {
             result.append((char) getFourthBase64Symbol(byte3));
         }
 
-        switch (bytesMod) {
-            case 1:
-                byte1 = bytes[bytesIndex] & 0xFF;
+        if (bytesMod == 1) {
+            byte1 = bytes[bytesIndex] & 0xFF;
 
-                result.append((char) getFirstBase64Symbol(byte1));
-                result.append((char) getSecondBase64Symbol(byte1));
-                result.append((char) Consts.PAD);
-                result.append((char) Consts.PAD);
-                break;
-            case 2:
-                byte1 = bytes[bytesIndex] & 0xFF;
-                byte2 = bytes[bytesIndex + 1] & 0xFF;
+            result.append((char) getFirstBase64Symbol(byte1));
+            result.append((char) getSecondBase64Symbol(byte1));
+            result.append((char) Consts.PAD);
+            result.append((char) Consts.PAD);
+        } else if (bytesMod == 2) {
+            byte1 = bytes[bytesIndex] & 0xFF;
+            byte2 = bytes[bytesIndex + 1] & 0xFF;
 
-                result.append((char) getFirstBase64Symbol(byte1));
-                result.append((char) getSecondBase64Symbol(byte1, byte2));
-                result.append((char) getThirdBase64Symbol(byte2));
-                result.append((char) Consts.PAD);
-                break;
-            default:
-                break;
+            result.append((char) getFirstBase64Symbol(byte1));
+            result.append((char) getSecondBase64Symbol(byte1, byte2));
+            result.append((char) getThirdBase64Symbol(byte2));
+            result.append((char) Consts.PAD);
         }
 
         return result.toString();
@@ -202,13 +197,13 @@ public final class Base64Helper {
         int symbol4;
         int resultIndex = 0;
         for (int i = 0; i < blockCountM1; i++) {
-            symbol1 = getCharFromBase64String(base64, base64Index, false);
+            symbol1 = getBase64Symbol(base64, base64Index, false);
             base64Index++;
-            symbol2 = getCharFromBase64String(base64, base64Index, false);
+            symbol2 = getBase64Symbol(base64, base64Index, false);
             base64Index++;
-            symbol3 = getCharFromBase64String(base64, base64Index, false);
+            symbol3 = getBase64Symbol(base64, base64Index, false);
             base64Index++;
-            symbol4 = getCharFromBase64String(base64, base64Index, false);
+            symbol4 = getBase64Symbol(base64, base64Index, false);
             base64Index++;
 
             result[resultIndex] = (byte) getFirstBase64Byte(symbol1, symbol2);
@@ -219,10 +214,10 @@ public final class Base64Helper {
             resultIndex++;
         }
 
-        symbol1 = getCharFromBase64String(base64, base64Index, false);
-        symbol2 = getCharFromBase64String(base64, base64Index + 1, false);
-        symbol3 = getCharFromBase64String(base64, base64Index + 2, true);
-        symbol4 = getCharFromBase64String(base64, base64Index + 3, true);
+        symbol1 = getBase64Symbol(base64, base64Index, false);
+        symbol2 = getBase64Symbol(base64, base64Index + 1, false);
+        symbol3 = getBase64Symbol(base64, base64Index + 2, true);
+        symbol4 = getBase64Symbol(base64, base64Index + 3, true);
         if (symbol4 == Consts.PAD) {
             if (symbol3 == Consts.PAD) {
                 if (isSecondBase64ByteZero(symbol2)) {
@@ -240,7 +235,7 @@ public final class Base64Helper {
             }
         } else {
             if (symbol3 == Consts.PAD) {
-                throw new Base64RuntimeException(ExceptionMessageHelper.createWrongBase64Symbol(symbol3));
+                throw new Base64RuntimeException(ExceptionMessageHelper.createWrongBase64Symbol(symbol4));
             } else {
                 result[resultIndex] = (byte) getFirstBase64Byte(symbol1, symbol2);
                 result[resultIndex + 1] = (byte) getSecondBase64Byte(symbol2, symbol3);
@@ -249,7 +244,7 @@ public final class Base64Helper {
         }
     }
 
-    private static int getCharFromBase64String(final String base64, final int base64Index, final boolean padIsValid) {
+    private static int getBase64Symbol(final String base64, final int base64Index, final boolean padIsValid) {
         int symbol = base64.charAt(base64Index);
         if (isBase64SymbolValid(symbol) || padIsValid && symbol == Consts.PAD) {
             return symbol;
@@ -315,7 +310,6 @@ public final class Base64Helper {
         int symbol2 = base64.charAt(base64LengthM4 + 1);
         int symbol3 = base64.charAt(base64LengthM4 + 2);
         int symbol4 = base64.charAt(base64LengthM4 + 3);
-
         if (symbol4 == Consts.PAD) {
             if (symbol3 == Consts.PAD) {
                 return isBase64SymbolValid(symbol1) && isBase64SymbolValid(symbol2) && isSecondBase64ByteZero(symbol2);
