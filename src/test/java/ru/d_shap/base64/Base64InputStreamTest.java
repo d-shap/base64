@@ -407,6 +407,7 @@ public final class Base64InputStreamTest {
         ByteArrayInputStream bais = new ByteArrayInputStream(base64Bytes);
         Base64InputStream base64InputStream = new Base64InputStream(bais);
         Assertions.assertThat(base64InputStream).isCompleted();
+        Assertions.assertThat(base64InputStream).isCompleted();
     }
 
     /**
