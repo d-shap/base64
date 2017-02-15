@@ -23,8 +23,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import org.junit.Assert;
 import org.junit.Test;
+
+import ru.d_shap.assertions.Assertions;
 
 /**
  * Tests for {@link Base64OutputStream}.
@@ -53,7 +54,7 @@ public final class Base64OutputStreamTest {
         Base64OutputStream base64OutputStream = new Base64OutputStream(baos);
         base64OutputStream.write(new byte[]{(byte) 240, 120, 15, 30, (byte) 193, (byte) 201});
         base64OutputStream.close();
-        Assert.assertEquals("8HgPHsHJ", new String(baos.toByteArray(), ENCODING));
+        Assertions.assertThat(new String(baos.toByteArray(), ENCODING)).isEqualTo("8HgPHsHJ");
     }
 
     /**
@@ -67,7 +68,7 @@ public final class Base64OutputStreamTest {
         Base64OutputStream base64OutputStream = new Base64OutputStream(baos);
         base64OutputStream.write(new byte[]{(byte) 240, 120, 15, 30, (byte) 193});
         base64OutputStream.close();
-        Assert.assertEquals("8HgPHsE=", new String(baos.toByteArray(), ENCODING));
+        Assertions.assertThat(new String(baos.toByteArray(), ENCODING)).isEqualTo("8HgPHsE=");
     }
 
     /**
@@ -81,7 +82,7 @@ public final class Base64OutputStreamTest {
         Base64OutputStream base64OutputStream = new Base64OutputStream(baos);
         base64OutputStream.write(new byte[]{(byte) 240, 120, 15, 30});
         base64OutputStream.close();
-        Assert.assertEquals("8HgPHg==", new String(baos.toByteArray(), ENCODING));
+        Assertions.assertThat(new String(baos.toByteArray(), ENCODING)).isEqualTo("8HgPHg==");
     }
 
     /**
@@ -95,7 +96,7 @@ public final class Base64OutputStreamTest {
         Base64OutputStream base64OutputStream = new Base64OutputStream(baos);
         base64OutputStream.write(new byte[0]);
         base64OutputStream.close();
-        Assert.assertEquals("", new String(baos.toByteArray(), ENCODING));
+        Assertions.assertThat(new String(baos.toByteArray(), ENCODING)).isEqualTo("");
     }
 
     /**
@@ -109,9 +110,9 @@ public final class Base64OutputStreamTest {
         Base64OutputStream base64OutputStream = new Base64OutputStream(closeStream);
         base64OutputStream.write(123);
 
-        Assert.assertFalse(closeStream.isClosed());
+        Assertions.assertThat(closeStream.isClosed()).isFalse();
         base64OutputStream.close();
-        Assert.assertTrue(closeStream.isClosed());
+        Assertions.assertThat(closeStream.isClosed()).isTrue();
     }
 
     /**
@@ -126,19 +127,19 @@ public final class Base64OutputStreamTest {
 
         base64OutputStream.write(new byte[]{(byte) 240, 120, 15});
         base64OutputStream.close();
-        Assert.assertEquals("8HgP", new String(baos.toByteArray(), ENCODING));
+        Assertions.assertThat(new String(baos.toByteArray(), ENCODING)).isEqualTo("8HgP");
 
         base64OutputStream.write(new byte[]{17, 32});
         base64OutputStream.close();
-        Assert.assertEquals("8HgPESA=", new String(baos.toByteArray(), ENCODING));
+        Assertions.assertThat(new String(baos.toByteArray(), ENCODING)).isEqualTo("8HgPESA=");
 
         base64OutputStream.write(176);
         base64OutputStream.close();
-        Assert.assertEquals("8HgPESA=sA==", new String(baos.toByteArray(), ENCODING));
+        Assertions.assertThat(new String(baos.toByteArray(), ENCODING)).isEqualTo("8HgPESA=sA==");
 
         base64OutputStream.write(new byte[]{30, (byte) 193, (byte) 201});
         base64OutputStream.close();
-        Assert.assertEquals("8HgPESA=sA==HsHJ", new String(baos.toByteArray(), ENCODING));
+        Assertions.assertThat(new String(baos.toByteArray(), ENCODING)).isEqualTo("8HgPESA=sA==HsHJ");
     }
 
     /**
@@ -152,13 +153,13 @@ public final class Base64OutputStreamTest {
         Base64OutputStream base64OutputStream = new Base64OutputStream(baos);
         base64OutputStream.write(new byte[]{30, (byte) 193});
         base64OutputStream.close();
-        Assert.assertEquals("HsE=", new String(baos.toByteArray(), ENCODING));
+        Assertions.assertThat(new String(baos.toByteArray(), ENCODING)).isEqualTo("HsE=");
 
         base64OutputStream.close();
-        Assert.assertEquals("HsE=", new String(baos.toByteArray(), ENCODING));
+        Assertions.assertThat(new String(baos.toByteArray(), ENCODING)).isEqualTo("HsE=");
 
         base64OutputStream.close();
-        Assert.assertEquals("HsE=", new String(baos.toByteArray(), ENCODING));
+        Assertions.assertThat(new String(baos.toByteArray(), ENCODING)).isEqualTo("HsE=");
     }
 
     /**
@@ -186,6 +187,7 @@ public final class Base64OutputStreamTest {
 
         @Override
         public void close() throws IOException {
+            super.close();
             _closed = true;
         }
 

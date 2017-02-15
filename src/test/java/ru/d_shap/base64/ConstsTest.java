@@ -19,11 +19,9 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 package ru.d_shap.base64;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-
-import org.junit.Assert;
 import org.junit.Test;
+
+import ru.d_shap.assertions.Assertions;
 
 /**
  * Tests for {@link Consts}.
@@ -41,30 +39,10 @@ public final class ConstsTest {
 
     /**
      * {@link Consts} class test.
-     *
-     * @throws IllegalAccessException exception in test.
-     * @throws InstantiationException exception in test.
-     */
-    @Test(expected = IllegalAccessException.class)
-    public void constructorPrivateTest() throws IllegalAccessException, InstantiationException {
-        Consts.class.newInstance();
-    }
-
-    /**
-     * {@link Consts} class test.
-     *
-     * @throws IllegalAccessException    exception in test.
-     * @throws InstantiationException    exception in test.
-     * @throws InvocationTargetException exception in test.
      */
     @Test
-    public void constructorInaccessibleTest() throws IllegalAccessException, InstantiationException, InvocationTargetException {
-        Constructor[] ctors = Consts.class.getDeclaredConstructors();
-        Assert.assertEquals(1, ctors.length);
-        Constructor ctor = ctors[0];
-        Assert.assertFalse(ctor.isAccessible());
-        ctor.setAccessible(true);
-        Assert.assertEquals(Consts.class, ctor.newInstance().getClass());
+    public void constructorTest() {
+        Assertions.assertThat(Consts.class).hasOnePrivateConstructor();
     }
 
     /**
@@ -72,20 +50,20 @@ public final class ConstsTest {
      */
     @Test
     public void lengthTest() {
-        Assert.assertEquals(64, Consts.TO_BASE64.length);
-        Assert.assertEquals(256, Consts.TO_BASE64_FIRST_SYMBOL.length);
-        Assert.assertEquals(256, Consts.TO_BASE64_SECOND_SYMBOL_INDEX_1.length);
-        Assert.assertEquals(256, Consts.TO_BASE64_SECOND_SYMBOL_INDEX_2.length);
-        Assert.assertEquals(256, Consts.TO_BASE64_THIRD_SYMBOL_INDEX_1.length);
-        Assert.assertEquals(256, Consts.TO_BASE64_THIRD_SYMBOL_INDEX_2.length);
-        Assert.assertEquals(256, Consts.TO_BASE64_FOURTH_SYMBOL.length);
-        Assert.assertEquals(123, Consts.FROM_BASE64.length);
-        Assert.assertEquals(123, Consts.FROM_BASE64_FIRST_BYTE_1.length);
-        Assert.assertEquals(123, Consts.FROM_BASE64_FIRST_BYTE_2.length);
-        Assert.assertEquals(123, Consts.FROM_BASE64_SECOND_BYTE_1.length);
-        Assert.assertEquals(123, Consts.FROM_BASE64_SECOND_BYTE_2.length);
-        Assert.assertEquals(123, Consts.FROM_BASE64_THIRD_BYTE_1.length);
-        Assert.assertEquals(123, Consts.FROM_BASE64_THIRD_BYTE_2.length);
+        Assertions.assertThat(Consts.TO_BASE64).hasLength(64);
+        Assertions.assertThat(Consts.TO_BASE64_FIRST_SYMBOL).hasLength(256);
+        Assertions.assertThat(Consts.TO_BASE64_SECOND_SYMBOL_INDEX_1).hasLength(256);
+        Assertions.assertThat(Consts.TO_BASE64_SECOND_SYMBOL_INDEX_2).hasLength(256);
+        Assertions.assertThat(Consts.TO_BASE64_THIRD_SYMBOL_INDEX_1).hasLength(256);
+        Assertions.assertThat(Consts.TO_BASE64_THIRD_SYMBOL_INDEX_2).hasLength(256);
+        Assertions.assertThat(Consts.TO_BASE64_FOURTH_SYMBOL).hasLength(256);
+        Assertions.assertThat(Consts.FROM_BASE64).hasLength(123);
+        Assertions.assertThat(Consts.FROM_BASE64_FIRST_BYTE_1).hasLength(123);
+        Assertions.assertThat(Consts.FROM_BASE64_FIRST_BYTE_2).hasLength(123);
+        Assertions.assertThat(Consts.FROM_BASE64_SECOND_BYTE_1).hasLength(123);
+        Assertions.assertThat(Consts.FROM_BASE64_SECOND_BYTE_2).hasLength(123);
+        Assertions.assertThat(Consts.FROM_BASE64_THIRD_BYTE_1).hasLength(123);
+        Assertions.assertThat(Consts.FROM_BASE64_THIRD_BYTE_2).hasLength(123);
     }
 
     /**
@@ -96,11 +74,11 @@ public final class ConstsTest {
         for (int i = 0; i < Consts.TO_BASE64.length; i++) {
             int toBase64Value = Consts.TO_BASE64[i];
             int fromBase64Value = Consts.FROM_BASE64[toBase64Value];
-            Assert.assertEquals(fromBase64Value, i);
+            Assertions.assertThat(fromBase64Value).isEqualTo(i);
         }
         for (int i = 0; i < Consts.FROM_BASE64.length; i++) {
             int fromBase64Value = Consts.FROM_BASE64[i];
-            Assert.assertTrue(fromBase64Value == -1 || Consts.TO_BASE64[fromBase64Value] == i);
+            Assertions.assertThat(fromBase64Value == -1 || Consts.TO_BASE64[fromBase64Value] == i).isTrue();
         }
     }
 
@@ -109,13 +87,13 @@ public final class ConstsTest {
      */
     @Test
     public void toBase64FirstSymbolTest() {
-        Assert.assertEquals('/', Consts.TO_BASE64_FIRST_SYMBOL[0xFF]);
-        Assert.assertEquals('/', Consts.TO_BASE64_FIRST_SYMBOL[0xFD]);
-        Assert.assertEquals('q', Consts.TO_BASE64_FIRST_SYMBOL[0xAA]);
-        Assert.assertEquals('8', Consts.TO_BASE64_FIRST_SYMBOL[0xF0]);
-        Assert.assertEquals('8', Consts.TO_BASE64_FIRST_SYMBOL[0xF3]);
-        Assert.assertEquals('D', Consts.TO_BASE64_FIRST_SYMBOL[0x0C]);
-        Assert.assertEquals('D', Consts.TO_BASE64_FIRST_SYMBOL[0x0D]);
+        Assertions.assertThat(Consts.TO_BASE64_FIRST_SYMBOL[0xFF]).isEqualTo('/');
+        Assertions.assertThat(Consts.TO_BASE64_FIRST_SYMBOL[0xFD]).isEqualTo('/');
+        Assertions.assertThat(Consts.TO_BASE64_FIRST_SYMBOL[0xAA]).isEqualTo('q');
+        Assertions.assertThat(Consts.TO_BASE64_FIRST_SYMBOL[0xF0]).isEqualTo('8');
+        Assertions.assertThat(Consts.TO_BASE64_FIRST_SYMBOL[0xF3]).isEqualTo('8');
+        Assertions.assertThat(Consts.TO_BASE64_FIRST_SYMBOL[0x0C]).isEqualTo('D');
+        Assertions.assertThat(Consts.TO_BASE64_FIRST_SYMBOL[0x0D]).isEqualTo('D');
     }
 
     /**
@@ -123,19 +101,19 @@ public final class ConstsTest {
      */
     @Test
     public void toBase64SecondSymbolIndexTest() {
-        Assert.assertEquals(0x30, Consts.TO_BASE64_SECOND_SYMBOL_INDEX_1[0xFF]);
-        Assert.assertEquals(0x10, Consts.TO_BASE64_SECOND_SYMBOL_INDEX_1[0xFD]);
-        Assert.assertEquals(0x20, Consts.TO_BASE64_SECOND_SYMBOL_INDEX_1[0xAA]);
-        Assert.assertEquals(0x00, Consts.TO_BASE64_SECOND_SYMBOL_INDEX_1[0xF0]);
-        Assert.assertEquals(0x30, Consts.TO_BASE64_SECOND_SYMBOL_INDEX_1[0xF3]);
-        Assert.assertEquals(0x10, Consts.TO_BASE64_SECOND_SYMBOL_INDEX_1[0x0D]);
+        Assertions.assertThat(Consts.TO_BASE64_SECOND_SYMBOL_INDEX_1[0xFF]).isEqualTo(0x30);
+        Assertions.assertThat(Consts.TO_BASE64_SECOND_SYMBOL_INDEX_1[0xFD]).isEqualTo(0x10);
+        Assertions.assertThat(Consts.TO_BASE64_SECOND_SYMBOL_INDEX_1[0xAA]).isEqualTo(0x20);
+        Assertions.assertThat(Consts.TO_BASE64_SECOND_SYMBOL_INDEX_1[0xF0]).isEqualTo(0x00);
+        Assertions.assertThat(Consts.TO_BASE64_SECOND_SYMBOL_INDEX_1[0xF3]).isEqualTo(0x30);
+        Assertions.assertThat(Consts.TO_BASE64_SECOND_SYMBOL_INDEX_1[0x0D]).isEqualTo(0x10);
 
-        Assert.assertEquals(0x0F, Consts.TO_BASE64_SECOND_SYMBOL_INDEX_2[0xFF]);
-        Assert.assertEquals(0x0F, Consts.TO_BASE64_SECOND_SYMBOL_INDEX_2[0xFD]);
-        Assert.assertEquals(0x0A, Consts.TO_BASE64_SECOND_SYMBOL_INDEX_2[0xAA]);
-        Assert.assertEquals(0x0F, Consts.TO_BASE64_SECOND_SYMBOL_INDEX_2[0xF0]);
-        Assert.assertEquals(0x0F, Consts.TO_BASE64_SECOND_SYMBOL_INDEX_2[0xF3]);
-        Assert.assertEquals(0x00, Consts.TO_BASE64_SECOND_SYMBOL_INDEX_2[0x0D]);
+        Assertions.assertThat(Consts.TO_BASE64_SECOND_SYMBOL_INDEX_2[0xFF]).isEqualTo(0x0F);
+        Assertions.assertThat(Consts.TO_BASE64_SECOND_SYMBOL_INDEX_2[0xFD]).isEqualTo(0x0F);
+        Assertions.assertThat(Consts.TO_BASE64_SECOND_SYMBOL_INDEX_2[0xAA]).isEqualTo(0x0A);
+        Assertions.assertThat(Consts.TO_BASE64_SECOND_SYMBOL_INDEX_2[0xF0]).isEqualTo(0x0F);
+        Assertions.assertThat(Consts.TO_BASE64_SECOND_SYMBOL_INDEX_2[0xF3]).isEqualTo(0x0F);
+        Assertions.assertThat(Consts.TO_BASE64_SECOND_SYMBOL_INDEX_2[0x0D]).isEqualTo(0x00);
     }
 
     /**
@@ -143,19 +121,19 @@ public final class ConstsTest {
      */
     @Test
     public void toBase64ThirdSymbolIndexTest() {
-        Assert.assertEquals(0x3C, Consts.TO_BASE64_THIRD_SYMBOL_INDEX_1[0xFF]);
-        Assert.assertEquals(0x34, Consts.TO_BASE64_THIRD_SYMBOL_INDEX_1[0xFD]);
-        Assert.assertEquals(0x28, Consts.TO_BASE64_THIRD_SYMBOL_INDEX_1[0xAA]);
-        Assert.assertEquals(0x00, Consts.TO_BASE64_THIRD_SYMBOL_INDEX_1[0xF0]);
-        Assert.assertEquals(0x0C, Consts.TO_BASE64_THIRD_SYMBOL_INDEX_1[0xF3]);
-        Assert.assertEquals(0x34, Consts.TO_BASE64_THIRD_SYMBOL_INDEX_1[0x0D]);
+        Assertions.assertThat(Consts.TO_BASE64_THIRD_SYMBOL_INDEX_1[0xFF]).isEqualTo(0x3C);
+        Assertions.assertThat(Consts.TO_BASE64_THIRD_SYMBOL_INDEX_1[0xFD]).isEqualTo(0x34);
+        Assertions.assertThat(Consts.TO_BASE64_THIRD_SYMBOL_INDEX_1[0xAA]).isEqualTo(0x28);
+        Assertions.assertThat(Consts.TO_BASE64_THIRD_SYMBOL_INDEX_1[0xF0]).isEqualTo(0x00);
+        Assertions.assertThat(Consts.TO_BASE64_THIRD_SYMBOL_INDEX_1[0xF3]).isEqualTo(0x0C);
+        Assertions.assertThat(Consts.TO_BASE64_THIRD_SYMBOL_INDEX_1[0x0D]).isEqualTo(0x34);
 
-        Assert.assertEquals(0x03, Consts.TO_BASE64_THIRD_SYMBOL_INDEX_2[0xFF]);
-        Assert.assertEquals(0x03, Consts.TO_BASE64_THIRD_SYMBOL_INDEX_2[0xFD]);
-        Assert.assertEquals(0x02, Consts.TO_BASE64_THIRD_SYMBOL_INDEX_2[0xAA]);
-        Assert.assertEquals(0x03, Consts.TO_BASE64_THIRD_SYMBOL_INDEX_2[0xF0]);
-        Assert.assertEquals(0x03, Consts.TO_BASE64_THIRD_SYMBOL_INDEX_2[0xF3]);
-        Assert.assertEquals(0x00, Consts.TO_BASE64_THIRD_SYMBOL_INDEX_2[0x0D]);
+        Assertions.assertThat(Consts.TO_BASE64_THIRD_SYMBOL_INDEX_2[0xFF]).isEqualTo(0x03);
+        Assertions.assertThat(Consts.TO_BASE64_THIRD_SYMBOL_INDEX_2[0xFD]).isEqualTo(0x03);
+        Assertions.assertThat(Consts.TO_BASE64_THIRD_SYMBOL_INDEX_2[0xAA]).isEqualTo(0x02);
+        Assertions.assertThat(Consts.TO_BASE64_THIRD_SYMBOL_INDEX_2[0xF0]).isEqualTo(0x03);
+        Assertions.assertThat(Consts.TO_BASE64_THIRD_SYMBOL_INDEX_2[0xF3]).isEqualTo(0x03);
+        Assertions.assertThat(Consts.TO_BASE64_THIRD_SYMBOL_INDEX_2[0x0D]).isEqualTo(0x00);
     }
 
     /**
@@ -163,13 +141,13 @@ public final class ConstsTest {
      */
     @Test
     public void toBase64FourthSymbolTest() {
-        Assert.assertEquals('/', Consts.TO_BASE64_FOURTH_SYMBOL[0xFF]);
-        Assert.assertEquals('9', Consts.TO_BASE64_FOURTH_SYMBOL[0xFD]);
-        Assert.assertEquals('q', Consts.TO_BASE64_FOURTH_SYMBOL[0xAA]);
-        Assert.assertEquals('w', Consts.TO_BASE64_FOURTH_SYMBOL[0xF0]);
-        Assert.assertEquals('z', Consts.TO_BASE64_FOURTH_SYMBOL[0xF3]);
-        Assert.assertEquals('M', Consts.TO_BASE64_FOURTH_SYMBOL[0x0C]);
-        Assert.assertEquals('N', Consts.TO_BASE64_FOURTH_SYMBOL[0x0D]);
+        Assertions.assertThat(Consts.TO_BASE64_FOURTH_SYMBOL[0xFF]).isEqualTo('/');
+        Assertions.assertThat(Consts.TO_BASE64_FOURTH_SYMBOL[0xFD]).isEqualTo('9');
+        Assertions.assertThat(Consts.TO_BASE64_FOURTH_SYMBOL[0xAA]).isEqualTo('q');
+        Assertions.assertThat(Consts.TO_BASE64_FOURTH_SYMBOL[0xF0]).isEqualTo('w');
+        Assertions.assertThat(Consts.TO_BASE64_FOURTH_SYMBOL[0xF3]).isEqualTo('z');
+        Assertions.assertThat(Consts.TO_BASE64_FOURTH_SYMBOL[0x0C]).isEqualTo('M');
+        Assertions.assertThat(Consts.TO_BASE64_FOURTH_SYMBOL[0x0D]).isEqualTo('N');
     }
 
     /**
@@ -177,27 +155,27 @@ public final class ConstsTest {
      */
     @Test
     public void fromBase64FirstByteTest() {
-        Assert.assertEquals(0x7C, Consts.FROM_BASE64_FIRST_BYTE_1['f']);
-        Assert.assertEquals(0x10, Consts.FROM_BASE64_FIRST_BYTE_1['E']);
-        Assert.assertEquals(0xC4, Consts.FROM_BASE64_FIRST_BYTE_1['x']);
-        Assert.assertEquals(0x5C, Consts.FROM_BASE64_FIRST_BYTE_1['X']);
-        Assert.assertEquals(0xD4, Consts.FROM_BASE64_FIRST_BYTE_1['1']);
-        Assert.assertEquals(0xE4, Consts.FROM_BASE64_FIRST_BYTE_1['5']);
-        Assert.assertEquals(0xF8, Consts.FROM_BASE64_FIRST_BYTE_1['+']);
-        Assert.assertEquals(0xFC, Consts.FROM_BASE64_FIRST_BYTE_1['/']);
-        Assert.assertEquals(-1, Consts.FROM_BASE64_FIRST_BYTE_1[5]);
-        Assert.assertEquals(-1, Consts.FROM_BASE64_FIRST_BYTE_1[10]);
+        Assertions.assertThat(Consts.FROM_BASE64_FIRST_BYTE_1['f']).isEqualTo(0x7C);
+        Assertions.assertThat(Consts.FROM_BASE64_FIRST_BYTE_1['E']).isEqualTo(0x10);
+        Assertions.assertThat(Consts.FROM_BASE64_FIRST_BYTE_1['x']).isEqualTo(0xC4);
+        Assertions.assertThat(Consts.FROM_BASE64_FIRST_BYTE_1['X']).isEqualTo(0x5C);
+        Assertions.assertThat(Consts.FROM_BASE64_FIRST_BYTE_1['1']).isEqualTo(0xD4);
+        Assertions.assertThat(Consts.FROM_BASE64_FIRST_BYTE_1['5']).isEqualTo(0xE4);
+        Assertions.assertThat(Consts.FROM_BASE64_FIRST_BYTE_1['+']).isEqualTo(0xF8);
+        Assertions.assertThat(Consts.FROM_BASE64_FIRST_BYTE_1['/']).isEqualTo(0xFC);
+        Assertions.assertThat(Consts.FROM_BASE64_FIRST_BYTE_1[5]).isEqualTo(-1);
+        Assertions.assertThat(Consts.FROM_BASE64_FIRST_BYTE_1[10]).isEqualTo(-1);
 
-        Assert.assertEquals(0x01, Consts.FROM_BASE64_FIRST_BYTE_2['f']);
-        Assert.assertEquals(0x00, Consts.FROM_BASE64_FIRST_BYTE_2['E']);
-        Assert.assertEquals(0x03, Consts.FROM_BASE64_FIRST_BYTE_2['x']);
-        Assert.assertEquals(0x01, Consts.FROM_BASE64_FIRST_BYTE_2['X']);
-        Assert.assertEquals(0x03, Consts.FROM_BASE64_FIRST_BYTE_2['1']);
-        Assert.assertEquals(0x03, Consts.FROM_BASE64_FIRST_BYTE_2['5']);
-        Assert.assertEquals(0x03, Consts.FROM_BASE64_FIRST_BYTE_2['+']);
-        Assert.assertEquals(0x03, Consts.FROM_BASE64_FIRST_BYTE_2['/']);
-        Assert.assertEquals(-1, Consts.FROM_BASE64_FIRST_BYTE_2[5]);
-        Assert.assertEquals(-1, Consts.FROM_BASE64_FIRST_BYTE_2[10]);
+        Assertions.assertThat(Consts.FROM_BASE64_FIRST_BYTE_2['f']).isEqualTo(0x01);
+        Assertions.assertThat(Consts.FROM_BASE64_FIRST_BYTE_2['E']).isEqualTo(0x00);
+        Assertions.assertThat(Consts.FROM_BASE64_FIRST_BYTE_2['x']).isEqualTo(0x03);
+        Assertions.assertThat(Consts.FROM_BASE64_FIRST_BYTE_2['X']).isEqualTo(0x01);
+        Assertions.assertThat(Consts.FROM_BASE64_FIRST_BYTE_2['1']).isEqualTo(0x03);
+        Assertions.assertThat(Consts.FROM_BASE64_FIRST_BYTE_2['5']).isEqualTo(0x03);
+        Assertions.assertThat(Consts.FROM_BASE64_FIRST_BYTE_2['+']).isEqualTo(0x03);
+        Assertions.assertThat(Consts.FROM_BASE64_FIRST_BYTE_2['/']).isEqualTo(0x03);
+        Assertions.assertThat(Consts.FROM_BASE64_FIRST_BYTE_2[5]).isEqualTo(-1);
+        Assertions.assertThat(Consts.FROM_BASE64_FIRST_BYTE_2[10]).isEqualTo(-1);
     }
 
     /**
@@ -205,27 +183,27 @@ public final class ConstsTest {
      */
     @Test
     public void fromBase64SecondByteTest() {
-        Assert.assertEquals(0xF0, Consts.FROM_BASE64_SECOND_BYTE_1['f']);
-        Assert.assertEquals(0x40, Consts.FROM_BASE64_SECOND_BYTE_1['E']);
-        Assert.assertEquals(0x10, Consts.FROM_BASE64_SECOND_BYTE_1['x']);
-        Assert.assertEquals(0x70, Consts.FROM_BASE64_SECOND_BYTE_1['X']);
-        Assert.assertEquals(0x50, Consts.FROM_BASE64_SECOND_BYTE_1['1']);
-        Assert.assertEquals(0x90, Consts.FROM_BASE64_SECOND_BYTE_1['5']);
-        Assert.assertEquals(0xE0, Consts.FROM_BASE64_SECOND_BYTE_1['+']);
-        Assert.assertEquals(0xF0, Consts.FROM_BASE64_SECOND_BYTE_1['/']);
-        Assert.assertEquals(-1, Consts.FROM_BASE64_SECOND_BYTE_1[5]);
-        Assert.assertEquals(-1, Consts.FROM_BASE64_SECOND_BYTE_1[10]);
+        Assertions.assertThat(Consts.FROM_BASE64_SECOND_BYTE_1['f']).isEqualTo(0xF0);
+        Assertions.assertThat(Consts.FROM_BASE64_SECOND_BYTE_1['E']).isEqualTo(0x40);
+        Assertions.assertThat(Consts.FROM_BASE64_SECOND_BYTE_1['x']).isEqualTo(0x10);
+        Assertions.assertThat(Consts.FROM_BASE64_SECOND_BYTE_1['X']).isEqualTo(0x70);
+        Assertions.assertThat(Consts.FROM_BASE64_SECOND_BYTE_1['1']).isEqualTo(0x50);
+        Assertions.assertThat(Consts.FROM_BASE64_SECOND_BYTE_1['5']).isEqualTo(0x90);
+        Assertions.assertThat(Consts.FROM_BASE64_SECOND_BYTE_1['+']).isEqualTo(0xE0);
+        Assertions.assertThat(Consts.FROM_BASE64_SECOND_BYTE_1['/']).isEqualTo(0xF0);
+        Assertions.assertThat(Consts.FROM_BASE64_SECOND_BYTE_1[5]).isEqualTo(-1);
+        Assertions.assertThat(Consts.FROM_BASE64_SECOND_BYTE_1[10]).isEqualTo(-1);
 
-        Assert.assertEquals(0x07, Consts.FROM_BASE64_SECOND_BYTE_2['f']);
-        Assert.assertEquals(0x01, Consts.FROM_BASE64_SECOND_BYTE_2['E']);
-        Assert.assertEquals(0x0C, Consts.FROM_BASE64_SECOND_BYTE_2['x']);
-        Assert.assertEquals(0x05, Consts.FROM_BASE64_SECOND_BYTE_2['X']);
-        Assert.assertEquals(0x0D, Consts.FROM_BASE64_SECOND_BYTE_2['1']);
-        Assert.assertEquals(0x0E, Consts.FROM_BASE64_SECOND_BYTE_2['5']);
-        Assert.assertEquals(0x0F, Consts.FROM_BASE64_SECOND_BYTE_2['+']);
-        Assert.assertEquals(0x0F, Consts.FROM_BASE64_SECOND_BYTE_2['/']);
-        Assert.assertEquals(-1, Consts.FROM_BASE64_SECOND_BYTE_2[5]);
-        Assert.assertEquals(-1, Consts.FROM_BASE64_SECOND_BYTE_2[10]);
+        Assertions.assertThat(Consts.FROM_BASE64_SECOND_BYTE_2['f']).isEqualTo(0x07);
+        Assertions.assertThat(Consts.FROM_BASE64_SECOND_BYTE_2['E']).isEqualTo(0x01);
+        Assertions.assertThat(Consts.FROM_BASE64_SECOND_BYTE_2['x']).isEqualTo(0x0C);
+        Assertions.assertThat(Consts.FROM_BASE64_SECOND_BYTE_2['X']).isEqualTo(0x05);
+        Assertions.assertThat(Consts.FROM_BASE64_SECOND_BYTE_2['1']).isEqualTo(0x0D);
+        Assertions.assertThat(Consts.FROM_BASE64_SECOND_BYTE_2['5']).isEqualTo(0x0E);
+        Assertions.assertThat(Consts.FROM_BASE64_SECOND_BYTE_2['+']).isEqualTo(0x0F);
+        Assertions.assertThat(Consts.FROM_BASE64_SECOND_BYTE_2['/']).isEqualTo(0x0F);
+        Assertions.assertThat(Consts.FROM_BASE64_SECOND_BYTE_2[5]).isEqualTo(-1);
+        Assertions.assertThat(Consts.FROM_BASE64_SECOND_BYTE_2[10]).isEqualTo(-1);
     }
 
     /**
@@ -233,27 +211,27 @@ public final class ConstsTest {
      */
     @Test
     public void fromBase64ThirdByteTest() {
-        Assert.assertEquals(0xC0, Consts.FROM_BASE64_THIRD_BYTE_1['f']);
-        Assert.assertEquals(0x00, Consts.FROM_BASE64_THIRD_BYTE_1['E']);
-        Assert.assertEquals(0x40, Consts.FROM_BASE64_THIRD_BYTE_1['x']);
-        Assert.assertEquals(0xC0, Consts.FROM_BASE64_THIRD_BYTE_1['X']);
-        Assert.assertEquals(0x40, Consts.FROM_BASE64_THIRD_BYTE_1['1']);
-        Assert.assertEquals(0x40, Consts.FROM_BASE64_THIRD_BYTE_1['5']);
-        Assert.assertEquals(0x80, Consts.FROM_BASE64_THIRD_BYTE_1['+']);
-        Assert.assertEquals(0xC0, Consts.FROM_BASE64_THIRD_BYTE_1['/']);
-        Assert.assertEquals(-1, Consts.FROM_BASE64_THIRD_BYTE_1[5]);
-        Assert.assertEquals(-1, Consts.FROM_BASE64_THIRD_BYTE_1[10]);
+        Assertions.assertThat(Consts.FROM_BASE64_THIRD_BYTE_1['f']).isEqualTo(0xC0);
+        Assertions.assertThat(Consts.FROM_BASE64_THIRD_BYTE_1['E']).isEqualTo(0x00);
+        Assertions.assertThat(Consts.FROM_BASE64_THIRD_BYTE_1['x']).isEqualTo(0x40);
+        Assertions.assertThat(Consts.FROM_BASE64_THIRD_BYTE_1['X']).isEqualTo(0xC0);
+        Assertions.assertThat(Consts.FROM_BASE64_THIRD_BYTE_1['1']).isEqualTo(0x40);
+        Assertions.assertThat(Consts.FROM_BASE64_THIRD_BYTE_1['5']).isEqualTo(0x40);
+        Assertions.assertThat(Consts.FROM_BASE64_THIRD_BYTE_1['+']).isEqualTo(0x80);
+        Assertions.assertThat(Consts.FROM_BASE64_THIRD_BYTE_1['/']).isEqualTo(0xC0);
+        Assertions.assertThat(Consts.FROM_BASE64_THIRD_BYTE_1[5]).isEqualTo(-1);
+        Assertions.assertThat(Consts.FROM_BASE64_THIRD_BYTE_1[10]).isEqualTo(-1);
 
-        Assert.assertEquals(0x1F, Consts.FROM_BASE64_THIRD_BYTE_2['f']);
-        Assert.assertEquals(0x04, Consts.FROM_BASE64_THIRD_BYTE_2['E']);
-        Assert.assertEquals(0x31, Consts.FROM_BASE64_THIRD_BYTE_2['x']);
-        Assert.assertEquals(0x17, Consts.FROM_BASE64_THIRD_BYTE_2['X']);
-        Assert.assertEquals(0x35, Consts.FROM_BASE64_THIRD_BYTE_2['1']);
-        Assert.assertEquals(0x39, Consts.FROM_BASE64_THIRD_BYTE_2['5']);
-        Assert.assertEquals(0x3E, Consts.FROM_BASE64_THIRD_BYTE_2['+']);
-        Assert.assertEquals(0x3F, Consts.FROM_BASE64_THIRD_BYTE_2['/']);
-        Assert.assertEquals(-1, Consts.FROM_BASE64_THIRD_BYTE_2[5]);
-        Assert.assertEquals(-1, Consts.FROM_BASE64_THIRD_BYTE_2[10]);
+        Assertions.assertThat(Consts.FROM_BASE64_THIRD_BYTE_2['f']).isEqualTo(0x1F);
+        Assertions.assertThat(Consts.FROM_BASE64_THIRD_BYTE_2['E']).isEqualTo(0x04);
+        Assertions.assertThat(Consts.FROM_BASE64_THIRD_BYTE_2['x']).isEqualTo(0x31);
+        Assertions.assertThat(Consts.FROM_BASE64_THIRD_BYTE_2['X']).isEqualTo(0x17);
+        Assertions.assertThat(Consts.FROM_BASE64_THIRD_BYTE_2['1']).isEqualTo(0x35);
+        Assertions.assertThat(Consts.FROM_BASE64_THIRD_BYTE_2['5']).isEqualTo(0x39);
+        Assertions.assertThat(Consts.FROM_BASE64_THIRD_BYTE_2['+']).isEqualTo(0x3E);
+        Assertions.assertThat(Consts.FROM_BASE64_THIRD_BYTE_2['/']).isEqualTo(0x3F);
+        Assertions.assertThat(Consts.FROM_BASE64_THIRD_BYTE_2[5]).isEqualTo(-1);
+        Assertions.assertThat(Consts.FROM_BASE64_THIRD_BYTE_2[10]).isEqualTo(-1);
     }
 
 }
