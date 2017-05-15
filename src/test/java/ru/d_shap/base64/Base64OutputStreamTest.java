@@ -2,7 +2,7 @@
 // Base64 library converts bytes to base64 representation and vice versa.
 // Copyright (C) 2016 Dmitry Shapovalov.
 //
-// This file is part of Base64 library.
+// This file is part of base64 library.
 //
 // Base64 library is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Lesser General Public License as published by
