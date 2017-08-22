@@ -59,7 +59,6 @@ public final class Base64OutputStream extends OutputStream {
 
     @Override
     public void close() throws IOException {
-        super.close();
         flushBuffer();
         _bufferPosition = 0;
         _outputStream.close();
