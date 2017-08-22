@@ -470,7 +470,7 @@ public final class Base64InputStreamTest {
     }
 
     /**
-     * Input stream to test close method.
+     * Test class.
      *
      * @author Dmitry Shapovalov
      */

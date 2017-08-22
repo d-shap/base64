@@ -163,7 +163,7 @@ public final class Base64OutputStreamTest {
     }
 
     /**
-     * Output stream to test close method.
+     * Test class.
      *
      * @author Dmitry Shapovalov
      */
