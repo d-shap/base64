@@ -161,7 +161,7 @@ public final class Base64InputStreamTest {
             base64InputStream.read();
             Assertions.fail("Base64InputStream test fail");
         } catch (IOException ex) {
-            Assertions.assertThat(ex).hasMessage("Wrong symbol obtained: '?' (63)");
+            Assertions.assertThat(ex).hasMessage("Wrong character obtained ('?', 63)");
         }
         try {
             byte[] base64Bytes = new byte[]{'a', '?', 'b', 'c'};
@@ -170,7 +170,7 @@ public final class Base64InputStreamTest {
             base64InputStream.read();
             Assertions.fail("Base64InputStream test fail");
         } catch (IOException ex) {
-            Assertions.assertThat(ex).hasMessage("Wrong symbol obtained: '?' (63)");
+            Assertions.assertThat(ex).hasMessage("Wrong character obtained ('?', 63)");
         }
         try {
             byte[] base64Bytes = new byte[]{'a', 'b', '?', 'c'};
@@ -179,7 +179,7 @@ public final class Base64InputStreamTest {
             base64InputStream.read();
             Assertions.fail("Base64InputStream test fail");
         } catch (IOException ex) {
-            Assertions.assertThat(ex).hasMessage("Wrong symbol obtained: '?' (63)");
+            Assertions.assertThat(ex).hasMessage("Wrong character obtained ('?', 63)");
         }
         try {
             byte[] base64Bytes = new byte[]{'a', 'b', 'c', '?'};
@@ -188,7 +188,7 @@ public final class Base64InputStreamTest {
             base64InputStream.read();
             Assertions.fail("Base64InputStream test fail");
         } catch (IOException ex) {
-            Assertions.assertThat(ex).hasMessage("Wrong symbol obtained: '?' (63)");
+            Assertions.assertThat(ex).hasMessage("Wrong character obtained ('?', 63)");
         }
     }
 
@@ -204,7 +204,7 @@ public final class Base64InputStreamTest {
             base64InputStream.read();
             Assertions.fail("Base64InputStream test fail");
         } catch (IOException ex) {
-            Assertions.assertThat(ex).hasMessage("Wrong symbol obtained: '\u0000' (0)");
+            Assertions.assertThat(ex).hasMessage("Wrong character obtained ('\u0000', 0)");
         }
         try {
             byte[] base64Bytes = new byte[]{'a', 0, 'b', 'c'};
@@ -213,7 +213,7 @@ public final class Base64InputStreamTest {
             base64InputStream.read();
             Assertions.fail("Base64InputStream test fail");
         } catch (IOException ex) {
-            Assertions.assertThat(ex).hasMessage("Wrong symbol obtained: '\u0000' (0)");
+            Assertions.assertThat(ex).hasMessage("Wrong character obtained ('\u0000', 0)");
         }
         try {
             byte[] base64Bytes = new byte[]{'a', 'b', 0, 'c'};
@@ -222,7 +222,7 @@ public final class Base64InputStreamTest {
             base64InputStream.read();
             Assertions.fail("Base64InputStream test fail");
         } catch (IOException ex) {
-            Assertions.assertThat(ex).hasMessage("Wrong symbol obtained: '\u0000' (0)");
+            Assertions.assertThat(ex).hasMessage("Wrong character obtained ('\u0000', 0)");
         }
         try {
             byte[] base64Bytes = new byte[]{'a', 'b', 'c', 0};
@@ -231,7 +231,7 @@ public final class Base64InputStreamTest {
             base64InputStream.read();
             Assertions.fail("Base64InputStream test fail");
         } catch (IOException ex) {
-            Assertions.assertThat(ex).hasMessage("Wrong symbol obtained: '\u0000' (0)");
+            Assertions.assertThat(ex).hasMessage("Wrong character obtained ('\u0000', 0)");
         }
     }
 
@@ -248,7 +248,7 @@ public final class Base64InputStreamTest {
             base64InputStream.read();
             Assertions.fail("Base64InputStream test fail");
         } catch (IOException ex) {
-            Assertions.assertThat(ex).hasMessage("Wrong symbol obtained: '?' (63)");
+            Assertions.assertThat(ex).hasMessage("Wrong character obtained ('?', 63)");
         }
         try {
             byte[] base64Bytes = new byte[]{'a', 'b', 'c', 'd', 'a', 'a', '=', '='};
@@ -258,7 +258,7 @@ public final class Base64InputStreamTest {
             base64InputStream.read();
             Assertions.fail("Base64InputStream test fail");
         } catch (IOException ex) {
-            Assertions.assertThat(ex).hasMessage("Wrong symbol obtained: 'a' (97)");
+            Assertions.assertThat(ex).hasMessage("Wrong character obtained ('a', 97)");
         }
         try {
             byte[] base64Bytes = new byte[]{'a', 'b', 'c', 'd', '?', 'a', '=', '='};
@@ -268,7 +268,7 @@ public final class Base64InputStreamTest {
             base64InputStream.read();
             Assertions.fail("Base64InputStream test fail");
         } catch (IOException ex) {
-            Assertions.assertThat(ex).hasMessage("Wrong symbol obtained: '?' (63)");
+            Assertions.assertThat(ex).hasMessage("Wrong character obtained ('?', 63)");
         }
         try {
             byte[] base64Bytes = new byte[]{'a', 'b', 'c', 'd', 'a', '?', '=', '='};
@@ -278,7 +278,7 @@ public final class Base64InputStreamTest {
             base64InputStream.read();
             Assertions.fail("Base64InputStream test fail");
         } catch (IOException ex) {
-            Assertions.assertThat(ex).hasMessage("Wrong symbol obtained: '?' (63)");
+            Assertions.assertThat(ex).hasMessage("Wrong character obtained ('?', 63)");
         }
         try {
             byte[] base64Bytes = new byte[]{'a', 'b', 'c', 'd', 'a', 'Q', '=', 'a'};
@@ -288,7 +288,7 @@ public final class Base64InputStreamTest {
             base64InputStream.read();
             Assertions.fail("Base64InputStream test fail");
         } catch (IOException ex) {
-            Assertions.assertThat(ex).hasMessage("Wrong symbol obtained: 'a' (97)");
+            Assertions.assertThat(ex).hasMessage("Wrong character obtained ('a', 97)");
         }
         try {
             byte[] base64Bytes = new byte[]{'a', 'b', 'c', 'd', 'a', 'Q', '=', '?'};
@@ -298,7 +298,7 @@ public final class Base64InputStreamTest {
             base64InputStream.read();
             Assertions.fail("Base64InputStream test fail");
         } catch (IOException ex) {
-            Assertions.assertThat(ex).hasMessage("Wrong symbol obtained: '?' (63)");
+            Assertions.assertThat(ex).hasMessage("Wrong character obtained ('?', 63)");
         }
     }
 
@@ -315,7 +315,7 @@ public final class Base64InputStreamTest {
             base64InputStream.read();
             Assertions.fail("Base64InputStream test fail");
         } catch (IOException ex) {
-            Assertions.assertThat(ex).hasMessage("Wrong symbol obtained: '?' (63)");
+            Assertions.assertThat(ex).hasMessage("Wrong character obtained ('?', 63)");
         }
         try {
             byte[] base64Bytes = new byte[]{'a', 'b', 'c', 'd', 'a', '?', 'Q', '='};
@@ -325,7 +325,7 @@ public final class Base64InputStreamTest {
             base64InputStream.read();
             Assertions.fail("Base64InputStream test fail");
         } catch (IOException ex) {
-            Assertions.assertThat(ex).hasMessage("Wrong symbol obtained: '?' (63)");
+            Assertions.assertThat(ex).hasMessage("Wrong character obtained ('?', 63)");
         }
         try {
             byte[] base64Bytes = new byte[]{'a', 'b', 'c', 'd', 'a', 'a', 'a', '='};
@@ -335,7 +335,7 @@ public final class Base64InputStreamTest {
             base64InputStream.read();
             Assertions.fail("Base64InputStream test fail");
         } catch (IOException ex) {
-            Assertions.assertThat(ex).hasMessage("Wrong symbol obtained: 'a' (97)");
+            Assertions.assertThat(ex).hasMessage("Wrong character obtained ('a', 97)");
         }
         try {
             byte[] base64Bytes = new byte[]{'a', 'b', 'c', 'd', '?', 'a', 'a', '='};
@@ -345,7 +345,7 @@ public final class Base64InputStreamTest {
             base64InputStream.read();
             Assertions.fail("Base64InputStream test fail");
         } catch (IOException ex) {
-            Assertions.assertThat(ex).hasMessage("Wrong symbol obtained: '?' (63)");
+            Assertions.assertThat(ex).hasMessage("Wrong character obtained ('?', 63)");
         }
         try {
             byte[] base64Bytes = new byte[]{'a', 'b', 'c', 'd', 'a', '?', 'a', '='};
@@ -355,7 +355,7 @@ public final class Base64InputStreamTest {
             base64InputStream.read();
             Assertions.fail("Base64InputStream test fail");
         } catch (IOException ex) {
-            Assertions.assertThat(ex).hasMessage("Wrong symbol obtained: '?' (63)");
+            Assertions.assertThat(ex).hasMessage("Wrong character obtained ('?', 63)");
         }
         try {
             byte[] base64Bytes = new byte[]{'a', 'b', 'c', 'd', 'a', 'a', '?', '='};
@@ -365,7 +365,7 @@ public final class Base64InputStreamTest {
             base64InputStream.read();
             Assertions.fail("Base64InputStream test fail");
         } catch (IOException ex) {
-            Assertions.assertThat(ex).hasMessage("Wrong symbol obtained: '?' (63)");
+            Assertions.assertThat(ex).hasMessage("Wrong character obtained ('?', 63)");
         }
     }
 
@@ -382,7 +382,7 @@ public final class Base64InputStreamTest {
             base64InputStream.read();
             Assertions.fail("Base64InputStream test fail");
         } catch (IOException ex) {
-            Assertions.assertThat(ex).hasMessage("Wrong symbol obtained: '=' (61)");
+            Assertions.assertThat(ex).hasMessage("Wrong character obtained ('=', 61)");
         }
         try {
             byte[] base64Bytes = new byte[]{'a', 'b', 'c', 'd', 'a', '=', 'b', 'c'};
@@ -392,7 +392,7 @@ public final class Base64InputStreamTest {
             base64InputStream.read();
             Assertions.fail("Base64InputStream test fail");
         } catch (IOException ex) {
-            Assertions.assertThat(ex).hasMessage("Wrong symbol obtained: '=' (61)");
+            Assertions.assertThat(ex).hasMessage("Wrong character obtained ('=', 61)");
         }
     }
 

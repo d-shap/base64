@@ -51,12 +51,12 @@ public final class ConstsTest {
     @Test
     public void lengthTest() {
         Assertions.assertThat(Consts.TO_BASE64).hasLength(64);
-        Assertions.assertThat(Consts.TO_BASE64_FIRST_SYMBOL).hasLength(256);
-        Assertions.assertThat(Consts.TO_BASE64_SECOND_SYMBOL_INDEX_1).hasLength(256);
-        Assertions.assertThat(Consts.TO_BASE64_SECOND_SYMBOL_INDEX_2).hasLength(256);
-        Assertions.assertThat(Consts.TO_BASE64_THIRD_SYMBOL_INDEX_1).hasLength(256);
-        Assertions.assertThat(Consts.TO_BASE64_THIRD_SYMBOL_INDEX_2).hasLength(256);
-        Assertions.assertThat(Consts.TO_BASE64_FOURTH_SYMBOL).hasLength(256);
+        Assertions.assertThat(Consts.TO_BASE64_FIRST_CHARACTER).hasLength(256);
+        Assertions.assertThat(Consts.TO_BASE64_SECOND_CHARACTER_INDEX_1).hasLength(256);
+        Assertions.assertThat(Consts.TO_BASE64_SECOND_CHARACTER_INDEX_2).hasLength(256);
+        Assertions.assertThat(Consts.TO_BASE64_THIRD_CHARACTER_INDEX_1).hasLength(256);
+        Assertions.assertThat(Consts.TO_BASE64_THIRD_CHARACTER_INDEX_2).hasLength(256);
+        Assertions.assertThat(Consts.TO_BASE64_FOURTH_CHARACTER).hasLength(256);
         Assertions.assertThat(Consts.FROM_BASE64).hasLength(123);
         Assertions.assertThat(Consts.FROM_BASE64_FIRST_BYTE_1).hasLength(123);
         Assertions.assertThat(Consts.FROM_BASE64_FIRST_BYTE_2).hasLength(123);
@@ -87,13 +87,13 @@ public final class ConstsTest {
      */
     @Test
     public void toBase64FirstSymbolTest() {
-        Assertions.assertThat(Consts.TO_BASE64_FIRST_SYMBOL[0xFF]).isEqualTo('/');
-        Assertions.assertThat(Consts.TO_BASE64_FIRST_SYMBOL[0xFD]).isEqualTo('/');
-        Assertions.assertThat(Consts.TO_BASE64_FIRST_SYMBOL[0xAA]).isEqualTo('q');
-        Assertions.assertThat(Consts.TO_BASE64_FIRST_SYMBOL[0xF0]).isEqualTo('8');
-        Assertions.assertThat(Consts.TO_BASE64_FIRST_SYMBOL[0xF3]).isEqualTo('8');
-        Assertions.assertThat(Consts.TO_BASE64_FIRST_SYMBOL[0x0C]).isEqualTo('D');
-        Assertions.assertThat(Consts.TO_BASE64_FIRST_SYMBOL[0x0D]).isEqualTo('D');
+        Assertions.assertThat(Consts.TO_BASE64_FIRST_CHARACTER[0xFF]).isEqualTo('/');
+        Assertions.assertThat(Consts.TO_BASE64_FIRST_CHARACTER[0xFD]).isEqualTo('/');
+        Assertions.assertThat(Consts.TO_BASE64_FIRST_CHARACTER[0xAA]).isEqualTo('q');
+        Assertions.assertThat(Consts.TO_BASE64_FIRST_CHARACTER[0xF0]).isEqualTo('8');
+        Assertions.assertThat(Consts.TO_BASE64_FIRST_CHARACTER[0xF3]).isEqualTo('8');
+        Assertions.assertThat(Consts.TO_BASE64_FIRST_CHARACTER[0x0C]).isEqualTo('D');
+        Assertions.assertThat(Consts.TO_BASE64_FIRST_CHARACTER[0x0D]).isEqualTo('D');
     }
 
     /**
@@ -101,19 +101,19 @@ public final class ConstsTest {
      */
     @Test
     public void toBase64SecondSymbolIndexTest() {
-        Assertions.assertThat(Consts.TO_BASE64_SECOND_SYMBOL_INDEX_1[0xFF]).isEqualTo(0x30);
-        Assertions.assertThat(Consts.TO_BASE64_SECOND_SYMBOL_INDEX_1[0xFD]).isEqualTo(0x10);
-        Assertions.assertThat(Consts.TO_BASE64_SECOND_SYMBOL_INDEX_1[0xAA]).isEqualTo(0x20);
-        Assertions.assertThat(Consts.TO_BASE64_SECOND_SYMBOL_INDEX_1[0xF0]).isEqualTo(0x00);
-        Assertions.assertThat(Consts.TO_BASE64_SECOND_SYMBOL_INDEX_1[0xF3]).isEqualTo(0x30);
-        Assertions.assertThat(Consts.TO_BASE64_SECOND_SYMBOL_INDEX_1[0x0D]).isEqualTo(0x10);
+        Assertions.assertThat(Consts.TO_BASE64_SECOND_CHARACTER_INDEX_1[0xFF]).isEqualTo(0x30);
+        Assertions.assertThat(Consts.TO_BASE64_SECOND_CHARACTER_INDEX_1[0xFD]).isEqualTo(0x10);
+        Assertions.assertThat(Consts.TO_BASE64_SECOND_CHARACTER_INDEX_1[0xAA]).isEqualTo(0x20);
+        Assertions.assertThat(Consts.TO_BASE64_SECOND_CHARACTER_INDEX_1[0xF0]).isEqualTo(0x00);
+        Assertions.assertThat(Consts.TO_BASE64_SECOND_CHARACTER_INDEX_1[0xF3]).isEqualTo(0x30);
+        Assertions.assertThat(Consts.TO_BASE64_SECOND_CHARACTER_INDEX_1[0x0D]).isEqualTo(0x10);
 
-        Assertions.assertThat(Consts.TO_BASE64_SECOND_SYMBOL_INDEX_2[0xFF]).isEqualTo(0x0F);
-        Assertions.assertThat(Consts.TO_BASE64_SECOND_SYMBOL_INDEX_2[0xFD]).isEqualTo(0x0F);
-        Assertions.assertThat(Consts.TO_BASE64_SECOND_SYMBOL_INDEX_2[0xAA]).isEqualTo(0x0A);
-        Assertions.assertThat(Consts.TO_BASE64_SECOND_SYMBOL_INDEX_2[0xF0]).isEqualTo(0x0F);
-        Assertions.assertThat(Consts.TO_BASE64_SECOND_SYMBOL_INDEX_2[0xF3]).isEqualTo(0x0F);
-        Assertions.assertThat(Consts.TO_BASE64_SECOND_SYMBOL_INDEX_2[0x0D]).isEqualTo(0x00);
+        Assertions.assertThat(Consts.TO_BASE64_SECOND_CHARACTER_INDEX_2[0xFF]).isEqualTo(0x0F);
+        Assertions.assertThat(Consts.TO_BASE64_SECOND_CHARACTER_INDEX_2[0xFD]).isEqualTo(0x0F);
+        Assertions.assertThat(Consts.TO_BASE64_SECOND_CHARACTER_INDEX_2[0xAA]).isEqualTo(0x0A);
+        Assertions.assertThat(Consts.TO_BASE64_SECOND_CHARACTER_INDEX_2[0xF0]).isEqualTo(0x0F);
+        Assertions.assertThat(Consts.TO_BASE64_SECOND_CHARACTER_INDEX_2[0xF3]).isEqualTo(0x0F);
+        Assertions.assertThat(Consts.TO_BASE64_SECOND_CHARACTER_INDEX_2[0x0D]).isEqualTo(0x00);
     }
 
     /**
@@ -121,19 +121,19 @@ public final class ConstsTest {
      */
     @Test
     public void toBase64ThirdSymbolIndexTest() {
-        Assertions.assertThat(Consts.TO_BASE64_THIRD_SYMBOL_INDEX_1[0xFF]).isEqualTo(0x3C);
-        Assertions.assertThat(Consts.TO_BASE64_THIRD_SYMBOL_INDEX_1[0xFD]).isEqualTo(0x34);
-        Assertions.assertThat(Consts.TO_BASE64_THIRD_SYMBOL_INDEX_1[0xAA]).isEqualTo(0x28);
-        Assertions.assertThat(Consts.TO_BASE64_THIRD_SYMBOL_INDEX_1[0xF0]).isEqualTo(0x00);
-        Assertions.assertThat(Consts.TO_BASE64_THIRD_SYMBOL_INDEX_1[0xF3]).isEqualTo(0x0C);
-        Assertions.assertThat(Consts.TO_BASE64_THIRD_SYMBOL_INDEX_1[0x0D]).isEqualTo(0x34);
+        Assertions.assertThat(Consts.TO_BASE64_THIRD_CHARACTER_INDEX_1[0xFF]).isEqualTo(0x3C);
+        Assertions.assertThat(Consts.TO_BASE64_THIRD_CHARACTER_INDEX_1[0xFD]).isEqualTo(0x34);
+        Assertions.assertThat(Consts.TO_BASE64_THIRD_CHARACTER_INDEX_1[0xAA]).isEqualTo(0x28);
+        Assertions.assertThat(Consts.TO_BASE64_THIRD_CHARACTER_INDEX_1[0xF0]).isEqualTo(0x00);
+        Assertions.assertThat(Consts.TO_BASE64_THIRD_CHARACTER_INDEX_1[0xF3]).isEqualTo(0x0C);
+        Assertions.assertThat(Consts.TO_BASE64_THIRD_CHARACTER_INDEX_1[0x0D]).isEqualTo(0x34);
 
-        Assertions.assertThat(Consts.TO_BASE64_THIRD_SYMBOL_INDEX_2[0xFF]).isEqualTo(0x03);
-        Assertions.assertThat(Consts.TO_BASE64_THIRD_SYMBOL_INDEX_2[0xFD]).isEqualTo(0x03);
-        Assertions.assertThat(Consts.TO_BASE64_THIRD_SYMBOL_INDEX_2[0xAA]).isEqualTo(0x02);
-        Assertions.assertThat(Consts.TO_BASE64_THIRD_SYMBOL_INDEX_2[0xF0]).isEqualTo(0x03);
-        Assertions.assertThat(Consts.TO_BASE64_THIRD_SYMBOL_INDEX_2[0xF3]).isEqualTo(0x03);
-        Assertions.assertThat(Consts.TO_BASE64_THIRD_SYMBOL_INDEX_2[0x0D]).isEqualTo(0x00);
+        Assertions.assertThat(Consts.TO_BASE64_THIRD_CHARACTER_INDEX_2[0xFF]).isEqualTo(0x03);
+        Assertions.assertThat(Consts.TO_BASE64_THIRD_CHARACTER_INDEX_2[0xFD]).isEqualTo(0x03);
+        Assertions.assertThat(Consts.TO_BASE64_THIRD_CHARACTER_INDEX_2[0xAA]).isEqualTo(0x02);
+        Assertions.assertThat(Consts.TO_BASE64_THIRD_CHARACTER_INDEX_2[0xF0]).isEqualTo(0x03);
+        Assertions.assertThat(Consts.TO_BASE64_THIRD_CHARACTER_INDEX_2[0xF3]).isEqualTo(0x03);
+        Assertions.assertThat(Consts.TO_BASE64_THIRD_CHARACTER_INDEX_2[0x0D]).isEqualTo(0x00);
     }
 
     /**
@@ -141,13 +141,13 @@ public final class ConstsTest {
      */
     @Test
     public void toBase64FourthSymbolTest() {
-        Assertions.assertThat(Consts.TO_BASE64_FOURTH_SYMBOL[0xFF]).isEqualTo('/');
-        Assertions.assertThat(Consts.TO_BASE64_FOURTH_SYMBOL[0xFD]).isEqualTo('9');
-        Assertions.assertThat(Consts.TO_BASE64_FOURTH_SYMBOL[0xAA]).isEqualTo('q');
-        Assertions.assertThat(Consts.TO_BASE64_FOURTH_SYMBOL[0xF0]).isEqualTo('w');
-        Assertions.assertThat(Consts.TO_BASE64_FOURTH_SYMBOL[0xF3]).isEqualTo('z');
-        Assertions.assertThat(Consts.TO_BASE64_FOURTH_SYMBOL[0x0C]).isEqualTo('M');
-        Assertions.assertThat(Consts.TO_BASE64_FOURTH_SYMBOL[0x0D]).isEqualTo('N');
+        Assertions.assertThat(Consts.TO_BASE64_FOURTH_CHARACTER[0xFF]).isEqualTo('/');
+        Assertions.assertThat(Consts.TO_BASE64_FOURTH_CHARACTER[0xFD]).isEqualTo('9');
+        Assertions.assertThat(Consts.TO_BASE64_FOURTH_CHARACTER[0xAA]).isEqualTo('q');
+        Assertions.assertThat(Consts.TO_BASE64_FOURTH_CHARACTER[0xF0]).isEqualTo('w');
+        Assertions.assertThat(Consts.TO_BASE64_FOURTH_CHARACTER[0xF3]).isEqualTo('z');
+        Assertions.assertThat(Consts.TO_BASE64_FOURTH_CHARACTER[0x0C]).isEqualTo('M');
+        Assertions.assertThat(Consts.TO_BASE64_FOURTH_CHARACTER[0x0D]).isEqualTo('N');
     }
 
     /**

@@ -50,15 +50,15 @@ public final class ExceptionMessageHelperTest {
      */
     @Test
     public void createMessageTest() {
-        Assertions.assertThat(ExceptionMessageHelper.createWrongBase64StringSizeMessage(10)).isEqualTo("Wrong number of symbols in base64 string (10)");
-        Assertions.assertThat(ExceptionMessageHelper.createWrongBase64StringSizeMessage(13)).isEqualTo("Wrong number of symbols in base64 string (13)");
+        Assertions.assertThat(ExceptionMessageHelper.createWrongBase64StringSizeMessage(10)).isEqualTo("Wrong number of characters in the base64 string (10)");
+        Assertions.assertThat(ExceptionMessageHelper.createWrongBase64StringSizeMessage(13)).isEqualTo("Wrong number of characters in the base64 string (13)");
 
-        Assertions.assertThat(ExceptionMessageHelper.createWrongResultArrayMessage(16, 13)).isEqualTo("Result array is too small for base64 string (13), expected size is (16)");
-        Assertions.assertThat(ExceptionMessageHelper.createWrongResultArrayMessage(20, 9)).isEqualTo("Result array is too small for base64 string (9), expected size is (20)");
+        Assertions.assertThat(ExceptionMessageHelper.createWrongResultArrayMessage(16, 13)).isEqualTo("The result array is too small for the base64 string (13), expected size is (16)");
+        Assertions.assertThat(ExceptionMessageHelper.createWrongResultArrayMessage(20, 9)).isEqualTo("The result array is too small for the base64 string (9), expected size is (20)");
 
-        Assertions.assertThat(ExceptionMessageHelper.createWrongBase64Symbol('-')).isEqualTo("Wrong symbol obtained: '-' (45)");
-        Assertions.assertThat(ExceptionMessageHelper.createWrongBase64Symbol('!')).isEqualTo("Wrong symbol obtained: '!' (33)");
-        Assertions.assertThat(ExceptionMessageHelper.createWrongBase64Symbol('#')).isEqualTo("Wrong symbol obtained: '#' (35)");
+        Assertions.assertThat(ExceptionMessageHelper.createWrongBase64CharacterMessage('-')).isEqualTo("Wrong character obtained ('-', 45)");
+        Assertions.assertThat(ExceptionMessageHelper.createWrongBase64CharacterMessage('!')).isEqualTo("Wrong character obtained ('!', 33)");
+        Assertions.assertThat(ExceptionMessageHelper.createWrongBase64CharacterMessage('#')).isEqualTo("Wrong character obtained ('#', 35)");
 
         Assertions.assertThat(ExceptionMessageHelper.createEndOfStreamMessage()).isEqualTo("Unexpected end of stream");
     }

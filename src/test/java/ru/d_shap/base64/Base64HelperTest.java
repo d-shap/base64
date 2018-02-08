@@ -230,19 +230,19 @@ public final class Base64HelperTest {
             Base64Helper.toBytes("1234567", new byte[6]);
             Assertions.fail("Base64Helper test fail");
         } catch (Base64RuntimeException ex) {
-            Assertions.assertThat(ex).hasMessage("Wrong number of symbols in base64 string (7)");
+            Assertions.assertThat(ex).hasMessage("Wrong number of characters in the base64 string (7)");
         }
         try {
             Base64Helper.toBytes("123456", new byte[6]);
             Assertions.fail("Base64Helper test fail");
         } catch (Base64RuntimeException ex) {
-            Assertions.assertThat(ex).hasMessage("Wrong number of symbols in base64 string (6)");
+            Assertions.assertThat(ex).hasMessage("Wrong number of characters in the base64 string (6)");
         }
         try {
             Base64Helper.toBytes("12345", new byte[6]);
             Assertions.fail("Base64Helper test fail");
         } catch (Base64RuntimeException ex) {
-            Assertions.assertThat(ex).hasMessage("Wrong number of symbols in base64 string (5)");
+            Assertions.assertThat(ex).hasMessage("Wrong number of characters in the base64 string (5)");
         }
     }
 
@@ -255,7 +255,7 @@ public final class Base64HelperTest {
             Base64Helper.toBytes("12345678", new byte[5]);
             Assertions.fail("Base64Helper test fail");
         } catch (Base64RuntimeException ex) {
-            Assertions.assertThat(ex).hasMessage("Result array is too small for base64 string (5), expected size is (6)");
+            Assertions.assertThat(ex).hasMessage("The result array is too small for the base64 string (5), expected size is (6)");
         }
     }
 
@@ -328,19 +328,19 @@ public final class Base64HelperTest {
             Base64Helper.toBytes("1234567");
             Assertions.fail("Base64Helper test fail");
         } catch (Base64RuntimeException ex) {
-            Assertions.assertThat(ex).hasMessage("Wrong number of symbols in base64 string (7)");
+            Assertions.assertThat(ex).hasMessage("Wrong number of characters in the base64 string (7)");
         }
         try {
             Base64Helper.toBytes("123456");
             Assertions.fail("Base64Helper test fail");
         } catch (Base64RuntimeException ex) {
-            Assertions.assertThat(ex).hasMessage("Wrong number of symbols in base64 string (6)");
+            Assertions.assertThat(ex).hasMessage("Wrong number of characters in the base64 string (6)");
         }
         try {
             Base64Helper.toBytes("12345");
             Assertions.fail("Base64Helper test fail");
         } catch (Base64RuntimeException ex) {
-            Assertions.assertThat(ex).hasMessage("Wrong number of symbols in base64 string (5)");
+            Assertions.assertThat(ex).hasMessage("Wrong number of characters in the base64 string (5)");
         }
     }
 
@@ -353,73 +353,73 @@ public final class Base64HelperTest {
             Base64Helper.toBytes("++++,+++++++");
             Assertions.fail("Base64Helper test fail");
         } catch (Base64RuntimeException ex) {
-            Assertions.assertThat(ex).hasMessage("Wrong symbol obtained: ',' (44)");
+            Assertions.assertThat(ex).hasMessage("Wrong character obtained (',', 44)");
         }
         try {
             Base64Helper.toBytes("+++++,++++++");
             Assertions.fail("Base64Helper test fail");
         } catch (Base64RuntimeException ex) {
-            Assertions.assertThat(ex).hasMessage("Wrong symbol obtained: ',' (44)");
+            Assertions.assertThat(ex).hasMessage("Wrong character obtained (',', 44)");
         }
         try {
             Base64Helper.toBytes("++++++,+++++");
             Assertions.fail("Base64Helper test fail");
         } catch (Base64RuntimeException ex) {
-            Assertions.assertThat(ex).hasMessage("Wrong symbol obtained: ',' (44)");
+            Assertions.assertThat(ex).hasMessage("Wrong character obtained (',', 44)");
         }
         try {
             Base64Helper.toBytes("+++++++,++++");
             Assertions.fail("Base64Helper test fail");
         } catch (Base64RuntimeException ex) {
-            Assertions.assertThat(ex).hasMessage("Wrong symbol obtained: ',' (44)");
+            Assertions.assertThat(ex).hasMessage("Wrong character obtained (',', 44)");
         }
         try {
             Base64Helper.toBytes("++++++++,+++");
             Assertions.fail("Base64Helper test fail");
         } catch (Base64RuntimeException ex) {
-            Assertions.assertThat(ex).hasMessage("Wrong symbol obtained: ',' (44)");
+            Assertions.assertThat(ex).hasMessage("Wrong character obtained (',', 44)");
         }
         try {
             Base64Helper.toBytes("+++++++++,++");
             Assertions.fail("Base64Helper test fail");
         } catch (Base64RuntimeException ex) {
-            Assertions.assertThat(ex).hasMessage("Wrong symbol obtained: ',' (44)");
+            Assertions.assertThat(ex).hasMessage("Wrong character obtained (',', 44)");
         }
         try {
             Base64Helper.toBytes("++++++++++,+");
             Assertions.fail("Base64Helper test fail");
         } catch (Base64RuntimeException ex) {
-            Assertions.assertThat(ex).hasMessage("Wrong symbol obtained: ',' (44)");
+            Assertions.assertThat(ex).hasMessage("Wrong character obtained (',', 44)");
         }
         try {
             Base64Helper.toBytes("+++++++++++,");
             Assertions.fail("Base64Helper test fail");
         } catch (Base64RuntimeException ex) {
-            Assertions.assertThat(ex).hasMessage("Wrong symbol obtained: ',' (44)");
+            Assertions.assertThat(ex).hasMessage("Wrong character obtained (',', 44)");
         }
         try {
             Base64Helper.toBytes("++++++++++,=");
             Assertions.fail("Base64Helper test fail");
         } catch (Base64RuntimeException ex) {
-            Assertions.assertThat(ex).hasMessage("Wrong symbol obtained: ',' (44)");
+            Assertions.assertThat(ex).hasMessage("Wrong character obtained (',', 44)");
         }
         try {
             Base64Helper.toBytes("+++++++++++=");
             Assertions.fail("Base64Helper test fail");
         } catch (Base64RuntimeException ex) {
-            Assertions.assertThat(ex).hasMessage("Wrong symbol obtained: '+' (43)");
+            Assertions.assertThat(ex).hasMessage("Wrong character obtained ('+', 43)");
         }
         try {
             Base64Helper.toBytes("+++++++++,==");
             Assertions.fail("Base64Helper test fail");
         } catch (Base64RuntimeException ex) {
-            Assertions.assertThat(ex).hasMessage("Wrong symbol obtained: ',' (44)");
+            Assertions.assertThat(ex).hasMessage("Wrong character obtained (',', 44)");
         }
         try {
             Base64Helper.toBytes("++++++++++==");
             Assertions.fail("Base64Helper test fail");
         } catch (Base64RuntimeException ex) {
-            Assertions.assertThat(ex).hasMessage("Wrong symbol obtained: '+' (43)");
+            Assertions.assertThat(ex).hasMessage("Wrong character obtained ('+', 43)");
         }
     }
 
@@ -432,37 +432,37 @@ public final class Base64HelperTest {
             Base64Helper.toBytes("++++=+++++++");
             Assertions.fail("Base64Helper test fail");
         } catch (Base64RuntimeException ex) {
-            Assertions.assertThat(ex).hasMessage("Wrong symbol obtained: '=' (61)");
+            Assertions.assertThat(ex).hasMessage("Wrong character obtained ('=', 61)");
         }
         try {
             Base64Helper.toBytes("+++++=++++++");
             Assertions.fail("Base64Helper test fail");
         } catch (Base64RuntimeException ex) {
-            Assertions.assertThat(ex).hasMessage("Wrong symbol obtained: '=' (61)");
+            Assertions.assertThat(ex).hasMessage("Wrong character obtained ('=', 61)");
         }
         try {
             Base64Helper.toBytes("++++++=+++++");
             Assertions.fail("Base64Helper test fail");
         } catch (Base64RuntimeException ex) {
-            Assertions.assertThat(ex).hasMessage("Wrong symbol obtained: '=' (61)");
+            Assertions.assertThat(ex).hasMessage("Wrong character obtained ('=', 61)");
         }
         try {
             Base64Helper.toBytes("+++++++=++++");
             Assertions.fail("Base64Helper test fail");
         } catch (Base64RuntimeException ex) {
-            Assertions.assertThat(ex).hasMessage("Wrong symbol obtained: '=' (61)");
+            Assertions.assertThat(ex).hasMessage("Wrong character obtained ('=', 61)");
         }
         try {
             Base64Helper.toBytes("++++++++=+++");
             Assertions.fail("Base64Helper test fail");
         } catch (Base64RuntimeException ex) {
-            Assertions.assertThat(ex).hasMessage("Wrong symbol obtained: '=' (61)");
+            Assertions.assertThat(ex).hasMessage("Wrong character obtained ('=', 61)");
         }
         try {
             Base64Helper.toBytes("+++++++++=++");
             Assertions.fail("Base64Helper test fail");
         } catch (Base64RuntimeException ex) {
-            Assertions.assertThat(ex).hasMessage("Wrong symbol obtained: '=' (61)");
+            Assertions.assertThat(ex).hasMessage("Wrong character obtained ('=', 61)");
         }
     }
 
@@ -475,13 +475,13 @@ public final class Base64HelperTest {
             Base64Helper.toBytes("++++++=+");
             Assertions.fail("Base64Helper test fail");
         } catch (Base64RuntimeException ex) {
-            Assertions.assertThat(ex).hasMessage("Wrong symbol obtained: '+' (43)");
+            Assertions.assertThat(ex).hasMessage("Wrong character obtained ('+', 43)");
         }
         try {
             Base64Helper.toBytes("++++++=,");
             Assertions.fail("Base64Helper test fail");
         } catch (Base64RuntimeException ex) {
-            Assertions.assertThat(ex).hasMessage("Wrong symbol obtained: ',' (44)");
+            Assertions.assertThat(ex).hasMessage("Wrong character obtained (',', 44)");
         }
     }
 
