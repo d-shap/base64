@@ -20,7 +20,7 @@
 package ru.d_shap.base64;
 
 /**
- * Class provides messages for all exceptions.
+ * Messages for all exceptions.
  *
  * @author Dmitry Shapovalov
  */
@@ -31,15 +31,15 @@ final class ExceptionMessageHelper {
     }
 
     static String createWrongBase64StringSizeMessage(final int length) {
-        return "Wrong number of symbols in base64 string (" + length + ")";
+        return "Wrong number of characters in the base64 string (" + length + ")";
     }
 
     static String createWrongResultArrayMessage(final int expected, final int actual) {
-        return "Result array is too small for base64 string (" + actual + "), expected size is (" + expected + ")";
+        return "The result array is too small for the base64 string (" + actual + "), expected size is (" + expected + ")";
     }
 
-    static String createWrongBase64Symbol(final int symbol) {
-        return "Wrong symbol obtained: '" + (char) symbol + "' (" + symbol + ")";
+    static String createWrongBase64CharacterMessage(final int character) {
+        return "Wrong character obtained ('" + (char) character + "', " + character + ")";
     }
 
     static String createEndOfStreamMessage() {
