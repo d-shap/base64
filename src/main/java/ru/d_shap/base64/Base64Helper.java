@@ -20,7 +20,7 @@
 package ru.d_shap.base64;
 
 /**
- * Class to perform bytes to base64 and base64 to bytes conversions.
+ * Class to perform the bytes-to-base64 and the base64-to-bytes conversions.
  *
  * @author Dmitry Shapovalov
  */
@@ -92,31 +92,31 @@ public final class Base64Helper {
     }
 
     static int getFirstBase64Symbol(final int byte1) {
-        return Consts.TO_BASE64_FIRST_SYMBOL[byte1];
+        return Consts.TO_BASE64_FIRST_CHARACTER[byte1];
     }
 
     static int getSecondBase64Symbol(final int byte1) {
-        int idx = Consts.TO_BASE64_SECOND_SYMBOL_INDEX_1[byte1];
+        int idx = Consts.TO_BASE64_SECOND_CHARACTER_INDEX_1[byte1];
         return Consts.TO_BASE64[idx];
     }
 
     static int getSecondBase64Symbol(final int byte1, final int byte2) {
-        int idx = Consts.TO_BASE64_SECOND_SYMBOL_INDEX_1[byte1] + Consts.TO_BASE64_SECOND_SYMBOL_INDEX_2[byte2];
+        int idx = Consts.TO_BASE64_SECOND_CHARACTER_INDEX_1[byte1] + Consts.TO_BASE64_SECOND_CHARACTER_INDEX_2[byte2];
         return Consts.TO_BASE64[idx];
     }
 
     static int getThirdBase64Symbol(final int byte2) {
-        int idx = Consts.TO_BASE64_THIRD_SYMBOL_INDEX_1[byte2];
+        int idx = Consts.TO_BASE64_THIRD_CHARACTER_INDEX_1[byte2];
         return Consts.TO_BASE64[idx];
     }
 
     static int getThirdBase64Symbol(final int byte2, final int byte3) {
-        int idx = Consts.TO_BASE64_THIRD_SYMBOL_INDEX_1[byte2] + Consts.TO_BASE64_THIRD_SYMBOL_INDEX_2[byte3];
+        int idx = Consts.TO_BASE64_THIRD_CHARACTER_INDEX_1[byte2] + Consts.TO_BASE64_THIRD_CHARACTER_INDEX_2[byte3];
         return Consts.TO_BASE64[idx];
     }
 
     static int getFourthBase64Symbol(final int byte3) {
-        return Consts.TO_BASE64_FOURTH_SYMBOL[byte3];
+        return Consts.TO_BASE64_FOURTH_CHARACTER[byte3];
     }
 
     /**
@@ -223,19 +223,19 @@ public final class Base64Helper {
                 if (isSecondBase64ByteZero(symbol2)) {
                     result[resultIndex] = (byte) getFirstBase64Byte(symbol1, symbol2);
                 } else {
-                    throw new Base64RuntimeException(ExceptionMessageHelper.createWrongBase64Symbol(symbol2));
+                    throw new Base64RuntimeException(ExceptionMessageHelper.createWrongBase64CharacterMessage(symbol2));
                 }
             } else {
                 if (isThirdBase64ByteZero(symbol3)) {
                     result[resultIndex] = (byte) getFirstBase64Byte(symbol1, symbol2);
                     result[resultIndex + 1] = (byte) getSecondBase64Byte(symbol2, symbol3);
                 } else {
-                    throw new Base64RuntimeException(ExceptionMessageHelper.createWrongBase64Symbol(symbol3));
+                    throw new Base64RuntimeException(ExceptionMessageHelper.createWrongBase64CharacterMessage(symbol3));
                 }
             }
         } else {
             if (symbol3 == Consts.PAD) {
-                throw new Base64RuntimeException(ExceptionMessageHelper.createWrongBase64Symbol(symbol4));
+                throw new Base64RuntimeException(ExceptionMessageHelper.createWrongBase64CharacterMessage(symbol4));
             } else {
                 result[resultIndex] = (byte) getFirstBase64Byte(symbol1, symbol2);
                 result[resultIndex + 1] = (byte) getSecondBase64Byte(symbol2, symbol3);
@@ -249,7 +249,7 @@ public final class Base64Helper {
         if (isBase64SymbolValid(symbol) || padIsValid && symbol == Consts.PAD) {
             return symbol;
         } else {
-            throw new Base64RuntimeException(ExceptionMessageHelper.createWrongBase64Symbol(symbol));
+            throw new Base64RuntimeException(ExceptionMessageHelper.createWrongBase64CharacterMessage(symbol));
         }
     }
 

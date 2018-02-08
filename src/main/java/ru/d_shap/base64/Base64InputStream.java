@@ -79,7 +79,7 @@ public final class Base64InputStream extends InputStream {
                     _buffer[2] = Base64Helper.getFirstBase64Byte(symbol1, symbol2);
                     return 2;
                 } else {
-                    throw new IOException(ExceptionMessageHelper.createWrongBase64Symbol(symbol2));
+                    throw new IOException(ExceptionMessageHelper.createWrongBase64CharacterMessage(symbol2));
                 }
             } else {
                 if (Base64Helper.isThirdBase64ByteZero(symbol3)) {
@@ -87,12 +87,12 @@ public final class Base64InputStream extends InputStream {
                     _buffer[2] = Base64Helper.getSecondBase64Byte(symbol2, symbol3);
                     return 1;
                 } else {
-                    throw new IOException(ExceptionMessageHelper.createWrongBase64Symbol(symbol3));
+                    throw new IOException(ExceptionMessageHelper.createWrongBase64CharacterMessage(symbol3));
                 }
             }
         } else {
             if (symbol3 == Consts.PAD) {
-                throw new IOException(ExceptionMessageHelper.createWrongBase64Symbol(symbol4));
+                throw new IOException(ExceptionMessageHelper.createWrongBase64CharacterMessage(symbol4));
             } else {
                 _buffer[0] = Base64Helper.getFirstBase64Byte(symbol1, symbol2);
                 _buffer[1] = Base64Helper.getSecondBase64Byte(symbol2, symbol3);
@@ -114,7 +114,7 @@ public final class Base64InputStream extends InputStream {
         if (Base64Helper.isBase64SymbolValid(symbol) || padIsValid && symbol == Consts.PAD) {
             return symbol;
         } else {
-            throw new IOException(ExceptionMessageHelper.createWrongBase64Symbol(symbol));
+            throw new IOException(ExceptionMessageHelper.createWrongBase64CharacterMessage(symbol));
         }
     }
 
