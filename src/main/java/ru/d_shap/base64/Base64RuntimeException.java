@@ -20,11 +20,11 @@
 package ru.d_shap.base64;
 
 /**
- * Exception thrown during base64-to-byte or byte-to-base64 conversion.
+ * Exception thrown during the bytes-to-base64 and the base64-to-bytes conversions.
  *
  * @author Dmitry Shapovalov
  */
-public class Base64RuntimeException extends RuntimeException {
+public final class Base64RuntimeException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
 
