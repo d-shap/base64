@@ -20,7 +20,7 @@
 package ru.d_shap.base64;
 
 /**
- * Predefined values for byte-to-base64 and base64-to-byte conversions.
+ * Predefined values for the bytes-to-base64 and the base64-to-bytes conversions.
  *
  * @author Dmitry Shapovalov
  */
@@ -97,57 +97,57 @@ final class Consts {
         TO_BASE64[63] = '/';
     }
 
-    static final int[] TO_BASE64_FIRST_SYMBOL;
+    static final int[] TO_BASE64_FIRST_CHARACTER;
 
     static {
-        TO_BASE64_FIRST_SYMBOL = new int[256];
-        for (int i = 0; i < TO_BASE64_FIRST_SYMBOL.length; i++) {
-            TO_BASE64_FIRST_SYMBOL[i] = TO_BASE64[(i & 0xFC) >> 2];
+        TO_BASE64_FIRST_CHARACTER = new int[256];
+        for (int i = 0; i < TO_BASE64_FIRST_CHARACTER.length; i++) {
+            TO_BASE64_FIRST_CHARACTER[i] = TO_BASE64[(i & 0xFC) >> 2];
         }
     }
 
-    static final int[] TO_BASE64_SECOND_SYMBOL_INDEX_1;
+    static final int[] TO_BASE64_SECOND_CHARACTER_INDEX_1;
 
     static {
-        TO_BASE64_SECOND_SYMBOL_INDEX_1 = new int[256];
-        for (int i = 0; i < TO_BASE64_SECOND_SYMBOL_INDEX_1.length; i++) {
-            TO_BASE64_SECOND_SYMBOL_INDEX_1[i] = (i & 0x3) << 4;
+        TO_BASE64_SECOND_CHARACTER_INDEX_1 = new int[256];
+        for (int i = 0; i < TO_BASE64_SECOND_CHARACTER_INDEX_1.length; i++) {
+            TO_BASE64_SECOND_CHARACTER_INDEX_1[i] = (i & 0x3) << 4;
         }
     }
 
-    static final int[] TO_BASE64_SECOND_SYMBOL_INDEX_2;
+    static final int[] TO_BASE64_SECOND_CHARACTER_INDEX_2;
 
     static {
-        TO_BASE64_SECOND_SYMBOL_INDEX_2 = new int[256];
-        for (int i = 0; i < TO_BASE64_SECOND_SYMBOL_INDEX_2.length; i++) {
-            TO_BASE64_SECOND_SYMBOL_INDEX_2[i] = (i & 0xF0) >> 4;
+        TO_BASE64_SECOND_CHARACTER_INDEX_2 = new int[256];
+        for (int i = 0; i < TO_BASE64_SECOND_CHARACTER_INDEX_2.length; i++) {
+            TO_BASE64_SECOND_CHARACTER_INDEX_2[i] = (i & 0xF0) >> 4;
         }
     }
 
-    static final int[] TO_BASE64_THIRD_SYMBOL_INDEX_1;
+    static final int[] TO_BASE64_THIRD_CHARACTER_INDEX_1;
 
     static {
-        TO_BASE64_THIRD_SYMBOL_INDEX_1 = new int[256];
-        for (int i = 0; i < TO_BASE64_THIRD_SYMBOL_INDEX_1.length; i++) {
-            TO_BASE64_THIRD_SYMBOL_INDEX_1[i] = (i & 0xF) << 2;
+        TO_BASE64_THIRD_CHARACTER_INDEX_1 = new int[256];
+        for (int i = 0; i < TO_BASE64_THIRD_CHARACTER_INDEX_1.length; i++) {
+            TO_BASE64_THIRD_CHARACTER_INDEX_1[i] = (i & 0xF) << 2;
         }
     }
 
-    static final int[] TO_BASE64_THIRD_SYMBOL_INDEX_2;
+    static final int[] TO_BASE64_THIRD_CHARACTER_INDEX_2;
 
     static {
-        TO_BASE64_THIRD_SYMBOL_INDEX_2 = new int[256];
-        for (int i = 0; i < TO_BASE64_THIRD_SYMBOL_INDEX_2.length; i++) {
-            TO_BASE64_THIRD_SYMBOL_INDEX_2[i] = (i & 0xC0) >> 6;
+        TO_BASE64_THIRD_CHARACTER_INDEX_2 = new int[256];
+        for (int i = 0; i < TO_BASE64_THIRD_CHARACTER_INDEX_2.length; i++) {
+            TO_BASE64_THIRD_CHARACTER_INDEX_2[i] = (i & 0xC0) >> 6;
         }
     }
 
-    static final int[] TO_BASE64_FOURTH_SYMBOL;
+    static final int[] TO_BASE64_FOURTH_CHARACTER;
 
     static {
-        TO_BASE64_FOURTH_SYMBOL = new int[256];
-        for (int i = 0; i < TO_BASE64_FOURTH_SYMBOL.length; i++) {
-            TO_BASE64_FOURTH_SYMBOL[i] = TO_BASE64[i & 0x3F];
+        TO_BASE64_FOURTH_CHARACTER = new int[256];
+        for (int i = 0; i < TO_BASE64_FOURTH_CHARACTER.length; i++) {
+            TO_BASE64_FOURTH_CHARACTER[i] = TO_BASE64[i & 0x3F];
         }
     }
 
