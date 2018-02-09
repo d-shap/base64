@@ -23,7 +23,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 /**
- * Output stream to write base64 representation of bytes.
+ * Output stream to write the base64 representation of the bytes.
  *
  * @author Dmitry Shapovalov
  */
@@ -38,13 +38,12 @@ public final class Base64OutputStream extends OutputStream {
     /**
      * Create new object.
      *
-     * @param outputStream output stream to write bytes.
+     * @param outputStream output stream with the base64 representation of the bytes.
      */
     public Base64OutputStream(final OutputStream outputStream) {
         super();
         _outputStream = outputStream;
         _buffer = new int[3];
-        _bufferPosition = 0;
     }
 
     @Override
@@ -52,34 +51,39 @@ public final class Base64OutputStream extends OutputStream {
         _buffer[_bufferPosition] = value & 0xFF;
         _bufferPosition++;
         if (_bufferPosition == _buffer.length) {
-            flushBuffer();
+            writeBufferToOutputStream();
             _bufferPosition = 0;
         }
     }
 
     @Override
+    public void flush() throws IOException {
+        _outputStream.flush();
+    }
+
+    @Override
     public void close() throws IOException {
-        flushBuffer();
+        writeBufferToOutputStream();
         _bufferPosition = 0;
         _outputStream.close();
     }
 
-    private void flushBuffer() throws IOException {
+    private void writeBufferToOutputStream() throws IOException {
         if (_bufferPosition == 1) {
-            _outputStream.write(Base64Helper.getFirstBase64Symbol(_buffer[0]));
-            _outputStream.write(Base64Helper.getSecondBase64Symbol(_buffer[0]));
+            _outputStream.write(Base64Helper.getFirstBase64Character(_buffer[0]));
+            _outputStream.write(Base64Helper.getSecondBase64Character(_buffer[0]));
             _outputStream.write(Consts.PAD);
             _outputStream.write(Consts.PAD);
         } else if (_bufferPosition == 2) {
-            _outputStream.write(Base64Helper.getFirstBase64Symbol(_buffer[0]));
-            _outputStream.write(Base64Helper.getSecondBase64Symbol(_buffer[0], _buffer[1]));
-            _outputStream.write(Base64Helper.getThirdBase64Symbol(_buffer[1]));
+            _outputStream.write(Base64Helper.getFirstBase64Character(_buffer[0]));
+            _outputStream.write(Base64Helper.getSecondBase64Character(_buffer[0], _buffer[1]));
+            _outputStream.write(Base64Helper.getThirdBase64Character(_buffer[1]));
             _outputStream.write(Consts.PAD);
         } else if (_bufferPosition == 3) {
-            _outputStream.write(Base64Helper.getFirstBase64Symbol(_buffer[0]));
-            _outputStream.write(Base64Helper.getSecondBase64Symbol(_buffer[0], _buffer[1]));
-            _outputStream.write(Base64Helper.getThirdBase64Symbol(_buffer[1], _buffer[2]));
-            _outputStream.write(Base64Helper.getFourthBase64Symbol(_buffer[2]));
+            _outputStream.write(Base64Helper.getFirstBase64Character(_buffer[0]));
+            _outputStream.write(Base64Helper.getSecondBase64Character(_buffer[0], _buffer[1]));
+            _outputStream.write(Base64Helper.getThirdBase64Character(_buffer[1], _buffer[2]));
+            _outputStream.write(Base64Helper.getFourthBase64Character(_buffer[2]));
         }
     }
 
