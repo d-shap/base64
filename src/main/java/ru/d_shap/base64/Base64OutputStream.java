@@ -74,12 +74,14 @@ public final class Base64OutputStream extends OutputStream {
             _outputStream.write(Base64Helper.getSecondBase64Character(_buffer[0]));
             _outputStream.write(Consts.PAD);
             _outputStream.write(Consts.PAD);
-        } else if (_bufferPosition == 2) {
+        }
+        if (_bufferPosition == 2) {
             _outputStream.write(Base64Helper.getFirstBase64Character(_buffer[0]));
             _outputStream.write(Base64Helper.getSecondBase64Character(_buffer[0], _buffer[1]));
             _outputStream.write(Base64Helper.getThirdBase64Character(_buffer[1]));
             _outputStream.write(Consts.PAD);
-        } else if (_bufferPosition == 3) {
+        }
+        if (_bufferPosition == 3) {
             _outputStream.write(Base64Helper.getFirstBase64Character(_buffer[0]));
             _outputStream.write(Base64Helper.getSecondBase64Character(_buffer[0], _buffer[1]));
             _outputStream.write(Base64Helper.getThirdBase64Character(_buffer[1], _buffer[2]));
