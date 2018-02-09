@@ -19,17 +19,18 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 /**
  * <p>
- * Package contains classes to convert bytes to base64 representation and vice versa.
+ * Base64 library converts bytes to the base64 representation and vice versa.
  * </p>
  * <p>
  * Base64 encoding is described in RFC 1421 and RFC 2045.
  * </p>
  * <p>
- * {@link ru.d_shap.base64.Base64Helper} class contains methods to convert byte array to base64 string, to convert
- * base64 string to byte array and to check, if the string is a base64 representation of bytes.
+ * {@link ru.d_shap.base64.Base64Helper} class contains methods to convert the byte array to the base64
+ * string, to convert the base64 string to the byte array and to check, if the string is a base64
+ * representation of bytes.
  * </p>
  * <p>
- * An example, how to convert bytes to base64 symbols:
+ * An example, how to convert the byte array to the base64 string:
  * </p>
  * <pre>{@code
  * String str1 = Base64Helper.toBase64(new byte[]{1, 5, (byte) 140, (byte) 250, -14, 25}); // str1 = "AQWM+vIZ"
@@ -37,7 +38,7 @@
  * String str3 = Base64Helper.toBase64(new byte[]{17, 28, (byte) 179, -14}); // str3 = "ERyz8g=="
  * }</pre>
  * <p>
- * An example, how to convert base64 symbols to bytes:
+ * An example, how to convert the base64 string to the byte array:
  * </p>
  * <pre>{@code
  * byte[] bytes1 = Base64Helper.toBytes("a+Z/fF12"); // bytes1 = new byte[]{(107, (byte) 230, 127, 124, 93, 118}
@@ -45,13 +46,14 @@
  * byte[] bytes3 = Base64Helper.toBytes("0FFTyQ=="); // bytes3 = new byte[]{(byte) 208, 81, 83, (byte) 201}
  * }</pre>
  * <p>
- * {@link ru.d_shap.base64.Base64Helper} class contains all data in memory. For a large data (for example, big files)
- * this is not efficient. In such cases {@link ru.d_shap.base64.Base64InputStream} and {@link ru.d_shap.base64.Base64OutputStream}
- * classes could be used. {@link ru.d_shap.base64.Base64InputStream} read stream of base64 symbols and translates them to bytes.
- * {@link ru.d_shap.base64.Base64OutputStream} writes base64 symbols to the stream.
+ * {@link ru.d_shap.base64.Base64Helper} class contains all data in memory. For the large data (for
+ * example, big files) this is not efficient. In this case  {@link ru.d_shap.base64.Base64InputStream}
+ * and {@link ru.d_shap.base64.Base64OutputStream} classes can be used. {@link ru.d_shap.base64.Base64InputStream}
+ * reads the stream of the base64 characters and translates them to the bytes. {@link ru.d_shap.base64.Base64OutputStream}
+ * translates the bytes to the base64 characters and writes them to the stream.
  * </p>
  * <p>
- * An example, how to write base64 symbols to the file:
+ * An example, how to write the base64 characters to the file:
  * </p>
  * <pre>{@code
  * try (FileInputStream inputStream = new FileInputStream("some input file");
@@ -67,7 +69,8 @@
  * }
  * }</pre>
  * <p>
- * Each 3 original bytes are represented with 4 base64 symbols. Convertion to base64 increases the original size by 33 percent.
+ * Each 3 original bytes are represented with 4 base64 characters. The base64 representation of bytes
+ * increases the original size by 33 percent.
  * </p>
  */
 package ru.d_shap.base64;
