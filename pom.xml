@@ -8,7 +8,7 @@
     <packaging>jar</packaging>
 
     <name>Base64 library</name>
-    <description>Base64 library converts bytes to base64 representation and vice versa</description>
+    <description>Base64 library converts bytes to the base64 representation and vice versa</description>
     <url>https://github.com/d-shap/base64</url>
 
     <licenses>

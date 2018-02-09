@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-// Base64 library converts bytes to base64 representation and vice versa.
+// Base64 library converts bytes to the base64 representation and vice versa.
 // Copyright (C) 2016 Dmitry Shapovalov.
 //
 // This file is part of base64 library.
