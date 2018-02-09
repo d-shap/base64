@@ -23,7 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * Input stream to read base64 representation of bytes.
+ * Input stream to read the base64 representation of the bytes.
  *
  * @author Dmitry Shapovalov
  */
@@ -38,7 +38,7 @@ public final class Base64InputStream extends InputStream {
     /**
      * Create new object.
      *
-     * @param inputStream input stream to read bytes.
+     * @param inputStream input stream with the base64 representation of the bytes.
      */
     public Base64InputStream(final InputStream inputStream) {
         super();
@@ -52,7 +52,6 @@ public final class Base64InputStream extends InputStream {
         if (_bufferPosition < 0) {
             return -1;
         }
-
         _bufferPosition++;
         if (_bufferPosition == _buffer.length) {
             _bufferPosition = updateBuffer();
@@ -60,62 +59,108 @@ public final class Base64InputStream extends InputStream {
                 return -1;
             }
         }
-
         return _buffer[_bufferPosition];
     }
 
     private int updateBuffer() throws IOException {
-        int symbol1 = readFromBase64Stream(false, false);
-        if (symbol1 < 0) {
+        int character1 = readCharacterFromStream(false, false);
+        if (character1 < 0) {
             return -1;
         }
-        int symbol2 = readFromBase64Stream(true, false);
-        int symbol3 = readFromBase64Stream(true, true);
-        int symbol4 = readFromBase64Stream(true, true);
+        int character2 = readCharacterFromStream(true, false);
+        int character3 = readCharacterFromStream(true, true);
+        int character4 = readCharacterFromStream(true, true);
 
-        if (symbol4 == Consts.PAD) {
-            if (symbol3 == Consts.PAD) {
-                if (Base64Helper.isSecondBase64ByteZero(symbol2)) {
-                    _buffer[2] = Base64Helper.getFirstBase64Byte(symbol1, symbol2);
+        if (character4 == Consts.PAD) {
+            if (character3 == Consts.PAD) {
+                if (Base64Helper.isSecondBase64ByteZero(character2)) {
+                    _buffer[2] = Base64Helper.getFirstBase64Byte(character1, character2);
                     return 2;
                 } else {
-                    throw new IOException(ExceptionMessageHelper.createWrongBase64CharacterMessage(symbol2));
+                    throw new IOException(ExceptionMessageHelper.createWrongBase64CharacterMessage(character2));
                 }
             } else {
-                if (Base64Helper.isThirdBase64ByteZero(symbol3)) {
-                    _buffer[1] = Base64Helper.getFirstBase64Byte(symbol1, symbol2);
-                    _buffer[2] = Base64Helper.getSecondBase64Byte(symbol2, symbol3);
+                if (Base64Helper.isThirdBase64ByteZero(character3)) {
+                    _buffer[1] = Base64Helper.getFirstBase64Byte(character1, character2);
+                    _buffer[2] = Base64Helper.getSecondBase64Byte(character2, character3);
                     return 1;
                 } else {
-                    throw new IOException(ExceptionMessageHelper.createWrongBase64CharacterMessage(symbol3));
+                    throw new IOException(ExceptionMessageHelper.createWrongBase64CharacterMessage(character3));
                 }
             }
         } else {
-            if (symbol3 == Consts.PAD) {
-                throw new IOException(ExceptionMessageHelper.createWrongBase64CharacterMessage(symbol4));
+            if (character3 == Consts.PAD) {
+                throw new IOException(ExceptionMessageHelper.createWrongBase64CharacterMessage(character4));
             } else {
-                _buffer[0] = Base64Helper.getFirstBase64Byte(symbol1, symbol2);
-                _buffer[1] = Base64Helper.getSecondBase64Byte(symbol2, symbol3);
-                _buffer[2] = Base64Helper.getThirdBase64Byte(symbol3, symbol4);
+                _buffer[0] = Base64Helper.getFirstBase64Byte(character1, character2);
+                _buffer[1] = Base64Helper.getSecondBase64Byte(character2, character3);
+                _buffer[2] = Base64Helper.getThirdBase64Byte(character3, character4);
                 return 0;
             }
         }
     }
 
-    private int readFromBase64Stream(final boolean checkEndOfInput, final boolean padIsValid) throws IOException {
-        int symbol = _inputStream.read();
-        if (symbol < 0) {
+    private int readCharacterFromStream(final boolean checkEndOfInput, final boolean padIsValid) throws IOException {
+        int character = _inputStream.read();
+        if (character < 0) {
             if (checkEndOfInput) {
                 throw new IOException(ExceptionMessageHelper.createEndOfStreamMessage());
             } else {
                 return -1;
             }
         }
-        if (Base64Helper.isBase64SymbolValid(symbol) || padIsValid && symbol == Consts.PAD) {
-            return symbol;
+        if (Base64Helper.isBase64CharacterValid(character) || padIsValid && character == Consts.PAD) {
+            return character;
         } else {
-            throw new IOException(ExceptionMessageHelper.createWrongBase64CharacterMessage(symbol));
+            throw new IOException(ExceptionMessageHelper.createWrongBase64CharacterMessage(character));
         }
+    }
+
+    @Override
+    public long skip(final long count) throws IOException {
+        if (count < 0) {
+            return -1;
+        }
+        long skipped = skipInCurrentBuffer(count);
+        if (skipped == count) {
+            return skipped;
+        }
+        skipped += skipInInputStream(count - skipped);
+        if (skipped == count) {
+            return skipped;
+        }
+        _bufferPosition = updateBuffer();
+        skipped += skipInCurrentBuffer(count - skipped);
+        return skipped;
+    }
+
+    private long skipInCurrentBuffer(final long count) {
+        int unreadBytesInBuffer = _buffer.length - _bufferPosition - 1;
+        if (count > unreadBytesInBuffer) {
+            _bufferPosition = _buffer.length - 1;
+            return unreadBytesInBuffer;
+        } else {
+            _bufferPosition = _bufferPosition + (int) count;
+            return count;
+        }
+    }
+
+    private long skipInInputStream(final long count) throws IOException {
+        long countBytesD3 = count / 3L;
+        long countCharacters = countBytesD3 * 4L;
+        long skippedCharacters = _inputStream.skip(countCharacters);
+        if (skippedCharacters == countCharacters) {
+            return countBytesD3 * 3L;
+        } else {
+            return skippedCharacters / 4L * 3L;
+        }
+    }
+
+    @Override
+    public int available() throws IOException {
+        int availableCharacters = _inputStream.available();
+        int unreadBytesInBuffer = _buffer.length - _bufferPosition - 1;
+        return unreadBytesInBuffer + availableCharacters / 4 * 3;
     }
 
     @Override
