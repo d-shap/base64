@@ -86,7 +86,7 @@ public final class ConstsTest {
      * {@link Consts} class test.
      */
     @Test
-    public void toBase64FirstSymbolTest() {
+    public void toBase64FirstCharacterTest() {
         Assertions.assertThat(Consts.TO_BASE64_FIRST_CHARACTER[0xFF]).isEqualTo('/');
         Assertions.assertThat(Consts.TO_BASE64_FIRST_CHARACTER[0xFD]).isEqualTo('/');
         Assertions.assertThat(Consts.TO_BASE64_FIRST_CHARACTER[0xAA]).isEqualTo('q');
@@ -100,7 +100,7 @@ public final class ConstsTest {
      * {@link Consts} class test.
      */
     @Test
-    public void toBase64SecondSymbolIndexTest() {
+    public void toBase64SecondCharacterIndexTest() {
         Assertions.assertThat(Consts.TO_BASE64_SECOND_CHARACTER_INDEX_1[0xFF]).isEqualTo(0x30);
         Assertions.assertThat(Consts.TO_BASE64_SECOND_CHARACTER_INDEX_1[0xFD]).isEqualTo(0x10);
         Assertions.assertThat(Consts.TO_BASE64_SECOND_CHARACTER_INDEX_1[0xAA]).isEqualTo(0x20);
@@ -120,7 +120,7 @@ public final class ConstsTest {
      * {@link Consts} class test.
      */
     @Test
-    public void toBase64ThirdSymbolIndexTest() {
+    public void toBase64ThirdCharacterIndexTest() {
         Assertions.assertThat(Consts.TO_BASE64_THIRD_CHARACTER_INDEX_1[0xFF]).isEqualTo(0x3C);
         Assertions.assertThat(Consts.TO_BASE64_THIRD_CHARACTER_INDEX_1[0xFD]).isEqualTo(0x34);
         Assertions.assertThat(Consts.TO_BASE64_THIRD_CHARACTER_INDEX_1[0xAA]).isEqualTo(0x28);
@@ -140,7 +140,7 @@ public final class ConstsTest {
      * {@link Consts} class test.
      */
     @Test
-    public void toBase64FourthSymbolTest() {
+    public void toBase64FourthCharacterTest() {
         Assertions.assertThat(Consts.TO_BASE64_FOURTH_CHARACTER[0xFF]).isEqualTo('/');
         Assertions.assertThat(Consts.TO_BASE64_FOURTH_CHARACTER[0xFD]).isEqualTo('9');
         Assertions.assertThat(Consts.TO_BASE64_FOURTH_CHARACTER[0xAA]).isEqualTo('q');

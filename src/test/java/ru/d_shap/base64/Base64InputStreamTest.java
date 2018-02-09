@@ -129,7 +129,7 @@ public final class Base64InputStreamTest {
      * @throws IOException IO exception.
      */
     @Test
-    public void symbolsAfterPadTest() throws IOException {
+    public void charactersAfterPadTest() throws IOException {
         byte[] base64Bytes1 = new byte[]{'a', 'b', 'Q', '=', 'a', 'b', 'c', 'd'};
         ByteArrayInputStream bais1 = new ByteArrayInputStream(base64Bytes1);
         Base64InputStream base64InputStream1 = new Base64InputStream(bais1);
@@ -153,7 +153,7 @@ public final class Base64InputStreamTest {
      * {@link Base64InputStream} class test.
      */
     @Test
-    public void wrongSymbolTest() {
+    public void wrongCharacterTest() {
         try {
             byte[] base64Bytes = new byte[]{'?', 'a', 'b', 'c'};
             ByteArrayInputStream bais = new ByteArrayInputStream(base64Bytes);
@@ -196,7 +196,7 @@ public final class Base64InputStreamTest {
      * {@link Base64InputStream} class test.
      */
     @Test
-    public void zeroSymbolTest() {
+    public void zeroCharacterTest() {
         try {
             byte[] base64Bytes = new byte[]{0, 'a', 'b', 'c'};
             ByteArrayInputStream bais = new ByteArrayInputStream(base64Bytes);
@@ -239,7 +239,7 @@ public final class Base64InputStreamTest {
      * {@link Base64InputStream} class test.
      */
     @Test
-    public void wrongOneByteEndingSymbolTest() {
+    public void wrongOneByteEndingCharacterTest() {
         try {
             byte[] base64Bytes = new byte[]{'a', 'b', 'c', 'd', '?', 'Q', '=', '='};
             ByteArrayInputStream bais = new ByteArrayInputStream(base64Bytes);
@@ -306,7 +306,7 @@ public final class Base64InputStreamTest {
      * {@link Base64InputStream} class test.
      */
     @Test
-    public void wrongTwoByteEndingSymbolTest() {
+    public void wrongTwoByteEndingCharacterTest() {
         try {
             byte[] base64Bytes = new byte[]{'a', 'b', 'c', 'd', '?', 'a', 'Q', '='};
             ByteArrayInputStream bais = new ByteArrayInputStream(base64Bytes);
