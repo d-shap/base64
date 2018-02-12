@@ -85,7 +85,8 @@ public final class Base64Helper {
             buffer.append((char) getSecondBase64Character(byte1));
             buffer.append((char) Consts.PAD);
             buffer.append((char) Consts.PAD);
-        } else if (bytesLengthM3 == 2) {
+        }
+        if (bytesLengthM3 == 2) {
             byte1 = bytes[bytesIndex] & 0xFF;
             byte2 = bytes[bytesIndex + 1] & 0xFF;
 
@@ -210,7 +211,7 @@ public final class Base64Helper {
         }
         int emptyBytesCount = getEmptyBytesCount(base64, base64Offset, base64Length);
         int bytesLength = base64Length * 3 / 4 - emptyBytesCount;
-        byte[] bytes = new byte[bytesLength];
+        byte[] bytes = new byte[Math.max(bytesLength, 0)];
 
         convertToBytes(base64, base64Offset, base64Length, bytes, 0);
         return bytes;
@@ -254,7 +255,7 @@ public final class Base64Helper {
             bytesIndex++;
         }
 
-        if (base64LengthD4M1 >= 0) {
+        if (base64Index < base64Offset + base64Length) {
             character1 = base64CharacterAt(base64, base64Index, false);
             character2 = base64CharacterAt(base64, base64Index + 1, false);
             character3 = base64CharacterAt(base64, base64Index + 2, true);
@@ -345,20 +346,22 @@ public final class Base64Helper {
             return false;
         }
 
+        int base64Index = base64Offset;
         int base64LengthM4 = base64Length - 4;
         int base64MaxIndex = base64Offset + base64LengthM4;
         int currentCharacter;
-        for (int base64Index = base64Offset; base64Index < base64MaxIndex; base64Index++) {
+        while (base64Index < base64MaxIndex) {
             currentCharacter = base64.charAt(base64Index);
             if (!isBase64CharacterValid(currentCharacter)) {
                 return false;
             }
+            base64Index++;
         }
 
-        int character1 = base64.charAt(base64LengthM4);
-        int character2 = base64.charAt(base64LengthM4 + 1);
-        int character3 = base64.charAt(base64LengthM4 + 2);
-        int character4 = base64.charAt(base64LengthM4 + 3);
+        int character1 = base64.charAt(base64Index);
+        int character2 = base64.charAt(base64Index + 1);
+        int character3 = base64.charAt(base64Index + 2);
+        int character4 = base64.charAt(base64Index + 3);
         if (character4 == Consts.PAD) {
             if (character3 == Consts.PAD) {
                 return isBase64CharacterValid(character1) && isBase64CharacterValid(character2) && isSecondBase64ByteZero(character2);
