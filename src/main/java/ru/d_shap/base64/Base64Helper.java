@@ -233,12 +233,13 @@ public final class Base64Helper {
     private static void convertToBytes(final String base64, final int base64Offset, final int base64Length, final byte[] bytes, final int bytesOffset) {
         int base64Index = base64Offset;
         int base64LengthD4M1 = base64Length / 4 - 1;
+        int base64MaxIndex = base64LengthD4M1 * 4;
         int character1;
         int character2;
         int character3;
         int character4;
         int bytesIndex = bytesOffset;
-        for (int i = 0; i < base64LengthD4M1; i++) {
+        while (base64Index < base64MaxIndex) {
             character1 = base64CharacterAt(base64, base64Index, false);
             base64Index++;
             character2 = base64CharacterAt(base64, base64Index, false);
