@@ -61,10 +61,11 @@ public final class Base64Helper {
         StringBuilder buffer = new StringBuilder(bufferLength);
 
         int bytesIndex = bytesOffset;
+        int bytesMaxIndex = bytesOffset + bytesLengthD3 * 3;
         int byte1;
         int byte2;
         int byte3;
-        for (int i = 0; i < bytesLengthD3; i++) {
+        while (bytesIndex < bytesMaxIndex) {
             byte1 = bytes[bytesIndex] & 0xFF;
             bytesIndex++;
             byte2 = bytes[bytesIndex] & 0xFF;
