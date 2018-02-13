@@ -77,7 +77,7 @@ public final class Base64InputStream extends InputStream {
                     _buffer[2] = Base64Helper.getFirstBase64Byte(character1, character2);
                     return 2;
                 } else {
-                    throw new IOException(ExceptionMessageHelper.createWrongBase64CharacterMessage(character2));
+                    throw new IOException(ExceptionMessageHelper.createWrongBase64StringCharacterMessage(character2));
                 }
             } else {
                 if (Base64Helper.isThirdBase64ByteZero(character3)) {
@@ -85,12 +85,12 @@ public final class Base64InputStream extends InputStream {
                     _buffer[2] = Base64Helper.getSecondBase64Byte(character2, character3);
                     return 1;
                 } else {
-                    throw new IOException(ExceptionMessageHelper.createWrongBase64CharacterMessage(character3));
+                    throw new IOException(ExceptionMessageHelper.createWrongBase64StringCharacterMessage(character3));
                 }
             }
         } else {
             if (character3 == Consts.PAD) {
-                throw new IOException(ExceptionMessageHelper.createWrongBase64CharacterMessage(character4));
+                throw new IOException(ExceptionMessageHelper.createWrongBase64StringCharacterMessage(character4));
             } else {
                 _buffer[0] = Base64Helper.getFirstBase64Byte(character1, character2);
                 _buffer[1] = Base64Helper.getSecondBase64Byte(character2, character3);
@@ -112,7 +112,7 @@ public final class Base64InputStream extends InputStream {
         if (Base64Helper.isBase64CharacterValid(character) || padIsValid && character == Consts.PAD) {
             return character;
         } else {
-            throw new IOException(ExceptionMessageHelper.createWrongBase64CharacterMessage(character));
+            throw new IOException(ExceptionMessageHelper.createWrongBase64StringCharacterMessage(character));
         }
     }
 
@@ -121,7 +121,10 @@ public final class Base64InputStream extends InputStream {
         if (count < 0) {
             return -1;
         }
-        long skipped = skipInCurrentBuffer(count);
+        if (count == 0) {
+            return 0;
+        }
+        long skipped = skipInCurrentBuffer(count, false);
         if (skipped == count) {
             return skipped;
         }
@@ -130,17 +133,26 @@ public final class Base64InputStream extends InputStream {
             return skipped;
         }
         _bufferPosition = updateBuffer();
-        skipped += skipInCurrentBuffer(count - skipped);
+        if (_bufferPosition < 0) {
+            return skipped;
+        }
+        skipped += skipInCurrentBuffer(count - skipped, true);
         return skipped;
     }
 
-    private long skipInCurrentBuffer(final long count) {
-        int unreadBytesInBuffer = _buffer.length - _bufferPosition - 1;
+    private long skipInCurrentBuffer(final long count, final boolean updatedBuffer) {
+        int unreadBytesInBuffer = _buffer.length - _bufferPosition;
+        if (!updatedBuffer) {
+            unreadBytesInBuffer = unreadBytesInBuffer - 1;
+        }
         if (count > unreadBytesInBuffer) {
             _bufferPosition = _buffer.length - 1;
             return unreadBytesInBuffer;
         } else {
             _bufferPosition = _bufferPosition + (int) count;
+            if (updatedBuffer) {
+                _bufferPosition--;
+            }
             return count;
         }
     }
@@ -152,7 +164,7 @@ public final class Base64InputStream extends InputStream {
         if (skippedCharacters == countCharacters) {
             return countBytesD3 * 3L;
         } else {
-            return skippedCharacters / 4L * 3L;
+            return skippedCharacters * 3L / 4L;
         }
     }
 
@@ -160,7 +172,7 @@ public final class Base64InputStream extends InputStream {
     public int available() throws IOException {
         int availableCharacters = _inputStream.available();
         int unreadBytesInBuffer = _buffer.length - _bufferPosition - 1;
-        return unreadBytesInBuffer + availableCharacters / 4 * 3;
+        return unreadBytesInBuffer + availableCharacters * 3 / 4;
     }
 
     @Override
