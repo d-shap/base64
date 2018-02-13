@@ -50,15 +50,24 @@ public final class ExceptionMessageHelperTest {
      */
     @Test
     public void createMessageTest() {
-        Assertions.assertThat(ExceptionMessageHelper.createWrongBase64StringSizeMessage(10)).isEqualTo("Wrong number of characters in the base64 string (10)");
-        Assertions.assertThat(ExceptionMessageHelper.createWrongBase64StringSizeMessage(13)).isEqualTo("Wrong number of characters in the base64 string (13)");
+        Assertions.assertThat(ExceptionMessageHelper.createWrongByteArrayIndexMessage(-1)).isEqualTo("Wrong byte array index (-1)");
+        Assertions.assertThat(ExceptionMessageHelper.createWrongByteArrayIndexMessage(17)).isEqualTo("Wrong byte array index (17)");
 
-        Assertions.assertThat(ExceptionMessageHelper.createWrongResultArrayMessage(16, 13)).isEqualTo("The result array is too small for the base64 string (13), expected size is (16)");
-        Assertions.assertThat(ExceptionMessageHelper.createWrongResultArrayMessage(20, 9)).isEqualTo("The result array is too small for the base64 string (9), expected size is (20)");
+        Assertions.assertThat(ExceptionMessageHelper.createWrongByteArrayLengthMessage(-1)).isEqualTo("Wrong byte array length (-1)");
+        Assertions.assertThat(ExceptionMessageHelper.createWrongByteArrayLengthMessage(17)).isEqualTo("Wrong byte array length (17)");
 
-        Assertions.assertThat(ExceptionMessageHelper.createWrongBase64CharacterMessage('-')).isEqualTo("Wrong character obtained ('-', 45)");
-        Assertions.assertThat(ExceptionMessageHelper.createWrongBase64CharacterMessage('!')).isEqualTo("Wrong character obtained ('!', 33)");
-        Assertions.assertThat(ExceptionMessageHelper.createWrongBase64CharacterMessage('#')).isEqualTo("Wrong character obtained ('#', 35)");
+        Assertions.assertThat(ExceptionMessageHelper.createWrongByteArrayLengthMessage(13, 16)).isEqualTo("Wrong byte array length (13), expected length is (16)");
+        Assertions.assertThat(ExceptionMessageHelper.createWrongByteArrayLengthMessage(9, 20)).isEqualTo("Wrong byte array length (9), expected length is (20)");
+
+        Assertions.assertThat(ExceptionMessageHelper.createWrongBase64StringIndexMessage(-1)).isEqualTo("Wrong base64 string index (-1)");
+        Assertions.assertThat(ExceptionMessageHelper.createWrongBase64StringIndexMessage(17)).isEqualTo("Wrong base64 string index (17)");
+
+        Assertions.assertThat(ExceptionMessageHelper.createWrongBase64StringLengthMessage(-1)).isEqualTo("Wrong base64 string length (-1)");
+        Assertions.assertThat(ExceptionMessageHelper.createWrongBase64StringLengthMessage(17)).isEqualTo("Wrong base64 string length (17)");
+
+        Assertions.assertThat(ExceptionMessageHelper.createWrongBase64StringCharacterMessage('-')).isEqualTo("Wrong character obtained ('-', 45)");
+        Assertions.assertThat(ExceptionMessageHelper.createWrongBase64StringCharacterMessage('!')).isEqualTo("Wrong character obtained ('!', 33)");
+        Assertions.assertThat(ExceptionMessageHelper.createWrongBase64StringCharacterMessage('#')).isEqualTo("Wrong character obtained ('#', 35)");
 
         Assertions.assertThat(ExceptionMessageHelper.createEndOfStreamMessage()).isEqualTo("Unexpected end of stream");
     }
