@@ -1159,6 +1159,40 @@ public final class Base64HelperTest {
      * {@link Base64Helper} class test.
      */
     @Test
+    public void getEmptyBytesCountTest() {
+        Assertions.assertThat(Base64Helper.getEmptyBytesCount("aaaA", 0, 4)).isEqualTo(0);
+        Assertions.assertThat(Base64Helper.getEmptyBytesCount("aaA=", 0, 4)).isEqualTo(1);
+        Assertions.assertThat(Base64Helper.getEmptyBytesCount("aA==", 0, 4)).isEqualTo(2);
+
+        Assertions.assertThat(Base64Helper.getEmptyBytesCount("1234aaaA", 0, 8)).isEqualTo(0);
+        Assertions.assertThat(Base64Helper.getEmptyBytesCount("1234aaA=", 0, 8)).isEqualTo(1);
+        Assertions.assertThat(Base64Helper.getEmptyBytesCount("1234aA==", 0, 8)).isEqualTo(2);
+
+        Assertions.assertThat(Base64Helper.getEmptyBytesCount("1234aaaA", 4, 4)).isEqualTo(0);
+        Assertions.assertThat(Base64Helper.getEmptyBytesCount("1234aaA=", 4, 4)).isEqualTo(1);
+        Assertions.assertThat(Base64Helper.getEmptyBytesCount("1234aA==", 4, 4)).isEqualTo(2);
+
+        Assertions.assertThat(Base64Helper.getEmptyBytesCount("1234aaaA", 0, 3)).isEqualTo(0);
+        Assertions.assertThat(Base64Helper.getEmptyBytesCount("1234aaA=", 0, 3)).isEqualTo(0);
+        Assertions.assertThat(Base64Helper.getEmptyBytesCount("1234aA==", 0, 3)).isEqualTo(0);
+
+        Assertions.assertThat(Base64Helper.getEmptyBytesCount("1234aaaA", 0, 2)).isEqualTo(0);
+        Assertions.assertThat(Base64Helper.getEmptyBytesCount("1234aaA=", 0, 2)).isEqualTo(0);
+        Assertions.assertThat(Base64Helper.getEmptyBytesCount("1234aA==", 0, 2)).isEqualTo(0);
+
+        Assertions.assertThat(Base64Helper.getEmptyBytesCount("1234aaaA", 0, 1)).isEqualTo(0);
+        Assertions.assertThat(Base64Helper.getEmptyBytesCount("1234aaA=", 0, 1)).isEqualTo(0);
+        Assertions.assertThat(Base64Helper.getEmptyBytesCount("1234aA==", 0, 1)).isEqualTo(0);
+
+        Assertions.assertThat(Base64Helper.getEmptyBytesCount("1234aaaA", 0, 0)).isEqualTo(0);
+        Assertions.assertThat(Base64Helper.getEmptyBytesCount("1234aaA=", 0, 0)).isEqualTo(0);
+        Assertions.assertThat(Base64Helper.getEmptyBytesCount("1234aA==", 0, 0)).isEqualTo(0);
+    }
+
+    /**
+     * {@link Base64Helper} class test.
+     */
+    @Test
     public void isBase64CharacterValidTest() {
         Assertions.assertThat(Base64Helper.isBase64CharacterValid(-2)).isFalse();
         Assertions.assertThat(Base64Helper.isBase64CharacterValid(-1)).isFalse();
