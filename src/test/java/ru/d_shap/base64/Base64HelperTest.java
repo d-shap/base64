@@ -300,6 +300,24 @@ public final class Base64HelperTest {
         } catch (Base64RuntimeException ex) {
             Assertions.assertThat(ex).hasMessage("Wrong number of characters in the base64 string (5)");
         }
+        try {
+            Base64Helper.toBytes("123", new byte[9]);
+            Assertions.fail("Base64Helper test fail");
+        } catch (Base64RuntimeException ex) {
+            Assertions.assertThat(ex).hasMessage("Wrong number of characters in the base64 string (3)");
+        }
+        try {
+            Base64Helper.toBytes("12", new byte[9]);
+            Assertions.fail("Base64Helper test fail");
+        } catch (Base64RuntimeException ex) {
+            Assertions.assertThat(ex).hasMessage("Wrong number of characters in the base64 string (2)");
+        }
+        try {
+            Base64Helper.toBytes("1", new byte[9]);
+            Assertions.fail("Base64Helper test fail");
+        } catch (Base64RuntimeException ex) {
+            Assertions.assertThat(ex).hasMessage("Wrong number of characters in the base64 string (1)");
+        }
     }
 
     /**
@@ -367,19 +385,19 @@ public final class Base64HelperTest {
     @Test
     public void toBytesSpecifiedWithBase64BoundsAndWrongStringLengthTest() {
         try {
-            Base64Helper.toBytes("aAbB56Y+", 4, 3, new byte[9]);
+            Base64Helper.toBytes("1234567", 4, 3, new byte[9]);
             Assertions.fail("Base64Helper test fail");
         } catch (Base64RuntimeException ex) {
             Assertions.assertThat(ex).hasMessage("Wrong number of characters in the base64 string (3)");
         }
         try {
-            Base64Helper.toBytes("aAbB56Y+", 4, 2, new byte[9]);
+            Base64Helper.toBytes("1234567", 4, 2, new byte[9]);
             Assertions.fail("Base64Helper test fail");
         } catch (Base64RuntimeException ex) {
             Assertions.assertThat(ex).hasMessage("Wrong number of characters in the base64 string (2)");
         }
         try {
-            Base64Helper.toBytes("aAbB56Y+", 4, 1, new byte[9]);
+            Base64Helper.toBytes("1234567", 4, 1, new byte[9]);
             Assertions.fail("Base64Helper test fail");
         } catch (Base64RuntimeException ex) {
             Assertions.assertThat(ex).hasMessage("Wrong number of characters in the base64 string (1)");
@@ -485,6 +503,24 @@ public final class Base64HelperTest {
             Assertions.fail("Base64Helper test fail");
         } catch (Base64RuntimeException ex) {
             Assertions.assertThat(ex).hasMessage("Wrong number of characters in the base64 string (5)");
+        }
+        try {
+            Base64Helper.toBytes("123", new byte[9], 2);
+            Assertions.fail("Base64Helper test fail");
+        } catch (Base64RuntimeException ex) {
+            Assertions.assertThat(ex).hasMessage("Wrong number of characters in the base64 string (3)");
+        }
+        try {
+            Base64Helper.toBytes("12", new byte[9], 2);
+            Assertions.fail("Base64Helper test fail");
+        } catch (Base64RuntimeException ex) {
+            Assertions.assertThat(ex).hasMessage("Wrong number of characters in the base64 string (2)");
+        }
+        try {
+            Base64Helper.toBytes("1", new byte[9], 2);
+            Assertions.fail("Base64Helper test fail");
+        } catch (Base64RuntimeException ex) {
+            Assertions.assertThat(ex).hasMessage("Wrong number of characters in the base64 string (1)");
         }
     }
 
@@ -614,19 +650,19 @@ public final class Base64HelperTest {
     @Test
     public void toBytesSpecifiedWithBase64BoundsAndByteArrayOffsetAndWrongStringLengthTest() {
         try {
-            Base64Helper.toBytes("aAbB56Y+", 4, 3, new byte[9], 1);
+            Base64Helper.toBytes("1234567", 4, 3, new byte[9], 1);
             Assertions.fail("Base64Helper test fail");
         } catch (Base64RuntimeException ex) {
             Assertions.assertThat(ex).hasMessage("Wrong number of characters in the base64 string (3)");
         }
         try {
-            Base64Helper.toBytes("aAbB56Y+", 4, 2, new byte[9], 1);
+            Base64Helper.toBytes("1234567", 4, 2, new byte[9], 1);
             Assertions.fail("Base64Helper test fail");
         } catch (Base64RuntimeException ex) {
             Assertions.assertThat(ex).hasMessage("Wrong number of characters in the base64 string (2)");
         }
         try {
-            Base64Helper.toBytes("aAbB56Y+", 4, 1, new byte[9], 1);
+            Base64Helper.toBytes("1234567", 4, 1, new byte[9], 1);
             Assertions.fail("Base64Helper test fail");
         } catch (Base64RuntimeException ex) {
             Assertions.assertThat(ex).hasMessage("Wrong number of characters in the base64 string (1)");
@@ -768,6 +804,24 @@ public final class Base64HelperTest {
         } catch (Base64RuntimeException ex) {
             Assertions.assertThat(ex).hasMessage("Wrong number of characters in the base64 string (5)");
         }
+        try {
+            Base64Helper.toBytes("123");
+            Assertions.fail("Base64Helper test fail");
+        } catch (Base64RuntimeException ex) {
+            Assertions.assertThat(ex).hasMessage("Wrong number of characters in the base64 string (3)");
+        }
+        try {
+            Base64Helper.toBytes("12");
+            Assertions.fail("Base64Helper test fail");
+        } catch (Base64RuntimeException ex) {
+            Assertions.assertThat(ex).hasMessage("Wrong number of characters in the base64 string (2)");
+        }
+        try {
+            Base64Helper.toBytes("1");
+            Assertions.fail("Base64Helper test fail");
+        } catch (Base64RuntimeException ex) {
+            Assertions.assertThat(ex).hasMessage("Wrong number of characters in the base64 string (1)");
+        }
     }
 
     /**
@@ -808,19 +862,19 @@ public final class Base64HelperTest {
     @Test
     public void toBytesCreatedWithBase64BoundsAndWrongStringLengthTest() {
         try {
-            Base64Helper.toBytes("aAbB56Y+", 4, 3);
+            Base64Helper.toBytes("1234567", 4, 3);
             Assertions.fail("Base64Helper test fail");
         } catch (Base64RuntimeException ex) {
             Assertions.assertThat(ex).hasMessage("Wrong number of characters in the base64 string (3)");
         }
         try {
-            Base64Helper.toBytes("aAbB56Y+", 4, 2);
+            Base64Helper.toBytes("1234567", 4, 2);
             Assertions.fail("Base64Helper test fail");
         } catch (Base64RuntimeException ex) {
             Assertions.assertThat(ex).hasMessage("Wrong number of characters in the base64 string (2)");
         }
         try {
-            Base64Helper.toBytes("aAbB56Y+", 4, 1);
+            Base64Helper.toBytes("1234567", 4, 1);
             Assertions.fail("Base64Helper test fail");
         } catch (Base64RuntimeException ex) {
             Assertions.assertThat(ex).hasMessage("Wrong number of characters in the base64 string (1)");
