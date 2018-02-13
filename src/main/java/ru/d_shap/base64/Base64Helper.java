@@ -49,6 +49,16 @@ public final class Base64Helper {
      * @return the base64 string.
      */
     public static String toBase64(final byte[] bytes, final int bytesOffset, final int bytesLength) {
+        if (bytesOffset < 0) {
+            throw new Base64RuntimeException(ExceptionMessageHelper.createWrongByteArrayIndexMessage(bytesOffset));
+        }
+        if (bytesLength < 0) {
+            throw new Base64RuntimeException(ExceptionMessageHelper.createWrongByteArrayLengthMessage(bytesLength));
+        }
+        if (bytesOffset + bytesLength > bytes.length) {
+            throw new Base64RuntimeException(ExceptionMessageHelper.createWrongByteArrayIndexMessage(bytesOffset + bytesLength));
+        }
+
         int bytesLengthD3 = bytesLength / 3;
         int bytesLengthM3 = bytesLength % 3;
 
@@ -61,7 +71,7 @@ public final class Base64Helper {
         StringBuilder buffer = new StringBuilder(bufferLength);
 
         int bytesIndex = bytesOffset;
-        int bytesMaxIndex = bytesOffset + bytesLengthD3 * 3;
+        int bytesMaxIndex = bytesOffset + bytesLength - bytesLengthM3;
         int byte1;
         int byte2;
         int byte3;
@@ -175,17 +185,36 @@ public final class Base64Helper {
      * @return the number of bytes affected in the byte array.
      */
     public static int toBytes(final String base64, final int base64Offset, final int base64Length, final byte[] bytes, final int bytesOffset) {
-        if (base64Length % 4 != 0) {
-            throw new Base64RuntimeException(ExceptionMessageHelper.createWrongBase64StringSizeMessage(base64Length));
+        if (base64Offset < 0) {
+            throw new Base64RuntimeException(ExceptionMessageHelper.createWrongBase64StringIndexMessage(base64Offset));
         }
-        int emptyBytesCount = getEmptyBytesCount(base64, base64Offset, base64Length);
-        int bytesLength = base64Length * 3 / 4 - emptyBytesCount;
-        if (bytes.length - bytesOffset < bytesLength) {
-            throw new Base64RuntimeException(ExceptionMessageHelper.createWrongResultArrayMessage(bytesLength, Math.max(bytes.length - bytesOffset, 0)));
+        if (base64Length < 0) {
+            throw new Base64RuntimeException(ExceptionMessageHelper.createWrongBase64StringLengthMessage(base64Length));
+        }
+        if (base64Offset + base64Length > base64.length()) {
+            throw new Base64RuntimeException(ExceptionMessageHelper.createWrongBase64StringIndexMessage(base64Offset + base64Length));
+        }
+        if (base64Length % 4 != 0) {
+            throw new Base64RuntimeException(ExceptionMessageHelper.createWrongBase64StringLengthMessage(base64Length));
+        }
+        if (bytesOffset < 0) {
+            throw new Base64RuntimeException(ExceptionMessageHelper.createWrongByteArrayIndexMessage(bytesOffset));
+        }
+        if (bytesOffset >= bytes.length) {
+            throw new Base64RuntimeException(ExceptionMessageHelper.createWrongByteArrayIndexMessage(bytesOffset));
         }
 
-        convertToBytes(base64, base64Offset, base64Length, bytes, bytesOffset);
-        return Math.max(bytesLength, 0);
+        if (base64Length == 0) {
+            return 0;
+        } else {
+            int emptyBytesCount = getEmptyBytesCount(base64, base64Offset, base64Length);
+            int bytesLength = base64Length * 3 / 4 - emptyBytesCount;
+            if (bytesOffset + bytesLength > bytes.length) {
+                throw new Base64RuntimeException(ExceptionMessageHelper.createWrongByteArrayLengthMessage(bytes.length - bytesOffset, bytesLength));
+            }
+            convertToBytes(base64, base64Offset, base64Length, bytes, bytesOffset);
+            return bytesLength;
+        }
     }
 
     /**
@@ -207,20 +236,33 @@ public final class Base64Helper {
      * @return the byte array with the result.
      */
     public static byte[] toBytes(final String base64, final int base64Offset, final int base64Length) {
-        if (base64Length % 4 != 0) {
-            throw new Base64RuntimeException(ExceptionMessageHelper.createWrongBase64StringSizeMessage(base64Length));
+        if (base64Offset < 0) {
+            throw new Base64RuntimeException(ExceptionMessageHelper.createWrongBase64StringIndexMessage(base64Offset));
         }
-        int emptyBytesCount = getEmptyBytesCount(base64, base64Offset, base64Length);
-        int bytesLength = base64Length * 3 / 4 - emptyBytesCount;
-        byte[] bytes = new byte[Math.max(bytesLength, 0)];
+        if (base64Length < 0) {
+            throw new Base64RuntimeException(ExceptionMessageHelper.createWrongBase64StringLengthMessage(base64Length));
+        }
+        if (base64Offset + base64Length > base64.length()) {
+            throw new Base64RuntimeException(ExceptionMessageHelper.createWrongBase64StringIndexMessage(base64Offset + base64Length));
+        }
+        if (base64Length % 4 != 0) {
+            throw new Base64RuntimeException(ExceptionMessageHelper.createWrongBase64StringLengthMessage(base64Length));
+        }
 
-        convertToBytes(base64, base64Offset, base64Length, bytes, 0);
-        return bytes;
+        if (base64Length == 0) {
+            return new byte[0];
+        } else {
+            int emptyBytesCount = getEmptyBytesCount(base64, base64Offset, base64Length);
+            int bytesLength = base64Length * 3 / 4 - emptyBytesCount;
+            byte[] bytes = new byte[bytesLength];
+            convertToBytes(base64, base64Offset, base64Length, bytes, 0);
+            return bytes;
+        }
     }
 
-    static int getEmptyBytesCount(final String base64, final int base64Offset, final int base64Length) {
-        if (base64Offset + base64Length >= 1 && base64.charAt(base64Offset + base64Length - 1) == Consts.PAD) {
-            if (base64Offset + base64Length >= 2 && base64.charAt(base64Offset + base64Length - 2) == Consts.PAD) {
+    private static int getEmptyBytesCount(final String base64, final int base64Offset, final int base64Length) {
+        if (base64.charAt(base64Offset + base64Length - 1) == Consts.PAD) {
+            if (base64.charAt(base64Offset + base64Length - 2) == Consts.PAD) {
                 return 2;
             } else {
                 return 1;
@@ -232,8 +274,7 @@ public final class Base64Helper {
 
     private static void convertToBytes(final String base64, final int base64Offset, final int base64Length, final byte[] bytes, final int bytesOffset) {
         int base64Index = base64Offset;
-        int base64LengthD4M1 = base64Length / 4 - 1;
-        int base64MaxIndex = base64LengthD4M1 * 4;
+        int base64MaxIndex = base64Offset + base64Length - 4;
         int character1;
         int character2;
         int character3;
@@ -257,34 +298,32 @@ public final class Base64Helper {
             bytesIndex++;
         }
 
-        if (base64Index < base64Offset + base64Length) {
-            character1 = base64CharacterAt(base64, base64Index, false);
-            character2 = base64CharacterAt(base64, base64Index + 1, false);
-            character3 = base64CharacterAt(base64, base64Index + 2, true);
-            character4 = base64CharacterAt(base64, base64Index + 3, true);
-            if (character4 == Consts.PAD) {
-                if (character3 == Consts.PAD) {
-                    if (isSecondBase64ByteZero(character2)) {
-                        bytes[bytesIndex] = (byte) getFirstBase64Byte(character1, character2);
-                    } else {
-                        throw new Base64RuntimeException(ExceptionMessageHelper.createWrongBase64CharacterMessage(character2));
-                    }
+        character1 = base64CharacterAt(base64, base64Index, false);
+        character2 = base64CharacterAt(base64, base64Index + 1, false);
+        character3 = base64CharacterAt(base64, base64Index + 2, true);
+        character4 = base64CharacterAt(base64, base64Index + 3, true);
+        if (character4 == Consts.PAD) {
+            if (character3 == Consts.PAD) {
+                if (isSecondBase64ByteZero(character2)) {
+                    bytes[bytesIndex] = (byte) getFirstBase64Byte(character1, character2);
                 } else {
-                    if (isThirdBase64ByteZero(character3)) {
-                        bytes[bytesIndex] = (byte) getFirstBase64Byte(character1, character2);
-                        bytes[bytesIndex + 1] = (byte) getSecondBase64Byte(character2, character3);
-                    } else {
-                        throw new Base64RuntimeException(ExceptionMessageHelper.createWrongBase64CharacterMessage(character3));
-                    }
+                    throw new Base64RuntimeException(ExceptionMessageHelper.createWrongBase64StringCharacterMessage(character2));
                 }
             } else {
-                if (character3 == Consts.PAD) {
-                    throw new Base64RuntimeException(ExceptionMessageHelper.createWrongBase64CharacterMessage(character4));
-                } else {
+                if (isThirdBase64ByteZero(character3)) {
                     bytes[bytesIndex] = (byte) getFirstBase64Byte(character1, character2);
                     bytes[bytesIndex + 1] = (byte) getSecondBase64Byte(character2, character3);
-                    bytes[bytesIndex + 2] = (byte) getThirdBase64Byte(character3, character4);
+                } else {
+                    throw new Base64RuntimeException(ExceptionMessageHelper.createWrongBase64StringCharacterMessage(character3));
                 }
+            }
+        } else {
+            if (character3 == Consts.PAD) {
+                throw new Base64RuntimeException(ExceptionMessageHelper.createWrongBase64StringCharacterMessage(character4));
+            } else {
+                bytes[bytesIndex] = (byte) getFirstBase64Byte(character1, character2);
+                bytes[bytesIndex + 1] = (byte) getSecondBase64Byte(character2, character3);
+                bytes[bytesIndex + 2] = (byte) getThirdBase64Byte(character3, character4);
             }
         }
     }
@@ -294,7 +333,7 @@ public final class Base64Helper {
         if (isBase64CharacterValid(character) || padIsValid && character == Consts.PAD) {
             return character;
         } else {
-            throw new Base64RuntimeException(ExceptionMessageHelper.createWrongBase64CharacterMessage(character));
+            throw new Base64RuntimeException(ExceptionMessageHelper.createWrongBase64StringCharacterMessage(character));
         }
     }
 
@@ -341,7 +380,16 @@ public final class Base64Helper {
      * @return true, if the base64 string contains only the base64 characters.
      */
     public static boolean isBase64String(final String base64, final int base64Offset, final int base64Length) {
-        if (base64Length <= 0) {
+        if (base64Offset < 0) {
+            throw new Base64RuntimeException(ExceptionMessageHelper.createWrongBase64StringIndexMessage(base64Offset));
+        }
+        if (base64Length < 0) {
+            throw new Base64RuntimeException(ExceptionMessageHelper.createWrongBase64StringLengthMessage(base64Length));
+        }
+        if (base64Offset + base64Length > base64.length()) {
+            throw new Base64RuntimeException(ExceptionMessageHelper.createWrongBase64StringIndexMessage(base64Offset + base64Length));
+        }
+        if (base64Length == 0) {
             return false;
         }
         if (base64Length % 4 != 0) {
@@ -349,8 +397,7 @@ public final class Base64Helper {
         }
 
         int base64Index = base64Offset;
-        int base64LengthM4 = base64Length - 4;
-        int base64MaxIndex = base64Offset + base64LengthM4;
+        int base64MaxIndex = base64Offset + base64Length - 4;
         int currentCharacter;
         while (base64Index < base64MaxIndex) {
             currentCharacter = base64.charAt(base64Index);
