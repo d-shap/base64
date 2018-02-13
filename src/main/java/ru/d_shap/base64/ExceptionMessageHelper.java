@@ -30,15 +30,27 @@ final class ExceptionMessageHelper {
         super();
     }
 
-    static String createWrongBase64StringSizeMessage(final int length) {
-        return "Wrong number of characters in the base64 string (" + length + ")";
+    static String createWrongByteArrayIndexMessage(final int index) {
+        return "Wrong byte array index (" + index + ")";
     }
 
-    static String createWrongResultArrayMessage(final int expected, final int actual) {
-        return "The result array is too small for the base64 string (" + actual + "), expected size is (" + expected + ")";
+    static String createWrongByteArrayLengthMessage(final int length) {
+        return "Wrong byte array length (" + length + ")";
     }
 
-    static String createWrongBase64CharacterMessage(final int character) {
+    static String createWrongByteArrayLengthMessage(final int actual, final int expected) {
+        return "Wrong byte array length (" + actual + "), expected length is (" + expected + ")";
+    }
+
+    static String createWrongBase64StringIndexMessage(final int index) {
+        return "Wrong base64 string index (" + index + ")";
+    }
+
+    static String createWrongBase64StringLengthMessage(final int length) {
+        return "Wrong base64 string length (" + length + ")";
+    }
+
+    static String createWrongBase64StringCharacterMessage(final int character) {
         return "Wrong character obtained ('" + (char) character + "', " + character + ")";
     }
 
