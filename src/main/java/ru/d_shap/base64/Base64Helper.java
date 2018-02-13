@@ -218,7 +218,7 @@ public final class Base64Helper {
         return bytes;
     }
 
-    private static int getEmptyBytesCount(final String base64, final int base64Offset, final int base64Length) {
+     static int getEmptyBytesCount(final String base64, final int base64Offset, final int base64Length) {
         if (base64Offset + base64Length >= 1 && base64.charAt(base64Offset + base64Length - 1) == Consts.PAD) {
             if (base64Offset + base64Length >= 2 && base64.charAt(base64Offset + base64Length - 2) == Consts.PAD) {
                 return 2;
