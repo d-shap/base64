@@ -53,6 +53,7 @@ public final class Base64OutputStreamTest {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         Base64OutputStream base64OutputStream = new Base64OutputStream(baos);
         base64OutputStream.write(new byte[]{(byte) 240, 120, 15, 30, (byte) 193, (byte) 201});
+        Assertions.assertThat(new String(baos.toByteArray(), ENCODING)).isEqualTo("8HgPHsHJ");
         base64OutputStream.close();
         Assertions.assertThat(new String(baos.toByteArray(), ENCODING)).isEqualTo("8HgPHsHJ");
     }
@@ -66,9 +67,10 @@ public final class Base64OutputStreamTest {
     public void writeOneByteEndingTest() throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         Base64OutputStream base64OutputStream = new Base64OutputStream(baos);
-        base64OutputStream.write(new byte[]{(byte) 240, 120, 15, 30, (byte) 193});
+        base64OutputStream.write(new byte[]{(byte) 240, 120, 15, 30});
+        Assertions.assertThat(new String(baos.toByteArray(), ENCODING)).isEqualTo("8HgP");
         base64OutputStream.close();
-        Assertions.assertThat(new String(baos.toByteArray(), ENCODING)).isEqualTo("8HgPHsE=");
+        Assertions.assertThat(new String(baos.toByteArray(), ENCODING)).isEqualTo("8HgPHg==");
     }
 
     /**
@@ -80,9 +82,10 @@ public final class Base64OutputStreamTest {
     public void writeTwoByteEndingTest() throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         Base64OutputStream base64OutputStream = new Base64OutputStream(baos);
-        base64OutputStream.write(new byte[]{(byte) 240, 120, 15, 30});
+        base64OutputStream.write(new byte[]{(byte) 240, 120, 15, 30, (byte) 193});
+        Assertions.assertThat(new String(baos.toByteArray(), ENCODING)).isEqualTo("8HgP");
         base64OutputStream.close();
-        Assertions.assertThat(new String(baos.toByteArray(), ENCODING)).isEqualTo("8HgPHg==");
+        Assertions.assertThat(new String(baos.toByteArray(), ENCODING)).isEqualTo("8HgPHsE=");
     }
 
     /**
@@ -95,8 +98,55 @@ public final class Base64OutputStreamTest {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         Base64OutputStream base64OutputStream = new Base64OutputStream(baos);
         base64OutputStream.write(new byte[0]);
+        Assertions.assertThat(new String(baos.toByteArray(), ENCODING)).isEqualTo("");
         base64OutputStream.close();
         Assertions.assertThat(new String(baos.toByteArray(), ENCODING)).isEqualTo("");
+    }
+
+    /**
+     * {@link Base64OutputStream} class test.
+     *
+     * @throws IOException IO exception.
+     */
+    @Test
+    public void flushTest() throws IOException {
+        FlushStream flushStream = new FlushStream();
+        Base64OutputStream base64OutputStream = new Base64OutputStream(flushStream);
+        base64OutputStream.write(123);
+
+        Assertions.assertThat(flushStream.isFlushed()).isFalse();
+        base64OutputStream.flush();
+        Assertions.assertThat(flushStream.isFlushed()).isTrue();
+    }
+
+    /**
+     * {@link Base64OutputStream} class test.
+     *
+     * @throws IOException IO exception.
+     */
+    @Test
+    public void writeToFlushedTest() throws IOException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        Base64OutputStream base64OutputStream = new Base64OutputStream(baos);
+
+        base64OutputStream.write(new byte[]{(byte) 240, 120, 15});
+        base64OutputStream.flush();
+        Assertions.assertThat(new String(baos.toByteArray(), ENCODING)).isEqualTo("8HgP");
+
+        base64OutputStream.write(new byte[]{17, 32});
+        base64OutputStream.flush();
+        Assertions.assertThat(new String(baos.toByteArray(), ENCODING)).isEqualTo("8HgP");
+
+        base64OutputStream.write(176);
+        base64OutputStream.flush();
+        Assertions.assertThat(new String(baos.toByteArray(), ENCODING)).isEqualTo("8HgPESCw");
+
+        base64OutputStream.write(new byte[]{30, (byte) 193, (byte) 201});
+        base64OutputStream.flush();
+        Assertions.assertThat(new String(baos.toByteArray(), ENCODING)).isEqualTo("8HgPESCwHsHJ");
+
+        base64OutputStream.close();
+        Assertions.assertThat(new String(baos.toByteArray(), ENCODING)).isEqualTo("8HgPESCwHsHJ");
     }
 
     /**
@@ -160,6 +210,37 @@ public final class Base64OutputStreamTest {
 
         base64OutputStream.close();
         Assertions.assertThat(new String(baos.toByteArray(), ENCODING)).isEqualTo("HsE=");
+    }
+
+    /**
+     * Test class.
+     *
+     * @author Dmitry Shapovalov
+     */
+    private static final class FlushStream extends OutputStream {
+
+        private boolean _flushed;
+
+        FlushStream() {
+            super();
+            _flushed = false;
+        }
+
+        @Override
+        public void write(final int value) throws IOException {
+            // Ignore
+        }
+
+        boolean isFlushed() {
+            return _flushed;
+        }
+
+        @Override
+        public void flush() throws IOException {
+            super.flush();
+            _flushed = true;
+        }
+
     }
 
     /**
