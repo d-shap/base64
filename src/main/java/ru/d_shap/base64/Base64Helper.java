@@ -200,7 +200,7 @@ public final class Base64Helper {
         if (bytesOffset < 0) {
             throw new Base64RuntimeException(ExceptionMessageHelper.createWrongByteArrayIndexMessage(bytesOffset));
         }
-        if (bytesOffset >= bytes.length) {
+        if (bytesOffset > bytes.length) {
             throw new Base64RuntimeException(ExceptionMessageHelper.createWrongByteArrayIndexMessage(bytesOffset));
         }
 
