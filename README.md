@@ -28,8 +28,8 @@ In this case `Base64InputStream` and `Base64OutputStream` classes can be used.
 
 An example, how to write the base64 characters to the file:
 ```
-try (FileInputStream inputStream = new FileInputStream("some input file");
-     Base64OutputStream outputStream = new Base64OutputStream(new FileOutputStream("some output file"));) {
+try (FileInputStream inputStream = new FileInputStream("input file");
+     Base64OutputStream outputStream = new Base64OutputStream(new FileOutputStream("base64 output file"))) {
     int read;
     while (true) {
         read = inputStream.read();
