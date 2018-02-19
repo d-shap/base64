@@ -1517,6 +1517,11 @@ public final class Base64HelperTest {
         Assertions.assertThat(Base64Helper.isBase64String("aa,a")).isFalse();
         Assertions.assertThat(Base64Helper.isBase64String("aaa,")).isFalse();
 
+        Assertions.assertThat(Base64Helper.isBase64String("\u0240aaa")).isFalse();
+        Assertions.assertThat(Base64Helper.isBase64String("a\u0240aa")).isFalse();
+        Assertions.assertThat(Base64Helper.isBase64String("aa\u0240a")).isFalse();
+        Assertions.assertThat(Base64Helper.isBase64String("aaa\u0240")).isFalse();
+
         Assertions.assertThat(Base64Helper.isBase64String("12341234")).isTrue();
         Assertions.assertThat(Base64Helper.isBase64String(",aaa1234")).isFalse();
         Assertions.assertThat(Base64Helper.isBase64String("a,aa1234")).isFalse();
@@ -1539,6 +1544,11 @@ public final class Base64HelperTest {
         Assertions.assertThat(Base64Helper.isBase64String("a,a=")).isFalse();
         Assertions.assertThat(Base64Helper.isBase64String("aa,=")).isFalse();
 
+        Assertions.assertThat(Base64Helper.isBase64String("\u0240aa=")).isFalse();
+        Assertions.assertThat(Base64Helper.isBase64String("a\u0240a=")).isFalse();
+        Assertions.assertThat(Base64Helper.isBase64String("aa\u0240=")).isFalse();
+        Assertions.assertThat(Base64Helper.isBase64String("aa=\u0240")).isFalse();
+
         Assertions.assertThat(Base64Helper.isBase64String("1234aaQ=")).isTrue();
         Assertions.assertThat(Base64Helper.isBase64String("1234,aQ=")).isFalse();
         Assertions.assertThat(Base64Helper.isBase64String("1234a,Q=")).isFalse();
@@ -1554,6 +1564,11 @@ public final class Base64HelperTest {
         Assertions.assertThat(Base64Helper.isBase64String("a,==")).isFalse();
         Assertions.assertThat(Base64Helper.isBase64String("aQ=a")).isFalse();
         Assertions.assertThat(Base64Helper.isBase64String("aQ=,")).isFalse();
+
+        Assertions.assertThat(Base64Helper.isBase64String("\u0240a==")).isFalse();
+        Assertions.assertThat(Base64Helper.isBase64String("a\u0240==")).isFalse();
+        Assertions.assertThat(Base64Helper.isBase64String("a=\u0240=")).isFalse();
+        Assertions.assertThat(Base64Helper.isBase64String("a==\u0240")).isFalse();
 
         Assertions.assertThat(Base64Helper.isBase64String("1234aQ==")).isTrue();
         Assertions.assertThat(Base64Helper.isBase64String("1234,Q==")).isFalse();
