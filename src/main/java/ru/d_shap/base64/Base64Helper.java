@@ -59,18 +59,11 @@ public final class Base64Helper {
             throw new Base64RuntimeException(ExceptionMessageHelper.createWrongByteArrayIndexMessage(bytesOffset + bytesLength));
         }
 
-        int bytesLengthD3 = bytesLength / 3;
-        int bytesLengthM3 = bytesLength % 3;
-
-        int bufferLength;
-        if (bytesLengthM3 == 0) {
-            bufferLength = bytesLengthD3 * 4;
-        } else {
-            bufferLength = (bytesLengthD3 + 1) * 4;
-        }
+        int bufferLength = getBase64StringLength(bytesLength);
         StringBuilder buffer = new StringBuilder(bufferLength);
 
         int bytesIndex = bytesOffset;
+        int bytesLengthM3 = bytesLength % 3;
         int bytesMaxIndex = bytesOffset + bytesLength - bytesLengthM3;
         int byte1;
         int byte2;
@@ -108,6 +101,19 @@ public final class Base64Helper {
         }
 
         return buffer.toString();
+    }
+
+    static int getBase64StringLength(final int bytesLength) {
+        int bytesLengthD3 = bytesLength / 3;
+        int bytesLengthM3 = bytesLength % 3;
+
+        int base64StringLength;
+        if (bytesLengthM3 == 0) {
+            base64StringLength = bytesLengthD3 * 4;
+        } else {
+            base64StringLength = (bytesLengthD3 + 1) * 4;
+        }
+        return base64StringLength;
     }
 
     static int getFirstBase64Character(final int byte1) {
