@@ -63,12 +63,11 @@ public final class Base64Helper {
         StringBuilder buffer = new StringBuilder(bufferLength);
 
         int bytesIndex = bytesOffset;
-        int bytesLengthM3 = bytesLength % 3;
-        int bytesMaxIndex = bytesOffset + bytesLength - bytesLengthM3;
         int byte1;
         int byte2;
         int byte3;
-        while (bytesIndex < bytesMaxIndex) {
+        int bytesLengthD3 = bytesLength / 3;
+        for (int i = 0; i < bytesLengthD3; i++) {
             byte1 = bytes[bytesIndex] & 0xFF;
             bytesIndex++;
             byte2 = bytes[bytesIndex] & 0xFF;
@@ -82,6 +81,7 @@ public final class Base64Helper {
             buffer.append((char) getFourthBase64Character(byte3));
         }
 
+        int bytesLengthM3 = bytesLength % 3;
         if (bytesLengthM3 == 1) {
             byte1 = bytes[bytesIndex] & 0xFF;
 
