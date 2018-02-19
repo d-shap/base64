@@ -403,9 +403,9 @@ public final class Base64Helper {
         }
 
         int base64Index = base64Offset;
-        int base64MaxIndex = base64Offset + base64Length - 4;
         int currentCharacter;
-        while (base64Index < base64MaxIndex) {
+        int base64LengthM4 = base64Length - 4;
+        for (int i = 0; i < base64LengthM4; i++) {
             currentCharacter = base64.charAt(base64Index);
             if (!isBase64CharacterValid(currentCharacter)) {
                 return false;
