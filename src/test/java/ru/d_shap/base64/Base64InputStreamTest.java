@@ -200,6 +200,42 @@ public final class Base64InputStreamTest {
     @Test
     public void zeroCharacterTest() {
         try {
+            byte[] base64Bytes = "\u0000".getBytes(ENCODING);
+            ByteArrayInputStream bais = new ByteArrayInputStream(base64Bytes);
+            Base64InputStream base64InputStream = new Base64InputStream(bais);
+            base64InputStream.read();
+            Assertions.fail("Base64InputStream test fail");
+        } catch (IOException ex) {
+            Assertions.assertThat(ex).hasMessage("Wrong character obtained ('\u0000', 0)");
+        }
+        try {
+            byte[] base64Bytes = "\u0000\u0000".getBytes(ENCODING);
+            ByteArrayInputStream bais = new ByteArrayInputStream(base64Bytes);
+            Base64InputStream base64InputStream = new Base64InputStream(bais);
+            base64InputStream.read();
+            Assertions.fail("Base64InputStream test fail");
+        } catch (IOException ex) {
+            Assertions.assertThat(ex).hasMessage("Wrong character obtained ('\u0000', 0)");
+        }
+        try {
+            byte[] base64Bytes = "\u0000\u0000\u0000".getBytes(ENCODING);
+            ByteArrayInputStream bais = new ByteArrayInputStream(base64Bytes);
+            Base64InputStream base64InputStream = new Base64InputStream(bais);
+            base64InputStream.read();
+            Assertions.fail("Base64InputStream test fail");
+        } catch (IOException ex) {
+            Assertions.assertThat(ex).hasMessage("Wrong character obtained ('\u0000', 0)");
+        }
+        try {
+            byte[] base64Bytes = "\u0000\u0000\u0000\u0000".getBytes(ENCODING);
+            ByteArrayInputStream bais = new ByteArrayInputStream(base64Bytes);
+            Base64InputStream base64InputStream = new Base64InputStream(bais);
+            base64InputStream.read();
+            Assertions.fail("Base64InputStream test fail");
+        } catch (IOException ex) {
+            Assertions.assertThat(ex).hasMessage("Wrong character obtained ('\u0000', 0)");
+        }
+        try {
             byte[] base64Bytes = "\u0000abc".getBytes(ENCODING);
             ByteArrayInputStream bais = new ByteArrayInputStream(base64Bytes);
             Base64InputStream base64InputStream = new Base64InputStream(bais);
