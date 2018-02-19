@@ -639,6 +639,34 @@ public final class Base64HelperTest {
      * {@link Base64Helper} class test.
      */
     @Test
+    public void toBytesSpecifiedWithByteArrayOffsetAndUpperBoundTest() {
+        byte[] bytes1 = new byte[9];
+        Assertions.assertThat(Base64Helper.toBytes("", bytes1, 9)).isEqualTo(0);
+        Assertions.assertThat(bytes1).containsExactlyInOrder(0, 0, 0, 0, 0, 0, 0, 0, 0);
+
+        try {
+            Base64Helper.toBytes("", new byte[9], 10);
+            Assertions.fail("Base64Helper test fail");
+        } catch (Base64RuntimeException ex) {
+            Assertions.assertThat(ex).hasMessage("Wrong byte array index (10)");
+        }
+
+        try {
+            Base64Helper.toBytes("aQ==", new byte[9], 9);
+            Assertions.fail("Base64Helper test fail");
+        } catch (Base64RuntimeException ex) {
+            Assertions.assertThat(ex).hasMessage("Wrong byte array length (0), expected length is (1)");
+        }
+
+        byte[] bytes2 = new byte[9];
+        Assertions.assertThat(Base64Helper.toBytes("aQ==", bytes2, 8)).isEqualTo(1);
+        Assertions.assertThat(bytes2).containsExactlyInOrder(0, 0, 0, 0, 0, 0, 0, 0, 105);
+    }
+
+    /**
+     * {@link Base64Helper} class test.
+     */
+    @Test
     public void toBytesSpecifiedWithBase64BoundsAndByteArrayOffsetTest() {
         byte[] bytes11 = new byte[9];
         Assertions.assertThat(Base64Helper.toBytes("aAbB56Y+", 0, 0, bytes11, 0)).isEqualTo(0);
