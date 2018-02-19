@@ -1427,6 +1427,8 @@ public final class Base64HelperTest {
      */
     @Test
     public void isSecondBase64ByteZeroTest() {
+        Assertions.assertThat(Base64Helper.isSecondBase64ByteZero(0)).isFalse();
+        Assertions.assertThat(Base64Helper.isSecondBase64ByteZero(1)).isFalse();
         Assertions.assertThat(Base64Helper.isSecondBase64ByteZero('w')).isTrue();
         Assertions.assertThat(Base64Helper.isSecondBase64ByteZero('g')).isTrue();
         Assertions.assertThat(Base64Helper.isSecondBase64ByteZero('Q')).isTrue();
@@ -1439,6 +1441,7 @@ public final class Base64HelperTest {
         Assertions.assertThat(Base64Helper.isSecondBase64ByteZero('8')).isFalse();
         Assertions.assertThat(Base64Helper.isSecondBase64ByteZero('+')).isFalse();
         Assertions.assertThat(Base64Helper.isSecondBase64ByteZero('/')).isFalse();
+        Assertions.assertThat(Base64Helper.isSecondBase64ByteZero(122)).isFalse();
     }
 
     /**
@@ -1446,6 +1449,8 @@ public final class Base64HelperTest {
      */
     @Test
     public void isThirdBase64ByteZeroTest() {
+        Assertions.assertThat(Base64Helper.isThirdBase64ByteZero(0)).isFalse();
+        Assertions.assertThat(Base64Helper.isThirdBase64ByteZero(1)).isFalse();
         Assertions.assertThat(Base64Helper.isThirdBase64ByteZero('8')).isTrue();
         Assertions.assertThat(Base64Helper.isThirdBase64ByteZero('o')).isTrue();
         Assertions.assertThat(Base64Helper.isThirdBase64ByteZero('g')).isTrue();
@@ -1458,6 +1463,7 @@ public final class Base64HelperTest {
         Assertions.assertThat(Base64Helper.isThirdBase64ByteZero('h')).isFalse();
         Assertions.assertThat(Base64Helper.isThirdBase64ByteZero('i')).isFalse();
         Assertions.assertThat(Base64Helper.isThirdBase64ByteZero('j')).isFalse();
+        Assertions.assertThat(Base64Helper.isThirdBase64ByteZero(122)).isFalse();
     }
 
     /**
