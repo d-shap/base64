@@ -892,6 +892,46 @@ public final class Base64HelperTest {
      * {@link Base64Helper} class test.
      */
     @Test
+    public void toBytesSpecifiedWithBase64BoundsAndByteArrayOffsetAndUpperBoundTest() {
+        byte[] bytes1 = new byte[9];
+        Assertions.assertThat(Base64Helper.toBytes("", 0, 0, bytes1, 9)).isEqualTo(0);
+        Assertions.assertThat(bytes1).containsExactlyInOrder(0, 0, 0, 0, 0, 0, 0, 0, 0);
+
+        byte[] bytes2 = new byte[9];
+        Assertions.assertThat(Base64Helper.toBytes("1234aQ==", 0, 0, bytes2, 9)).isEqualTo(0);
+        Assertions.assertThat(bytes2).containsExactlyInOrder(0, 0, 0, 0, 0, 0, 0, 0, 0);
+
+        byte[] bytes3 = new byte[9];
+        Assertions.assertThat(Base64Helper.toBytes("1234aQ==", 2, 0, bytes3, 9)).isEqualTo(0);
+        Assertions.assertThat(bytes3).containsExactlyInOrder(0, 0, 0, 0, 0, 0, 0, 0, 0);
+
+        byte[] bytes4 = new byte[9];
+        Assertions.assertThat(Base64Helper.toBytes("1234aQ==", 5, 0, bytes4, 9)).isEqualTo(0);
+        Assertions.assertThat(bytes4).containsExactlyInOrder(0, 0, 0, 0, 0, 0, 0, 0, 0);
+
+        try {
+            Base64Helper.toBytes("", 0, 0, new byte[9], 10);
+            Assertions.fail("Base64Helper test fail");
+        } catch (Base64RuntimeException ex) {
+            Assertions.assertThat(ex).hasMessage("Wrong byte array index (10)");
+        }
+
+        try {
+            Base64Helper.toBytes("aQ==", 0, 4, new byte[9], 9);
+            Assertions.fail("Base64Helper test fail");
+        } catch (Base64RuntimeException ex) {
+            Assertions.assertThat(ex).hasMessage("Wrong byte array length (0), expected length is (1)");
+        }
+
+        byte[] bytes5 = new byte[9];
+        Assertions.assertThat(Base64Helper.toBytes("aQ==", 0, 4, bytes5, 8)).isEqualTo(1);
+        Assertions.assertThat(bytes5).containsExactlyInOrder(0, 0, 0, 0, 0, 0, 0, 0, 105);
+    }
+
+    /**
+     * {@link Base64Helper} class test.
+     */
+    @Test
     public void toBytesCreatedTest() {
         byte[] bytes01 = Base64Helper.toBytes("");
         Assertions.assertThat(bytes01).containsExactlyInOrder();
