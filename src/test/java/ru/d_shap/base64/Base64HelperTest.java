@@ -162,6 +162,23 @@ public final class Base64HelperTest {
      * {@link Base64Helper} class test.
      */
     @Test
+    public void getBase64StringLengthTest() {
+        Assertions.assertThat(Base64Helper.getBase64StringLength(0)).isEqualTo(0);
+        Assertions.assertThat(Base64Helper.getBase64StringLength(1)).isEqualTo(4);
+        Assertions.assertThat(Base64Helper.getBase64StringLength(2)).isEqualTo(4);
+        Assertions.assertThat(Base64Helper.getBase64StringLength(3)).isEqualTo(4);
+        Assertions.assertThat(Base64Helper.getBase64StringLength(4)).isEqualTo(8);
+        Assertions.assertThat(Base64Helper.getBase64StringLength(5)).isEqualTo(8);
+        Assertions.assertThat(Base64Helper.getBase64StringLength(6)).isEqualTo(8);
+        Assertions.assertThat(Base64Helper.getBase64StringLength(7)).isEqualTo(12);
+        Assertions.assertThat(Base64Helper.getBase64StringLength(8)).isEqualTo(12);
+        Assertions.assertThat(Base64Helper.getBase64StringLength(9)).isEqualTo(12);
+    }
+
+    /**
+     * {@link Base64Helper} class test.
+     */
+    @Test
     public void getFirstBase64CharacterTest() {
         Assertions.assertThat(Base64Helper.getFirstBase64Character(0x00)).isEqualTo('A');
         Assertions.assertThat(Base64Helper.getFirstBase64Character(0x03)).isEqualTo('A');
