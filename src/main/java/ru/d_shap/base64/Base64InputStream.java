@@ -29,6 +29,10 @@ import java.io.InputStream;
  */
 public final class Base64InputStream extends InputStream {
 
+    private static final int END_OF_STREAM = -1;
+
+    private static final int NEGATIVE_SKIP_RESULT = -1;
+
     private final InputStream _inputStream;
 
     private final int[] _buffer;
@@ -49,14 +53,14 @@ public final class Base64InputStream extends InputStream {
 
     @Override
     public int read() throws IOException {
-        if (_bufferPosition < 0) {
-            return -1;
+        if (_bufferPosition == END_OF_STREAM) {
+            return END_OF_STREAM;
         }
         _bufferPosition++;
         if (_bufferPosition == _buffer.length) {
             _bufferPosition = updateBuffer();
-            if (_bufferPosition < 0) {
-                return -1;
+            if (_bufferPosition == END_OF_STREAM) {
+                return END_OF_STREAM;
             }
         }
         return _buffer[_bufferPosition];
@@ -64,8 +68,8 @@ public final class Base64InputStream extends InputStream {
 
     private int updateBuffer() throws IOException {
         int character1 = readCharacterFromStream(false, false);
-        if (character1 < 0) {
-            return -1;
+        if (character1 == END_OF_STREAM) {
+            return END_OF_STREAM;
         }
         int character2 = readCharacterFromStream(true, false);
         int character3 = readCharacterFromStream(true, true);
@@ -106,7 +110,7 @@ public final class Base64InputStream extends InputStream {
             if (checkEndOfInput) {
                 throw new IOException(ExceptionMessageHelper.createEndOfStreamMessage());
             } else {
-                return -1;
+                return END_OF_STREAM;
             }
         }
         if (Base64Helper.isBase64CharacterValid(character) || padIsValid && character == Consts.PAD) {
@@ -119,7 +123,7 @@ public final class Base64InputStream extends InputStream {
     @Override
     public long skip(final long count) throws IOException {
         if (count < 0) {
-            return -1;
+            return NEGATIVE_SKIP_RESULT;
         }
         if (count == 0) {
             return 0;
