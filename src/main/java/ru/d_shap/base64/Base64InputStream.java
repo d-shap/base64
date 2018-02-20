@@ -125,13 +125,7 @@ public final class Base64InputStream extends InputStream {
         if (count < 0) {
             return NEGATIVE_SKIP_RESULT;
         }
-        if (count == 0) {
-            return 0;
-        }
-        long skipped = skipInCurrentBuffer(count, false);
-        if (skipped == count) {
-            return skipped;
-        }
+        long skipped = skipInCurrentBuffer(count);
         skipped += skipInInputStream(count - skipped);
         if (skipped == count) {
             return skipped;
@@ -140,43 +134,33 @@ public final class Base64InputStream extends InputStream {
         if (_bufferPosition < 0) {
             return skipped;
         }
-        skipped += skipInCurrentBuffer(count - skipped, true);
+        skipped += skipInUpdatedBuffer(count - skipped);
         return skipped;
     }
 
-    private long skipInCurrentBuffer(final long count, final boolean updatedBuffer) {
-        int unreadBytesInBuffer = _buffer.length - _bufferPosition;
-        if (!updatedBuffer) {
-            unreadBytesInBuffer = unreadBytesInBuffer - 1;
-        }
-        if (count > unreadBytesInBuffer) {
-            _bufferPosition = _buffer.length - 1;
-            return unreadBytesInBuffer;
-        } else {
-            _bufferPosition = _bufferPosition + (int) count;
-            if (updatedBuffer) {
-                _bufferPosition--;
-            }
-            return count;
-        }
+    private long skipInCurrentBuffer(final long count) {
+        int unreadBytesInBuffer = _buffer.length - _bufferPosition - 1;
+        _bufferPosition = Math.min(_buffer.length - 1, _bufferPosition + (int) count);
+        return Math.min(unreadBytesInBuffer, count);
     }
 
     private long skipInInputStream(final long count) throws IOException {
-        long countBytesD3 = count / 3L;
-        long countCharacters = countBytesD3 * 4L;
+        long countCharacters = count / 3L * 4L;
         long skippedCharacters = _inputStream.skip(countCharacters);
-        if (skippedCharacters == countCharacters) {
-            return countBytesD3 * 3L;
-        } else {
-            return skippedCharacters * 3L / 4L;
-        }
+        return skippedCharacters / 4L * 3L;
+    }
+
+    private long skipInUpdatedBuffer(final long count) {
+        int unreadBytesInBuffer = _buffer.length - _bufferPosition;
+        _bufferPosition = Math.min(_buffer.length - 1, _bufferPosition + (int) count - 1);
+        return Math.min(unreadBytesInBuffer, count);
     }
 
     @Override
     public int available() throws IOException {
         int availableCharacters = _inputStream.available();
         int unreadBytesInBuffer = _buffer.length - _bufferPosition - 1;
-        return unreadBytesInBuffer + availableCharacters * 3 / 4;
+        return unreadBytesInBuffer + availableCharacters / 4 * 3;
     }
 
     @Override
