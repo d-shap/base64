@@ -52,11 +52,11 @@ public final class Base64InputStreamTest {
     public void readZeroByteEndingTest() throws IOException {
         InputStreamImpl inputStream1 = new InputStreamImpl("S8RB");
         Base64InputStream base64InputStream1 = new Base64InputStream(inputStream1);
-        Assertions.assertThat(base64InputStream1).isAllBytesEqualTo(75, 196, 65);
+        Assertions.assertThat(base64InputStream1).isAllBytesEqualTo(75, -60, 65);
 
         InputStreamImpl inputStream2 = new InputStreamImpl("/MpxS8RB");
         Base64InputStream base64InputStream2 = new Base64InputStream(inputStream2);
-        Assertions.assertThat(base64InputStream2).isAllBytesEqualTo(252, 202, 113, 75, 196, 65);
+        Assertions.assertThat(base64InputStream2).isAllBytesEqualTo(-4, -54, 113, 75, -60, 65);
     }
 
     /**
@@ -68,11 +68,11 @@ public final class Base64InputStreamTest {
     public void readOneByteEndingTest() throws IOException {
         InputStreamImpl inputStream1 = new InputStreamImpl("pw==");
         Base64InputStream base64InputStream1 = new Base64InputStream(inputStream1);
-        Assertions.assertThat(base64InputStream1).isAllBytesEqualTo(167);
+        Assertions.assertThat(base64InputStream1).isAllBytesEqualTo(-89);
 
         InputStreamImpl inputStream2 = new InputStreamImpl("MT+6pw==");
         Base64InputStream base64InputStream2 = new Base64InputStream(inputStream2);
-        Assertions.assertThat(base64InputStream2).isAllBytesEqualTo(49, 63, 186, 167);
+        Assertions.assertThat(base64InputStream2).isAllBytesEqualTo(49, 63, -70, -89);
     }
 
     /**
@@ -84,11 +84,11 @@ public final class Base64InputStreamTest {
     public void readTwoByteEndingTest() throws IOException {
         InputStreamImpl inputStream1 = new InputStreamImpl("jO4=");
         Base64InputStream base64InputStream1 = new Base64InputStream(inputStream1);
-        Assertions.assertThat(base64InputStream1).isAllBytesEqualTo(140, 238);
+        Assertions.assertThat(base64InputStream1).isAllBytesEqualTo(-116, -18);
 
         InputStreamImpl inputStream2 = new InputStreamImpl("0xJQjO4=");
         Base64InputStream base64InputStream2 = new Base64InputStream(inputStream2);
-        Assertions.assertThat(base64InputStream2).isAllBytesEqualTo(211, 18, 80, 140, 238);
+        Assertions.assertThat(base64InputStream2).isAllBytesEqualTo(-45, 18, 80, -116, -18);
     }
 
     /**
@@ -139,17 +139,17 @@ public final class Base64InputStreamTest {
     public void charactersAfterPadTest() throws IOException {
         InputStreamImpl inputStream1 = new InputStreamImpl("abQ=abcd");
         Base64InputStream base64InputStream1 = new Base64InputStream(inputStream1);
-        Assertions.assertThat(base64InputStream1).isAllBytesEqualTo(105, 180, 105, 183, 29);
+        Assertions.assertThat(base64InputStream1).isAllBytesEqualTo(105, -76, 105, -73, 29);
         Assertions.assertThat(inputStream1).isCompleted();
 
         InputStreamImpl inputStream2 = new InputStreamImpl("aQ==abcd");
         Base64InputStream base64InputStream2 = new Base64InputStream(inputStream2);
-        Assertions.assertThat(base64InputStream2).isAllBytesEqualTo(105, 105, 183, 29);
+        Assertions.assertThat(base64InputStream2).isAllBytesEqualTo(105, 105, -73, 29);
         Assertions.assertThat(inputStream2).isCompleted();
 
         InputStreamImpl inputStream3 = new InputStreamImpl("8HgPESA=sA==HsHJ");
         Base64InputStream base64InputStream3 = new Base64InputStream(inputStream3);
-        Assertions.assertThat(base64InputStream3).isAllBytesEqualTo(240, 120, 15, 17, 32, 176, 30, 193, 201);
+        Assertions.assertThat(base64InputStream3).isAllBytesEqualTo(-16, 120, 15, 17, 32, -80, 30, -63, -55);
         Assertions.assertThat(inputStream3).isCompleted();
     }
 
@@ -303,7 +303,7 @@ public final class Base64InputStreamTest {
         try {
             InputStreamImpl inputStream = new InputStreamImpl("abcd?Q==");
             Base64InputStream base64InputStream = new Base64InputStream(inputStream);
-            Assertions.assertThat(base64InputStream).isNextBytesEqualTo(105, 183, 29);
+            Assertions.assertThat(base64InputStream).isNextBytesEqualTo(105, -73, 29);
             base64InputStream.read();
             Assertions.fail("Base64InputStream test fail");
         } catch (IOException ex) {
@@ -312,7 +312,7 @@ public final class Base64InputStreamTest {
         try {
             InputStreamImpl inputStream = new InputStreamImpl("abcdaa==");
             Base64InputStream base64InputStream = new Base64InputStream(inputStream);
-            Assertions.assertThat(base64InputStream).isNextBytesEqualTo(105, 183, 29);
+            Assertions.assertThat(base64InputStream).isNextBytesEqualTo(105, -73, 29);
             base64InputStream.read();
             Assertions.fail("Base64InputStream test fail");
         } catch (IOException ex) {
@@ -321,7 +321,7 @@ public final class Base64InputStreamTest {
         try {
             InputStreamImpl inputStream = new InputStreamImpl("abcd?a==");
             Base64InputStream base64InputStream = new Base64InputStream(inputStream);
-            Assertions.assertThat(base64InputStream).isNextBytesEqualTo(105, 183, 29);
+            Assertions.assertThat(base64InputStream).isNextBytesEqualTo(105, -73, 29);
             base64InputStream.read();
             Assertions.fail("Base64InputStream test fail");
         } catch (IOException ex) {
@@ -330,7 +330,7 @@ public final class Base64InputStreamTest {
         try {
             InputStreamImpl inputStream = new InputStreamImpl("abcda?==");
             Base64InputStream base64InputStream = new Base64InputStream(inputStream);
-            Assertions.assertThat(base64InputStream).isNextBytesEqualTo(105, 183, 29);
+            Assertions.assertThat(base64InputStream).isNextBytesEqualTo(105, -73, 29);
             base64InputStream.read();
             Assertions.fail("Base64InputStream test fail");
         } catch (IOException ex) {
@@ -339,7 +339,7 @@ public final class Base64InputStreamTest {
         try {
             InputStreamImpl inputStream = new InputStreamImpl("abcdaQ=a");
             Base64InputStream base64InputStream = new Base64InputStream(inputStream);
-            Assertions.assertThat(base64InputStream).isNextBytesEqualTo(105, 183, 29);
+            Assertions.assertThat(base64InputStream).isNextBytesEqualTo(105, -73, 29);
             base64InputStream.read();
             Assertions.fail("Base64InputStream test fail");
         } catch (IOException ex) {
@@ -348,7 +348,7 @@ public final class Base64InputStreamTest {
         try {
             InputStreamImpl inputStream = new InputStreamImpl("abcdaQ=?");
             Base64InputStream base64InputStream = new Base64InputStream(inputStream);
-            Assertions.assertThat(base64InputStream).isNextBytesEqualTo(105, 183, 29);
+            Assertions.assertThat(base64InputStream).isNextBytesEqualTo(105, -73, 29);
             base64InputStream.read();
             Assertions.fail("Base64InputStream test fail");
         } catch (IOException ex) {
@@ -412,7 +412,7 @@ public final class Base64InputStreamTest {
         try {
             InputStreamImpl inputStream = new InputStreamImpl("abcd?aQ=");
             Base64InputStream base64InputStream = new Base64InputStream(inputStream);
-            Assertions.assertThat(base64InputStream).isNextBytesEqualTo(105, 183, 29);
+            Assertions.assertThat(base64InputStream).isNextBytesEqualTo(105, -73, 29);
             base64InputStream.read();
             Assertions.fail("Base64InputStream test fail");
         } catch (IOException ex) {
@@ -421,7 +421,7 @@ public final class Base64InputStreamTest {
         try {
             InputStreamImpl inputStream = new InputStreamImpl("abcda?Q=");
             Base64InputStream base64InputStream = new Base64InputStream(inputStream);
-            Assertions.assertThat(base64InputStream).isNextBytesEqualTo(105, 183, 29);
+            Assertions.assertThat(base64InputStream).isNextBytesEqualTo(105, -73, 29);
             base64InputStream.read();
             Assertions.fail("Base64InputStream test fail");
         } catch (IOException ex) {
@@ -430,7 +430,7 @@ public final class Base64InputStreamTest {
         try {
             InputStreamImpl inputStream = new InputStreamImpl("abcdaaa=");
             Base64InputStream base64InputStream = new Base64InputStream(inputStream);
-            Assertions.assertThat(base64InputStream).isNextBytesEqualTo(105, 183, 29);
+            Assertions.assertThat(base64InputStream).isNextBytesEqualTo(105, -73, 29);
             base64InputStream.read();
             Assertions.fail("Base64InputStream test fail");
         } catch (IOException ex) {
@@ -439,7 +439,7 @@ public final class Base64InputStreamTest {
         try {
             InputStreamImpl inputStream = new InputStreamImpl("abcd?aa=");
             Base64InputStream base64InputStream = new Base64InputStream(inputStream);
-            Assertions.assertThat(base64InputStream).isNextBytesEqualTo(105, 183, 29);
+            Assertions.assertThat(base64InputStream).isNextBytesEqualTo(105, -73, 29);
             base64InputStream.read();
             Assertions.fail("Base64InputStream test fail");
         } catch (IOException ex) {
@@ -448,7 +448,7 @@ public final class Base64InputStreamTest {
         try {
             InputStreamImpl inputStream = new InputStreamImpl("abcda?a=");
             Base64InputStream base64InputStream = new Base64InputStream(inputStream);
-            Assertions.assertThat(base64InputStream).isNextBytesEqualTo(105, 183, 29);
+            Assertions.assertThat(base64InputStream).isNextBytesEqualTo(105, -73, 29);
             base64InputStream.read();
             Assertions.fail("Base64InputStream test fail");
         } catch (IOException ex) {
@@ -457,7 +457,7 @@ public final class Base64InputStreamTest {
         try {
             InputStreamImpl inputStream = new InputStreamImpl("abcdaa?=");
             Base64InputStream base64InputStream = new Base64InputStream(inputStream);
-            Assertions.assertThat(base64InputStream).isNextBytesEqualTo(105, 183, 29);
+            Assertions.assertThat(base64InputStream).isNextBytesEqualTo(105, -73, 29);
             base64InputStream.read();
             Assertions.fail("Base64InputStream test fail");
         } catch (IOException ex) {
@@ -489,7 +489,7 @@ public final class Base64InputStreamTest {
         try {
             InputStreamImpl inputStream = new InputStreamImpl("abcd=abc");
             Base64InputStream base64InputStream = new Base64InputStream(inputStream);
-            Assertions.assertThat(base64InputStream).isNextBytesEqualTo(105, 183, 29);
+            Assertions.assertThat(base64InputStream).isNextBytesEqualTo(105, -73, 29);
             base64InputStream.read();
             Assertions.fail("Base64InputStream test fail");
         } catch (IOException ex) {
@@ -498,7 +498,7 @@ public final class Base64InputStreamTest {
         try {
             InputStreamImpl inputStream = new InputStreamImpl("abcda=bc");
             Base64InputStream base64InputStream = new Base64InputStream(inputStream);
-            Assertions.assertThat(base64InputStream).isNextBytesEqualTo(105, 183, 29);
+            Assertions.assertThat(base64InputStream).isNextBytesEqualTo(105, -73, 29);
             base64InputStream.read();
             Assertions.fail("Base64InputStream test fail");
         } catch (IOException ex) {
@@ -529,51 +529,51 @@ public final class Base64InputStreamTest {
         String base64String = "ABMN+/12tY4/vbQ7";
 
         Base64InputStream base64InputStream = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream).isAllBytesEqualTo(0, 19, 13, 251, 253, 118, 181, 142, 63, 189, 180, 59);
+        Assertions.assertThat(base64InputStream).isAllBytesEqualTo(0, 19, 13, -5, -3, 118, -75, -114, 63, -67, -76, 59);
 
         Base64InputStream base64InputStream0100 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0100.skip(0)).isEqualTo(0);
-        Assertions.assertThat(base64InputStream0100).isAllBytesEqualTo(0, 19, 13, 251, 253, 118, 181, 142, 63, 189, 180, 59);
+        Assertions.assertThat(base64InputStream0100).isAllBytesEqualTo(0, 19, 13, -5, -3, 118, -75, -114, 63, -67, -76, 59);
 
         Base64InputStream base64InputStream0101 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0101.skip(1)).isEqualTo(1);
-        Assertions.assertThat(base64InputStream0101).isAllBytesEqualTo(19, 13, 251, 253, 118, 181, 142, 63, 189, 180, 59);
+        Assertions.assertThat(base64InputStream0101).isAllBytesEqualTo(19, 13, -5, -3, 118, -75, -114, 63, -67, -76, 59);
 
         Base64InputStream base64InputStream0102 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0102.skip(2)).isEqualTo(2);
-        Assertions.assertThat(base64InputStream0102).isAllBytesEqualTo(13, 251, 253, 118, 181, 142, 63, 189, 180, 59);
+        Assertions.assertThat(base64InputStream0102).isAllBytesEqualTo(13, -5, -3, 118, -75, -114, 63, -67, -76, 59);
 
         Base64InputStream base64InputStream0103 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0103.skip(3)).isEqualTo(3);
-        Assertions.assertThat(base64InputStream0103).isAllBytesEqualTo(251, 253, 118, 181, 142, 63, 189, 180, 59);
+        Assertions.assertThat(base64InputStream0103).isAllBytesEqualTo(-5, -3, 118, -75, -114, 63, -67, -76, 59);
 
         Base64InputStream base64InputStream0104 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0104.skip(4)).isEqualTo(4);
-        Assertions.assertThat(base64InputStream0104).isAllBytesEqualTo(253, 118, 181, 142, 63, 189, 180, 59);
+        Assertions.assertThat(base64InputStream0104).isAllBytesEqualTo(-3, 118, -75, -114, 63, -67, -76, 59);
 
         Base64InputStream base64InputStream0105 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0105.skip(5)).isEqualTo(5);
-        Assertions.assertThat(base64InputStream0105).isAllBytesEqualTo(118, 181, 142, 63, 189, 180, 59);
+        Assertions.assertThat(base64InputStream0105).isAllBytesEqualTo(118, -75, -114, 63, -67, -76, 59);
 
         Base64InputStream base64InputStream0106 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0106.skip(6)).isEqualTo(6);
-        Assertions.assertThat(base64InputStream0106).isAllBytesEqualTo(181, 142, 63, 189, 180, 59);
+        Assertions.assertThat(base64InputStream0106).isAllBytesEqualTo(-75, -114, 63, -67, -76, 59);
 
         Base64InputStream base64InputStream0107 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0107.skip(7)).isEqualTo(7);
-        Assertions.assertThat(base64InputStream0107).isAllBytesEqualTo(142, 63, 189, 180, 59);
+        Assertions.assertThat(base64InputStream0107).isAllBytesEqualTo(-114, 63, -67, -76, 59);
 
         Base64InputStream base64InputStream0108 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0108.skip(8)).isEqualTo(8);
-        Assertions.assertThat(base64InputStream0108).isAllBytesEqualTo(63, 189, 180, 59);
+        Assertions.assertThat(base64InputStream0108).isAllBytesEqualTo(63, -67, -76, 59);
 
         Base64InputStream base64InputStream0109 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0109.skip(9)).isEqualTo(9);
-        Assertions.assertThat(base64InputStream0109).isAllBytesEqualTo(189, 180, 59);
+        Assertions.assertThat(base64InputStream0109).isAllBytesEqualTo(-67, -76, 59);
 
         Base64InputStream base64InputStream0110 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0110.skip(10)).isEqualTo(10);
-        Assertions.assertThat(base64InputStream0110).isAllBytesEqualTo(180, 59);
+        Assertions.assertThat(base64InputStream0110).isAllBytesEqualTo(-76, 59);
 
         Base64InputStream base64InputStream0111 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0111.skip(11)).isEqualTo(11);
@@ -606,52 +606,52 @@ public final class Base64InputStreamTest {
         Base64InputStream base64InputStream0200 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0200).isNextBytesEqualTo(0);
         Assertions.assertThat(base64InputStream0200.skip(0)).isEqualTo(0);
-        Assertions.assertThat(base64InputStream0200).isAllBytesEqualTo(19, 13, 251, 253, 118, 181, 142, 63, 189, 180, 59);
+        Assertions.assertThat(base64InputStream0200).isAllBytesEqualTo(19, 13, -5, -3, 118, -75, -114, 63, -67, -76, 59);
 
         Base64InputStream base64InputStream0201 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0201).isNextBytesEqualTo(0);
         Assertions.assertThat(base64InputStream0201.skip(1)).isEqualTo(1);
-        Assertions.assertThat(base64InputStream0201).isAllBytesEqualTo(13, 251, 253, 118, 181, 142, 63, 189, 180, 59);
+        Assertions.assertThat(base64InputStream0201).isAllBytesEqualTo(13, -5, -3, 118, -75, -114, 63, -67, -76, 59);
 
         Base64InputStream base64InputStream0202 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0202).isNextBytesEqualTo(0);
         Assertions.assertThat(base64InputStream0202.skip(2)).isEqualTo(2);
-        Assertions.assertThat(base64InputStream0202).isAllBytesEqualTo(251, 253, 118, 181, 142, 63, 189, 180, 59);
+        Assertions.assertThat(base64InputStream0202).isAllBytesEqualTo(-5, -3, 118, -75, -114, 63, -67, -76, 59);
 
         Base64InputStream base64InputStream0203 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0203).isNextBytesEqualTo(0);
         Assertions.assertThat(base64InputStream0203.skip(3)).isEqualTo(3);
-        Assertions.assertThat(base64InputStream0203).isAllBytesEqualTo(253, 118, 181, 142, 63, 189, 180, 59);
+        Assertions.assertThat(base64InputStream0203).isAllBytesEqualTo(-3, 118, -75, -114, 63, -67, -76, 59);
 
         Base64InputStream base64InputStream0204 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0204).isNextBytesEqualTo(0);
         Assertions.assertThat(base64InputStream0204.skip(4)).isEqualTo(4);
-        Assertions.assertThat(base64InputStream0204).isAllBytesEqualTo(118, 181, 142, 63, 189, 180, 59);
+        Assertions.assertThat(base64InputStream0204).isAllBytesEqualTo(118, -75, -114, 63, -67, -76, 59);
 
         Base64InputStream base64InputStream0205 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0205).isNextBytesEqualTo(0);
         Assertions.assertThat(base64InputStream0205.skip(5)).isEqualTo(5);
-        Assertions.assertThat(base64InputStream0205).isAllBytesEqualTo(181, 142, 63, 189, 180, 59);
+        Assertions.assertThat(base64InputStream0205).isAllBytesEqualTo(-75, -114, 63, -67, -76, 59);
 
         Base64InputStream base64InputStream0206 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0206).isNextBytesEqualTo(0);
         Assertions.assertThat(base64InputStream0206.skip(6)).isEqualTo(6);
-        Assertions.assertThat(base64InputStream0206).isAllBytesEqualTo(142, 63, 189, 180, 59);
+        Assertions.assertThat(base64InputStream0206).isAllBytesEqualTo(-114, 63, -67, -76, 59);
 
         Base64InputStream base64InputStream0207 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0207).isNextBytesEqualTo(0);
         Assertions.assertThat(base64InputStream0207.skip(7)).isEqualTo(7);
-        Assertions.assertThat(base64InputStream0207).isAllBytesEqualTo(63, 189, 180, 59);
+        Assertions.assertThat(base64InputStream0207).isAllBytesEqualTo(63, -67, -76, 59);
 
         Base64InputStream base64InputStream0208 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0208).isNextBytesEqualTo(0);
         Assertions.assertThat(base64InputStream0208.skip(8)).isEqualTo(8);
-        Assertions.assertThat(base64InputStream0208).isAllBytesEqualTo(189, 180, 59);
+        Assertions.assertThat(base64InputStream0208).isAllBytesEqualTo(-67, -76, 59);
 
         Base64InputStream base64InputStream0209 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0209).isNextBytesEqualTo(0);
         Assertions.assertThat(base64InputStream0209.skip(9)).isEqualTo(9);
-        Assertions.assertThat(base64InputStream0209).isAllBytesEqualTo(180, 59);
+        Assertions.assertThat(base64InputStream0209).isAllBytesEqualTo(-76, 59);
 
         Base64InputStream base64InputStream0210 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0210).isNextBytesEqualTo(0);
@@ -671,47 +671,47 @@ public final class Base64InputStreamTest {
         Base64InputStream base64InputStream0300 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0300).isNextBytesEqualTo(0, 19);
         Assertions.assertThat(base64InputStream0300.skip(0)).isEqualTo(0);
-        Assertions.assertThat(base64InputStream0300).isAllBytesEqualTo(13, 251, 253, 118, 181, 142, 63, 189, 180, 59);
+        Assertions.assertThat(base64InputStream0300).isAllBytesEqualTo(13, -5, -3, 118, -75, -114, 63, -67, -76, 59);
 
         Base64InputStream base64InputStream0301 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0301).isNextBytesEqualTo(0, 19);
         Assertions.assertThat(base64InputStream0301.skip(1)).isEqualTo(1);
-        Assertions.assertThat(base64InputStream0301).isAllBytesEqualTo(251, 253, 118, 181, 142, 63, 189, 180, 59);
+        Assertions.assertThat(base64InputStream0301).isAllBytesEqualTo(-5, -3, 118, -75, -114, 63, -67, -76, 59);
 
         Base64InputStream base64InputStream0302 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0302).isNextBytesEqualTo(0, 19);
         Assertions.assertThat(base64InputStream0302.skip(2)).isEqualTo(2);
-        Assertions.assertThat(base64InputStream0302).isAllBytesEqualTo(253, 118, 181, 142, 63, 189, 180, 59);
+        Assertions.assertThat(base64InputStream0302).isAllBytesEqualTo(-3, 118, -75, -114, 63, -67, -76, 59);
 
         Base64InputStream base64InputStream0303 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0303).isNextBytesEqualTo(0, 19);
         Assertions.assertThat(base64InputStream0303.skip(3)).isEqualTo(3);
-        Assertions.assertThat(base64InputStream0303).isAllBytesEqualTo(118, 181, 142, 63, 189, 180, 59);
+        Assertions.assertThat(base64InputStream0303).isAllBytesEqualTo(118, -75, -114, 63, -67, -76, 59);
 
         Base64InputStream base64InputStream0304 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0304).isNextBytesEqualTo(0, 19);
         Assertions.assertThat(base64InputStream0304.skip(4)).isEqualTo(4);
-        Assertions.assertThat(base64InputStream0304).isAllBytesEqualTo(181, 142, 63, 189, 180, 59);
+        Assertions.assertThat(base64InputStream0304).isAllBytesEqualTo(-75, -114, 63, -67, -76, 59);
 
         Base64InputStream base64InputStream0305 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0305).isNextBytesEqualTo(0, 19);
         Assertions.assertThat(base64InputStream0305.skip(5)).isEqualTo(5);
-        Assertions.assertThat(base64InputStream0305).isAllBytesEqualTo(142, 63, 189, 180, 59);
+        Assertions.assertThat(base64InputStream0305).isAllBytesEqualTo(-114, 63, -67, -76, 59);
 
         Base64InputStream base64InputStream0306 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0306).isNextBytesEqualTo(0, 19);
         Assertions.assertThat(base64InputStream0306.skip(6)).isEqualTo(6);
-        Assertions.assertThat(base64InputStream0306).isAllBytesEqualTo(63, 189, 180, 59);
+        Assertions.assertThat(base64InputStream0306).isAllBytesEqualTo(63, -67, -76, 59);
 
         Base64InputStream base64InputStream0307 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0307).isNextBytesEqualTo(0, 19);
         Assertions.assertThat(base64InputStream0307.skip(7)).isEqualTo(7);
-        Assertions.assertThat(base64InputStream0307).isAllBytesEqualTo(189, 180, 59);
+        Assertions.assertThat(base64InputStream0307).isAllBytesEqualTo(-67, -76, 59);
 
         Base64InputStream base64InputStream0308 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0308).isNextBytesEqualTo(0, 19);
         Assertions.assertThat(base64InputStream0308.skip(8)).isEqualTo(8);
-        Assertions.assertThat(base64InputStream0308).isAllBytesEqualTo(180, 59);
+        Assertions.assertThat(base64InputStream0308).isAllBytesEqualTo(-76, 59);
 
         Base64InputStream base64InputStream0309 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0309).isNextBytesEqualTo(0, 19);
@@ -731,42 +731,42 @@ public final class Base64InputStreamTest {
         Base64InputStream base64InputStream0400 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0400).isNextBytesEqualTo(0, 19, 13);
         Assertions.assertThat(base64InputStream0400.skip(0)).isEqualTo(0);
-        Assertions.assertThat(base64InputStream0400).isAllBytesEqualTo(251, 253, 118, 181, 142, 63, 189, 180, 59);
+        Assertions.assertThat(base64InputStream0400).isAllBytesEqualTo(-5, -3, 118, -75, -114, 63, -67, -76, 59);
 
         Base64InputStream base64InputStream0401 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0401).isNextBytesEqualTo(0, 19, 13);
         Assertions.assertThat(base64InputStream0401.skip(1)).isEqualTo(1);
-        Assertions.assertThat(base64InputStream0401).isAllBytesEqualTo(253, 118, 181, 142, 63, 189, 180, 59);
+        Assertions.assertThat(base64InputStream0401).isAllBytesEqualTo(-3, 118, -75, -114, 63, -67, -76, 59);
 
         Base64InputStream base64InputStream0402 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0402).isNextBytesEqualTo(0, 19, 13);
         Assertions.assertThat(base64InputStream0402.skip(2)).isEqualTo(2);
-        Assertions.assertThat(base64InputStream0402).isAllBytesEqualTo(118, 181, 142, 63, 189, 180, 59);
+        Assertions.assertThat(base64InputStream0402).isAllBytesEqualTo(118, -75, -114, 63, -67, -76, 59);
 
         Base64InputStream base64InputStream0403 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0403).isNextBytesEqualTo(0, 19, 13);
         Assertions.assertThat(base64InputStream0403.skip(3)).isEqualTo(3);
-        Assertions.assertThat(base64InputStream0403).isAllBytesEqualTo(181, 142, 63, 189, 180, 59);
+        Assertions.assertThat(base64InputStream0403).isAllBytesEqualTo(-75, -114, 63, -67, -76, 59);
 
         Base64InputStream base64InputStream0404 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0404).isNextBytesEqualTo(0, 19, 13);
         Assertions.assertThat(base64InputStream0404.skip(4)).isEqualTo(4);
-        Assertions.assertThat(base64InputStream0404).isAllBytesEqualTo(142, 63, 189, 180, 59);
+        Assertions.assertThat(base64InputStream0404).isAllBytesEqualTo(-114, 63, -67, -76, 59);
 
         Base64InputStream base64InputStream0405 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0405).isNextBytesEqualTo(0, 19, 13);
         Assertions.assertThat(base64InputStream0405.skip(5)).isEqualTo(5);
-        Assertions.assertThat(base64InputStream0405).isAllBytesEqualTo(63, 189, 180, 59);
+        Assertions.assertThat(base64InputStream0405).isAllBytesEqualTo(63, -67, -76, 59);
 
         Base64InputStream base64InputStream0406 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0406).isNextBytesEqualTo(0, 19, 13);
         Assertions.assertThat(base64InputStream0406.skip(6)).isEqualTo(6);
-        Assertions.assertThat(base64InputStream0406).isAllBytesEqualTo(189, 180, 59);
+        Assertions.assertThat(base64InputStream0406).isAllBytesEqualTo(-67, -76, 59);
 
         Base64InputStream base64InputStream0407 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0407).isNextBytesEqualTo(0, 19, 13);
         Assertions.assertThat(base64InputStream0407.skip(7)).isEqualTo(7);
-        Assertions.assertThat(base64InputStream0407).isAllBytesEqualTo(180, 59);
+        Assertions.assertThat(base64InputStream0407).isAllBytesEqualTo(-76, 59);
 
         Base64InputStream base64InputStream0408 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0408).isNextBytesEqualTo(0, 19, 13);
@@ -784,272 +784,272 @@ public final class Base64InputStreamTest {
         Assertions.assertThat(base64InputStream0410).isAllBytesEqualTo();
 
         Base64InputStream base64InputStream0500 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0500).isNextBytesEqualTo(0, 19, 13, 251);
+        Assertions.assertThat(base64InputStream0500).isNextBytesEqualTo(0, 19, 13, -5);
         Assertions.assertThat(base64InputStream0500.skip(0)).isEqualTo(0);
-        Assertions.assertThat(base64InputStream0500).isAllBytesEqualTo(253, 118, 181, 142, 63, 189, 180, 59);
+        Assertions.assertThat(base64InputStream0500).isAllBytesEqualTo(-3, 118, -75, -114, 63, -67, -76, 59);
 
         Base64InputStream base64InputStream0501 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0501).isNextBytesEqualTo(0, 19, 13, 251);
+        Assertions.assertThat(base64InputStream0501).isNextBytesEqualTo(0, 19, 13, -5);
         Assertions.assertThat(base64InputStream0501.skip(1)).isEqualTo(1);
-        Assertions.assertThat(base64InputStream0501).isAllBytesEqualTo(118, 181, 142, 63, 189, 180, 59);
+        Assertions.assertThat(base64InputStream0501).isAllBytesEqualTo(118, -75, -114, 63, -67, -76, 59);
 
         Base64InputStream base64InputStream0502 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0502).isNextBytesEqualTo(0, 19, 13, 251);
+        Assertions.assertThat(base64InputStream0502).isNextBytesEqualTo(0, 19, 13, -5);
         Assertions.assertThat(base64InputStream0502.skip(2)).isEqualTo(2);
-        Assertions.assertThat(base64InputStream0502).isAllBytesEqualTo(181, 142, 63, 189, 180, 59);
+        Assertions.assertThat(base64InputStream0502).isAllBytesEqualTo(-75, -114, 63, -67, -76, 59);
 
         Base64InputStream base64InputStream0503 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0503).isNextBytesEqualTo(0, 19, 13, 251);
+        Assertions.assertThat(base64InputStream0503).isNextBytesEqualTo(0, 19, 13, -5);
         Assertions.assertThat(base64InputStream0503.skip(3)).isEqualTo(3);
-        Assertions.assertThat(base64InputStream0503).isAllBytesEqualTo(142, 63, 189, 180, 59);
+        Assertions.assertThat(base64InputStream0503).isAllBytesEqualTo(-114, 63, -67, -76, 59);
 
         Base64InputStream base64InputStream0504 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0504).isNextBytesEqualTo(0, 19, 13, 251);
+        Assertions.assertThat(base64InputStream0504).isNextBytesEqualTo(0, 19, 13, -5);
         Assertions.assertThat(base64InputStream0504.skip(4)).isEqualTo(4);
-        Assertions.assertThat(base64InputStream0504).isAllBytesEqualTo(63, 189, 180, 59);
+        Assertions.assertThat(base64InputStream0504).isAllBytesEqualTo(63, -67, -76, 59);
 
         Base64InputStream base64InputStream0505 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0505).isNextBytesEqualTo(0, 19, 13, 251);
+        Assertions.assertThat(base64InputStream0505).isNextBytesEqualTo(0, 19, 13, -5);
         Assertions.assertThat(base64InputStream0505.skip(5)).isEqualTo(5);
-        Assertions.assertThat(base64InputStream0505).isAllBytesEqualTo(189, 180, 59);
+        Assertions.assertThat(base64InputStream0505).isAllBytesEqualTo(-67, -76, 59);
 
         Base64InputStream base64InputStream0506 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0506).isNextBytesEqualTo(0, 19, 13, 251);
+        Assertions.assertThat(base64InputStream0506).isNextBytesEqualTo(0, 19, 13, -5);
         Assertions.assertThat(base64InputStream0506.skip(6)).isEqualTo(6);
-        Assertions.assertThat(base64InputStream0506).isAllBytesEqualTo(180, 59);
+        Assertions.assertThat(base64InputStream0506).isAllBytesEqualTo(-76, 59);
 
         Base64InputStream base64InputStream0507 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0507).isNextBytesEqualTo(0, 19, 13, 251);
+        Assertions.assertThat(base64InputStream0507).isNextBytesEqualTo(0, 19, 13, -5);
         Assertions.assertThat(base64InputStream0507.skip(7)).isEqualTo(7);
         Assertions.assertThat(base64InputStream0507).isAllBytesEqualTo(59);
 
         Base64InputStream base64InputStream0508 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0508).isNextBytesEqualTo(0, 19, 13, 251);
+        Assertions.assertThat(base64InputStream0508).isNextBytesEqualTo(0, 19, 13, -5);
         Assertions.assertThat(base64InputStream0508.skip(8)).isEqualTo(8);
         Assertions.assertThat(base64InputStream0508).isAllBytesEqualTo();
 
         Base64InputStream base64InputStream0509 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0509).isNextBytesEqualTo(0, 19, 13, 251);
+        Assertions.assertThat(base64InputStream0509).isNextBytesEqualTo(0, 19, 13, -5);
         Assertions.assertThat(base64InputStream0509.skip(9)).isEqualTo(8);
         Assertions.assertThat(base64InputStream0509).isAllBytesEqualTo();
 
         Base64InputStream base64InputStream0600 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0600).isNextBytesEqualTo(0, 19, 13, 251, 253);
+        Assertions.assertThat(base64InputStream0600).isNextBytesEqualTo(0, 19, 13, -5, -3);
         Assertions.assertThat(base64InputStream0600.skip(0)).isEqualTo(0);
-        Assertions.assertThat(base64InputStream0600).isAllBytesEqualTo(118, 181, 142, 63, 189, 180, 59);
+        Assertions.assertThat(base64InputStream0600).isAllBytesEqualTo(118, -75, -114, 63, -67, -76, 59);
 
         Base64InputStream base64InputStream0601 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0601).isNextBytesEqualTo(0, 19, 13, 251, 253);
+        Assertions.assertThat(base64InputStream0601).isNextBytesEqualTo(0, 19, 13, -5, -3);
         Assertions.assertThat(base64InputStream0601.skip(1)).isEqualTo(1);
-        Assertions.assertThat(base64InputStream0601).isAllBytesEqualTo(181, 142, 63, 189, 180, 59);
+        Assertions.assertThat(base64InputStream0601).isAllBytesEqualTo(-75, -114, 63, -67, -76, 59);
 
         Base64InputStream base64InputStream0602 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0602).isNextBytesEqualTo(0, 19, 13, 251, 253);
+        Assertions.assertThat(base64InputStream0602).isNextBytesEqualTo(0, 19, 13, -5, -3);
         Assertions.assertThat(base64InputStream0602.skip(2)).isEqualTo(2);
-        Assertions.assertThat(base64InputStream0602).isAllBytesEqualTo(142, 63, 189, 180, 59);
+        Assertions.assertThat(base64InputStream0602).isAllBytesEqualTo(-114, 63, -67, -76, 59);
 
         Base64InputStream base64InputStream0603 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0603).isNextBytesEqualTo(0, 19, 13, 251, 253);
+        Assertions.assertThat(base64InputStream0603).isNextBytesEqualTo(0, 19, 13, -5, -3);
         Assertions.assertThat(base64InputStream0603.skip(3)).isEqualTo(3);
-        Assertions.assertThat(base64InputStream0603).isAllBytesEqualTo(63, 189, 180, 59);
+        Assertions.assertThat(base64InputStream0603).isAllBytesEqualTo(63, -67, -76, 59);
 
         Base64InputStream base64InputStream0604 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0604).isNextBytesEqualTo(0, 19, 13, 251, 253);
+        Assertions.assertThat(base64InputStream0604).isNextBytesEqualTo(0, 19, 13, -5, -3);
         Assertions.assertThat(base64InputStream0604.skip(4)).isEqualTo(4);
-        Assertions.assertThat(base64InputStream0604).isAllBytesEqualTo(189, 180, 59);
+        Assertions.assertThat(base64InputStream0604).isAllBytesEqualTo(-67, -76, 59);
 
         Base64InputStream base64InputStream0605 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0605).isNextBytesEqualTo(0, 19, 13, 251, 253);
+        Assertions.assertThat(base64InputStream0605).isNextBytesEqualTo(0, 19, 13, -5, -3);
         Assertions.assertThat(base64InputStream0605.skip(5)).isEqualTo(5);
-        Assertions.assertThat(base64InputStream0605).isAllBytesEqualTo(180, 59);
+        Assertions.assertThat(base64InputStream0605).isAllBytesEqualTo(-76, 59);
 
         Base64InputStream base64InputStream0606 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0606).isNextBytesEqualTo(0, 19, 13, 251, 253);
+        Assertions.assertThat(base64InputStream0606).isNextBytesEqualTo(0, 19, 13, -5, -3);
         Assertions.assertThat(base64InputStream0606.skip(6)).isEqualTo(6);
         Assertions.assertThat(base64InputStream0606).isAllBytesEqualTo(59);
 
         Base64InputStream base64InputStream0607 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0607).isNextBytesEqualTo(0, 19, 13, 251, 253);
+        Assertions.assertThat(base64InputStream0607).isNextBytesEqualTo(0, 19, 13, -5, -3);
         Assertions.assertThat(base64InputStream0607.skip(7)).isEqualTo(7);
         Assertions.assertThat(base64InputStream0607).isAllBytesEqualTo();
 
         Base64InputStream base64InputStream0608 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0608).isNextBytesEqualTo(0, 19, 13, 251, 253);
+        Assertions.assertThat(base64InputStream0608).isNextBytesEqualTo(0, 19, 13, -5, -3);
         Assertions.assertThat(base64InputStream0608.skip(8)).isEqualTo(7);
         Assertions.assertThat(base64InputStream0608).isAllBytesEqualTo();
 
         Base64InputStream base64InputStream0700 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0700).isNextBytesEqualTo(0, 19, 13, 251, 253, 118);
+        Assertions.assertThat(base64InputStream0700).isNextBytesEqualTo(0, 19, 13, -5, -3, 118);
         Assertions.assertThat(base64InputStream0700.skip(0)).isEqualTo(0);
-        Assertions.assertThat(base64InputStream0700).isAllBytesEqualTo(181, 142, 63, 189, 180, 59);
+        Assertions.assertThat(base64InputStream0700).isAllBytesEqualTo(-75, -114, 63, -67, -76, 59);
 
         Base64InputStream base64InputStream0701 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0701).isNextBytesEqualTo(0, 19, 13, 251, 253, 118);
+        Assertions.assertThat(base64InputStream0701).isNextBytesEqualTo(0, 19, 13, -5, -3, 118);
         Assertions.assertThat(base64InputStream0701.skip(1)).isEqualTo(1);
-        Assertions.assertThat(base64InputStream0701).isAllBytesEqualTo(142, 63, 189, 180, 59);
+        Assertions.assertThat(base64InputStream0701).isAllBytesEqualTo(-114, 63, -67, -76, 59);
 
         Base64InputStream base64InputStream0702 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0702).isNextBytesEqualTo(0, 19, 13, 251, 253, 118);
+        Assertions.assertThat(base64InputStream0702).isNextBytesEqualTo(0, 19, 13, -5, -3, 118);
         Assertions.assertThat(base64InputStream0702.skip(2)).isEqualTo(2);
-        Assertions.assertThat(base64InputStream0702).isAllBytesEqualTo(63, 189, 180, 59);
+        Assertions.assertThat(base64InputStream0702).isAllBytesEqualTo(63, -67, -76, 59);
 
         Base64InputStream base64InputStream0703 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0703).isNextBytesEqualTo(0, 19, 13, 251, 253, 118);
+        Assertions.assertThat(base64InputStream0703).isNextBytesEqualTo(0, 19, 13, -5, -3, 118);
         Assertions.assertThat(base64InputStream0703.skip(3)).isEqualTo(3);
-        Assertions.assertThat(base64InputStream0703).isAllBytesEqualTo(189, 180, 59);
+        Assertions.assertThat(base64InputStream0703).isAllBytesEqualTo(-67, -76, 59);
 
         Base64InputStream base64InputStream0704 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0704).isNextBytesEqualTo(0, 19, 13, 251, 253, 118);
+        Assertions.assertThat(base64InputStream0704).isNextBytesEqualTo(0, 19, 13, -5, -3, 118);
         Assertions.assertThat(base64InputStream0704.skip(4)).isEqualTo(4);
-        Assertions.assertThat(base64InputStream0704).isAllBytesEqualTo(180, 59);
+        Assertions.assertThat(base64InputStream0704).isAllBytesEqualTo(-76, 59);
 
         Base64InputStream base64InputStream0705 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0705).isNextBytesEqualTo(0, 19, 13, 251, 253, 118);
+        Assertions.assertThat(base64InputStream0705).isNextBytesEqualTo(0, 19, 13, -5, -3, 118);
         Assertions.assertThat(base64InputStream0705.skip(5)).isEqualTo(5);
         Assertions.assertThat(base64InputStream0705).isAllBytesEqualTo(59);
 
         Base64InputStream base64InputStream0706 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0706).isNextBytesEqualTo(0, 19, 13, 251, 253, 118);
+        Assertions.assertThat(base64InputStream0706).isNextBytesEqualTo(0, 19, 13, -5, -3, 118);
         Assertions.assertThat(base64InputStream0706.skip(6)).isEqualTo(6);
         Assertions.assertThat(base64InputStream0706).isAllBytesEqualTo();
 
         Base64InputStream base64InputStream0707 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0707).isNextBytesEqualTo(0, 19, 13, 251, 253, 118);
+        Assertions.assertThat(base64InputStream0707).isNextBytesEqualTo(0, 19, 13, -5, -3, 118);
         Assertions.assertThat(base64InputStream0707.skip(7)).isEqualTo(6);
         Assertions.assertThat(base64InputStream0707).isAllBytesEqualTo();
 
         Base64InputStream base64InputStream0800 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0800).isNextBytesEqualTo(0, 19, 13, 251, 253, 118, 181);
+        Assertions.assertThat(base64InputStream0800).isNextBytesEqualTo(0, 19, 13, -5, -3, 118, -75);
         Assertions.assertThat(base64InputStream0800.skip(0)).isEqualTo(0);
-        Assertions.assertThat(base64InputStream0800).isAllBytesEqualTo(142, 63, 189, 180, 59);
+        Assertions.assertThat(base64InputStream0800).isAllBytesEqualTo(-114, 63, -67, -76, 59);
 
         Base64InputStream base64InputStream0801 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0801).isNextBytesEqualTo(0, 19, 13, 251, 253, 118, 181);
+        Assertions.assertThat(base64InputStream0801).isNextBytesEqualTo(0, 19, 13, -5, -3, 118, -75);
         Assertions.assertThat(base64InputStream0801.skip(1)).isEqualTo(1);
-        Assertions.assertThat(base64InputStream0801).isAllBytesEqualTo(63, 189, 180, 59);
+        Assertions.assertThat(base64InputStream0801).isAllBytesEqualTo(63, -67, -76, 59);
 
         Base64InputStream base64InputStream0802 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0802).isNextBytesEqualTo(0, 19, 13, 251, 253, 118, 181);
+        Assertions.assertThat(base64InputStream0802).isNextBytesEqualTo(0, 19, 13, -5, -3, 118, -75);
         Assertions.assertThat(base64InputStream0802.skip(2)).isEqualTo(2);
-        Assertions.assertThat(base64InputStream0802).isAllBytesEqualTo(189, 180, 59);
+        Assertions.assertThat(base64InputStream0802).isAllBytesEqualTo(-67, -76, 59);
 
         Base64InputStream base64InputStream0803 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0803).isNextBytesEqualTo(0, 19, 13, 251, 253, 118, 181);
+        Assertions.assertThat(base64InputStream0803).isNextBytesEqualTo(0, 19, 13, -5, -3, 118, -75);
         Assertions.assertThat(base64InputStream0803.skip(3)).isEqualTo(3);
-        Assertions.assertThat(base64InputStream0803).isAllBytesEqualTo(180, 59);
+        Assertions.assertThat(base64InputStream0803).isAllBytesEqualTo(-76, 59);
 
         Base64InputStream base64InputStream0804 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0804).isNextBytesEqualTo(0, 19, 13, 251, 253, 118, 181);
+        Assertions.assertThat(base64InputStream0804).isNextBytesEqualTo(0, 19, 13, -5, -3, 118, -75);
         Assertions.assertThat(base64InputStream0804.skip(4)).isEqualTo(4);
         Assertions.assertThat(base64InputStream0804).isAllBytesEqualTo(59);
 
         Base64InputStream base64InputStream0805 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0805).isNextBytesEqualTo(0, 19, 13, 251, 253, 118, 181);
+        Assertions.assertThat(base64InputStream0805).isNextBytesEqualTo(0, 19, 13, -5, -3, 118, -75);
         Assertions.assertThat(base64InputStream0805.skip(5)).isEqualTo(5);
         Assertions.assertThat(base64InputStream0805).isAllBytesEqualTo();
 
         Base64InputStream base64InputStream0806 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0806).isNextBytesEqualTo(0, 19, 13, 251, 253, 118, 181);
+        Assertions.assertThat(base64InputStream0806).isNextBytesEqualTo(0, 19, 13, -5, -3, 118, -75);
         Assertions.assertThat(base64InputStream0806.skip(6)).isEqualTo(5);
         Assertions.assertThat(base64InputStream0806).isAllBytesEqualTo();
 
         Base64InputStream base64InputStream0900 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0900).isNextBytesEqualTo(0, 19, 13, 251, 253, 118, 181, 142);
+        Assertions.assertThat(base64InputStream0900).isNextBytesEqualTo(0, 19, 13, -5, -3, 118, -75, -114);
         Assertions.assertThat(base64InputStream0900.skip(0)).isEqualTo(0);
-        Assertions.assertThat(base64InputStream0900).isAllBytesEqualTo(63, 189, 180, 59);
+        Assertions.assertThat(base64InputStream0900).isAllBytesEqualTo(63, -67, -76, 59);
 
         Base64InputStream base64InputStream0901 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0901).isNextBytesEqualTo(0, 19, 13, 251, 253, 118, 181, 142);
+        Assertions.assertThat(base64InputStream0901).isNextBytesEqualTo(0, 19, 13, -5, -3, 118, -75, -114);
         Assertions.assertThat(base64InputStream0901.skip(1)).isEqualTo(1);
-        Assertions.assertThat(base64InputStream0901).isAllBytesEqualTo(189, 180, 59);
+        Assertions.assertThat(base64InputStream0901).isAllBytesEqualTo(-67, -76, 59);
 
         Base64InputStream base64InputStream0902 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0902).isNextBytesEqualTo(0, 19, 13, 251, 253, 118, 181, 142);
+        Assertions.assertThat(base64InputStream0902).isNextBytesEqualTo(0, 19, 13, -5, -3, 118, -75, -114);
         Assertions.assertThat(base64InputStream0902.skip(2)).isEqualTo(2);
-        Assertions.assertThat(base64InputStream0902).isAllBytesEqualTo(180, 59);
+        Assertions.assertThat(base64InputStream0902).isAllBytesEqualTo(-76, 59);
 
         Base64InputStream base64InputStream0903 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0903).isNextBytesEqualTo(0, 19, 13, 251, 253, 118, 181, 142);
+        Assertions.assertThat(base64InputStream0903).isNextBytesEqualTo(0, 19, 13, -5, -3, 118, -75, -114);
         Assertions.assertThat(base64InputStream0903.skip(3)).isEqualTo(3);
         Assertions.assertThat(base64InputStream0903).isAllBytesEqualTo(59);
 
         Base64InputStream base64InputStream0904 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0904).isNextBytesEqualTo(0, 19, 13, 251, 253, 118, 181, 142);
+        Assertions.assertThat(base64InputStream0904).isNextBytesEqualTo(0, 19, 13, -5, -3, 118, -75, -114);
         Assertions.assertThat(base64InputStream0904.skip(4)).isEqualTo(4);
         Assertions.assertThat(base64InputStream0904).isAllBytesEqualTo();
 
         Base64InputStream base64InputStream0905 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0905).isNextBytesEqualTo(0, 19, 13, 251, 253, 118, 181, 142);
+        Assertions.assertThat(base64InputStream0905).isNextBytesEqualTo(0, 19, 13, -5, -3, 118, -75, -114);
         Assertions.assertThat(base64InputStream0905.skip(5)).isEqualTo(4);
         Assertions.assertThat(base64InputStream0905).isAllBytesEqualTo();
 
         Base64InputStream base64InputStream1000 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream1000).isNextBytesEqualTo(0, 19, 13, 251, 253, 118, 181, 142, 63);
+        Assertions.assertThat(base64InputStream1000).isNextBytesEqualTo(0, 19, 13, -5, -3, 118, -75, -114, 63);
         Assertions.assertThat(base64InputStream1000.skip(0)).isEqualTo(0);
-        Assertions.assertThat(base64InputStream1000).isAllBytesEqualTo(189, 180, 59);
+        Assertions.assertThat(base64InputStream1000).isAllBytesEqualTo(-67, -76, 59);
 
         Base64InputStream base64InputStream1001 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream1001).isNextBytesEqualTo(0, 19, 13, 251, 253, 118, 181, 142, 63);
+        Assertions.assertThat(base64InputStream1001).isNextBytesEqualTo(0, 19, 13, -5, -3, 118, -75, -114, 63);
         Assertions.assertThat(base64InputStream1001.skip(1)).isEqualTo(1);
-        Assertions.assertThat(base64InputStream1001).isAllBytesEqualTo(180, 59);
+        Assertions.assertThat(base64InputStream1001).isAllBytesEqualTo(-76, 59);
 
         Base64InputStream base64InputStream1002 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream1002).isNextBytesEqualTo(0, 19, 13, 251, 253, 118, 181, 142, 63);
+        Assertions.assertThat(base64InputStream1002).isNextBytesEqualTo(0, 19, 13, -5, -3, 118, -75, -114, 63);
         Assertions.assertThat(base64InputStream1002.skip(2)).isEqualTo(2);
         Assertions.assertThat(base64InputStream1002).isAllBytesEqualTo(59);
 
         Base64InputStream base64InputStream1003 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream1003).isNextBytesEqualTo(0, 19, 13, 251, 253, 118, 181, 142, 63);
+        Assertions.assertThat(base64InputStream1003).isNextBytesEqualTo(0, 19, 13, -5, -3, 118, -75, -114, 63);
         Assertions.assertThat(base64InputStream1003.skip(3)).isEqualTo(3);
         Assertions.assertThat(base64InputStream1003).isAllBytesEqualTo();
 
         Base64InputStream base64InputStream1004 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream1004).isNextBytesEqualTo(0, 19, 13, 251, 253, 118, 181, 142, 63);
+        Assertions.assertThat(base64InputStream1004).isNextBytesEqualTo(0, 19, 13, -5, -3, 118, -75, -114, 63);
         Assertions.assertThat(base64InputStream1004.skip(4)).isEqualTo(3);
         Assertions.assertThat(base64InputStream1004).isAllBytesEqualTo();
 
         Base64InputStream base64InputStream1100 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream1100).isNextBytesEqualTo(0, 19, 13, 251, 253, 118, 181, 142, 63, 189);
+        Assertions.assertThat(base64InputStream1100).isNextBytesEqualTo(0, 19, 13, -5, -3, 118, -75, -114, 63, -67);
         Assertions.assertThat(base64InputStream1100.skip(0)).isEqualTo(0);
-        Assertions.assertThat(base64InputStream1100).isAllBytesEqualTo(180, 59);
+        Assertions.assertThat(base64InputStream1100).isAllBytesEqualTo(-76, 59);
 
         Base64InputStream base64InputStream1101 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream1101).isNextBytesEqualTo(0, 19, 13, 251, 253, 118, 181, 142, 63, 189);
+        Assertions.assertThat(base64InputStream1101).isNextBytesEqualTo(0, 19, 13, -5, -3, 118, -75, -114, 63, -67);
         Assertions.assertThat(base64InputStream1101.skip(1)).isEqualTo(1);
         Assertions.assertThat(base64InputStream1101).isAllBytesEqualTo(59);
 
         Base64InputStream base64InputStream1102 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream1102).isNextBytesEqualTo(0, 19, 13, 251, 253, 118, 181, 142, 63, 189);
+        Assertions.assertThat(base64InputStream1102).isNextBytesEqualTo(0, 19, 13, -5, -3, 118, -75, -114, 63, -67);
         Assertions.assertThat(base64InputStream1102.skip(2)).isEqualTo(2);
         Assertions.assertThat(base64InputStream1102).isAllBytesEqualTo();
 
         Base64InputStream base64InputStream1103 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream1103).isNextBytesEqualTo(0, 19, 13, 251, 253, 118, 181, 142, 63, 189);
+        Assertions.assertThat(base64InputStream1103).isNextBytesEqualTo(0, 19, 13, -5, -3, 118, -75, -114, 63, -67);
         Assertions.assertThat(base64InputStream1103.skip(3)).isEqualTo(2);
         Assertions.assertThat(base64InputStream1103).isAllBytesEqualTo();
 
         Base64InputStream base64InputStream1200 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream1200).isNextBytesEqualTo(0, 19, 13, 251, 253, 118, 181, 142, 63, 189, 180);
+        Assertions.assertThat(base64InputStream1200).isNextBytesEqualTo(0, 19, 13, -5, -3, 118, -75, -114, 63, -67, -76);
         Assertions.assertThat(base64InputStream1200.skip(0)).isEqualTo(0);
         Assertions.assertThat(base64InputStream1200).isAllBytesEqualTo(59);
 
         Base64InputStream base64InputStream1201 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream1201).isNextBytesEqualTo(0, 19, 13, 251, 253, 118, 181, 142, 63, 189, 180);
+        Assertions.assertThat(base64InputStream1201).isNextBytesEqualTo(0, 19, 13, -5, -3, 118, -75, -114, 63, -67, -76);
         Assertions.assertThat(base64InputStream1201.skip(1)).isEqualTo(1);
         Assertions.assertThat(base64InputStream1201).isAllBytesEqualTo();
 
         Base64InputStream base64InputStream1202 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream1202).isNextBytesEqualTo(0, 19, 13, 251, 253, 118, 181, 142, 63, 189, 180);
+        Assertions.assertThat(base64InputStream1202).isNextBytesEqualTo(0, 19, 13, -5, -3, 118, -75, -114, 63, -67, -76);
         Assertions.assertThat(base64InputStream1202.skip(2)).isEqualTo(1);
         Assertions.assertThat(base64InputStream1202).isAllBytesEqualTo();
 
         Base64InputStream base64InputStream1300 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream1300).isNextBytesEqualTo(0, 19, 13, 251, 253, 118, 181, 142, 63, 189, 180, 59);
+        Assertions.assertThat(base64InputStream1300).isNextBytesEqualTo(0, 19, 13, -5, -3, 118, -75, -114, 63, -67, -76, 59);
         Assertions.assertThat(base64InputStream1300.skip(0)).isEqualTo(0);
         Assertions.assertThat(base64InputStream1300).isAllBytesEqualTo();
 
         Base64InputStream base64InputStream1301 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream1301).isNextBytesEqualTo(0, 19, 13, 251, 253, 118, 181, 142, 63, 189, 180, 59);
+        Assertions.assertThat(base64InputStream1301).isNextBytesEqualTo(0, 19, 13, -5, -3, 118, -75, -114, 63, -67, -76, 59);
         Assertions.assertThat(base64InputStream1301.skip(1)).isEqualTo(0);
         Assertions.assertThat(base64InputStream1301).isAllBytesEqualTo();
     }
@@ -1064,47 +1064,47 @@ public final class Base64InputStreamTest {
         String base64String = "ABMN+/12tY4/vQ==";
 
         Base64InputStream base64InputStream = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream).isAllBytesEqualTo(0, 19, 13, 251, 253, 118, 181, 142, 63, 189);
+        Assertions.assertThat(base64InputStream).isAllBytesEqualTo(0, 19, 13, -5, -3, 118, -75, -114, 63, -67);
 
         Base64InputStream base64InputStream0100 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0100.skip(0)).isEqualTo(0);
-        Assertions.assertThat(base64InputStream0100).isAllBytesEqualTo(0, 19, 13, 251, 253, 118, 181, 142, 63, 189);
+        Assertions.assertThat(base64InputStream0100).isAllBytesEqualTo(0, 19, 13, -5, -3, 118, -75, -114, 63, -67);
 
         Base64InputStream base64InputStream0101 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0101.skip(1)).isEqualTo(1);
-        Assertions.assertThat(base64InputStream0101).isAllBytesEqualTo(19, 13, 251, 253, 118, 181, 142, 63, 189);
+        Assertions.assertThat(base64InputStream0101).isAllBytesEqualTo(19, 13, -5, -3, 118, -75, -114, 63, -67);
 
         Base64InputStream base64InputStream0102 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0102.skip(2)).isEqualTo(2);
-        Assertions.assertThat(base64InputStream0102).isAllBytesEqualTo(13, 251, 253, 118, 181, 142, 63, 189);
+        Assertions.assertThat(base64InputStream0102).isAllBytesEqualTo(13, -5, -3, 118, -75, -114, 63, -67);
 
         Base64InputStream base64InputStream0103 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0103.skip(3)).isEqualTo(3);
-        Assertions.assertThat(base64InputStream0103).isAllBytesEqualTo(251, 253, 118, 181, 142, 63, 189);
+        Assertions.assertThat(base64InputStream0103).isAllBytesEqualTo(-5, -3, 118, -75, -114, 63, -67);
 
         Base64InputStream base64InputStream0104 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0104.skip(4)).isEqualTo(4);
-        Assertions.assertThat(base64InputStream0104).isAllBytesEqualTo(253, 118, 181, 142, 63, 189);
+        Assertions.assertThat(base64InputStream0104).isAllBytesEqualTo(-3, 118, -75, -114, 63, -67);
 
         Base64InputStream base64InputStream0105 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0105.skip(5)).isEqualTo(5);
-        Assertions.assertThat(base64InputStream0105).isAllBytesEqualTo(118, 181, 142, 63, 189);
+        Assertions.assertThat(base64InputStream0105).isAllBytesEqualTo(118, -75, -114, 63, -67);
 
         Base64InputStream base64InputStream0106 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0106.skip(6)).isEqualTo(6);
-        Assertions.assertThat(base64InputStream0106).isAllBytesEqualTo(181, 142, 63, 189);
+        Assertions.assertThat(base64InputStream0106).isAllBytesEqualTo(-75, -114, 63, -67);
 
         Base64InputStream base64InputStream0107 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0107.skip(7)).isEqualTo(7);
-        Assertions.assertThat(base64InputStream0107).isAllBytesEqualTo(142, 63, 189);
+        Assertions.assertThat(base64InputStream0107).isAllBytesEqualTo(-114, 63, -67);
 
         Base64InputStream base64InputStream0108 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0108.skip(8)).isEqualTo(8);
-        Assertions.assertThat(base64InputStream0108).isAllBytesEqualTo(63, 189);
+        Assertions.assertThat(base64InputStream0108).isAllBytesEqualTo(63, -67);
 
         Base64InputStream base64InputStream0109 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0109.skip(9)).isEqualTo(9);
-        Assertions.assertThat(base64InputStream0109).isAllBytesEqualTo(189);
+        Assertions.assertThat(base64InputStream0109).isAllBytesEqualTo(-67);
 
         Base64InputStream base64InputStream0110 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0110.skip(10)).isEqualTo(10);
@@ -1133,47 +1133,47 @@ public final class Base64InputStreamTest {
         Base64InputStream base64InputStream0200 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0200).isNextBytesEqualTo(0);
         Assertions.assertThat(base64InputStream0200.skip(0)).isEqualTo(0);
-        Assertions.assertThat(base64InputStream0200).isAllBytesEqualTo(19, 13, 251, 253, 118, 181, 142, 63, 189);
+        Assertions.assertThat(base64InputStream0200).isAllBytesEqualTo(19, 13, -5, -3, 118, -75, -114, 63, -67);
 
         Base64InputStream base64InputStream0201 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0201).isNextBytesEqualTo(0);
         Assertions.assertThat(base64InputStream0201.skip(1)).isEqualTo(1);
-        Assertions.assertThat(base64InputStream0201).isAllBytesEqualTo(13, 251, 253, 118, 181, 142, 63, 189);
+        Assertions.assertThat(base64InputStream0201).isAllBytesEqualTo(13, -5, -3, 118, -75, -114, 63, -67);
 
         Base64InputStream base64InputStream0202 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0202).isNextBytesEqualTo(0);
         Assertions.assertThat(base64InputStream0202.skip(2)).isEqualTo(2);
-        Assertions.assertThat(base64InputStream0202).isAllBytesEqualTo(251, 253, 118, 181, 142, 63, 189);
+        Assertions.assertThat(base64InputStream0202).isAllBytesEqualTo(-5, -3, 118, -75, -114, 63, -67);
 
         Base64InputStream base64InputStream0203 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0203).isNextBytesEqualTo(0);
         Assertions.assertThat(base64InputStream0203.skip(3)).isEqualTo(3);
-        Assertions.assertThat(base64InputStream0203).isAllBytesEqualTo(253, 118, 181, 142, 63, 189);
+        Assertions.assertThat(base64InputStream0203).isAllBytesEqualTo(-3, 118, -75, -114, 63, -67);
 
         Base64InputStream base64InputStream0204 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0204).isNextBytesEqualTo(0);
         Assertions.assertThat(base64InputStream0204.skip(4)).isEqualTo(4);
-        Assertions.assertThat(base64InputStream0204).isAllBytesEqualTo(118, 181, 142, 63, 189);
+        Assertions.assertThat(base64InputStream0204).isAllBytesEqualTo(118, -75, -114, 63, -67);
 
         Base64InputStream base64InputStream0205 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0205).isNextBytesEqualTo(0);
         Assertions.assertThat(base64InputStream0205.skip(5)).isEqualTo(5);
-        Assertions.assertThat(base64InputStream0205).isAllBytesEqualTo(181, 142, 63, 189);
+        Assertions.assertThat(base64InputStream0205).isAllBytesEqualTo(-75, -114, 63, -67);
 
         Base64InputStream base64InputStream0206 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0206).isNextBytesEqualTo(0);
         Assertions.assertThat(base64InputStream0206.skip(6)).isEqualTo(6);
-        Assertions.assertThat(base64InputStream0206).isAllBytesEqualTo(142, 63, 189);
+        Assertions.assertThat(base64InputStream0206).isAllBytesEqualTo(-114, 63, -67);
 
         Base64InputStream base64InputStream0207 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0207).isNextBytesEqualTo(0);
         Assertions.assertThat(base64InputStream0207.skip(7)).isEqualTo(7);
-        Assertions.assertThat(base64InputStream0207).isAllBytesEqualTo(63, 189);
+        Assertions.assertThat(base64InputStream0207).isAllBytesEqualTo(63, -67);
 
         Base64InputStream base64InputStream0208 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0208).isNextBytesEqualTo(0);
         Assertions.assertThat(base64InputStream0208.skip(8)).isEqualTo(8);
-        Assertions.assertThat(base64InputStream0208).isAllBytesEqualTo(189);
+        Assertions.assertThat(base64InputStream0208).isAllBytesEqualTo(-67);
 
         Base64InputStream base64InputStream0209 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0209).isNextBytesEqualTo(0);
@@ -1188,42 +1188,42 @@ public final class Base64InputStreamTest {
         Base64InputStream base64InputStream0300 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0300).isNextBytesEqualTo(0, 19);
         Assertions.assertThat(base64InputStream0300.skip(0)).isEqualTo(0);
-        Assertions.assertThat(base64InputStream0300).isAllBytesEqualTo(13, 251, 253, 118, 181, 142, 63, 189);
+        Assertions.assertThat(base64InputStream0300).isAllBytesEqualTo(13, -5, -3, 118, -75, -114, 63, -67);
 
         Base64InputStream base64InputStream0301 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0301).isNextBytesEqualTo(0, 19);
         Assertions.assertThat(base64InputStream0301.skip(1)).isEqualTo(1);
-        Assertions.assertThat(base64InputStream0301).isAllBytesEqualTo(251, 253, 118, 181, 142, 63, 189);
+        Assertions.assertThat(base64InputStream0301).isAllBytesEqualTo(-5, -3, 118, -75, -114, 63, -67);
 
         Base64InputStream base64InputStream0302 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0302).isNextBytesEqualTo(0, 19);
         Assertions.assertThat(base64InputStream0302.skip(2)).isEqualTo(2);
-        Assertions.assertThat(base64InputStream0302).isAllBytesEqualTo(253, 118, 181, 142, 63, 189);
+        Assertions.assertThat(base64InputStream0302).isAllBytesEqualTo(-3, 118, -75, -114, 63, -67);
 
         Base64InputStream base64InputStream0303 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0303).isNextBytesEqualTo(0, 19);
         Assertions.assertThat(base64InputStream0303.skip(3)).isEqualTo(3);
-        Assertions.assertThat(base64InputStream0303).isAllBytesEqualTo(118, 181, 142, 63, 189);
+        Assertions.assertThat(base64InputStream0303).isAllBytesEqualTo(118, -75, -114, 63, -67);
 
         Base64InputStream base64InputStream0304 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0304).isNextBytesEqualTo(0, 19);
         Assertions.assertThat(base64InputStream0304.skip(4)).isEqualTo(4);
-        Assertions.assertThat(base64InputStream0304).isAllBytesEqualTo(181, 142, 63, 189);
+        Assertions.assertThat(base64InputStream0304).isAllBytesEqualTo(-75, -114, 63, -67);
 
         Base64InputStream base64InputStream0305 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0305).isNextBytesEqualTo(0, 19);
         Assertions.assertThat(base64InputStream0305.skip(5)).isEqualTo(5);
-        Assertions.assertThat(base64InputStream0305).isAllBytesEqualTo(142, 63, 189);
+        Assertions.assertThat(base64InputStream0305).isAllBytesEqualTo(-114, 63, -67);
 
         Base64InputStream base64InputStream0306 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0306).isNextBytesEqualTo(0, 19);
         Assertions.assertThat(base64InputStream0306.skip(6)).isEqualTo(6);
-        Assertions.assertThat(base64InputStream0306).isAllBytesEqualTo(63, 189);
+        Assertions.assertThat(base64InputStream0306).isAllBytesEqualTo(63, -67);
 
         Base64InputStream base64InputStream0307 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0307).isNextBytesEqualTo(0, 19);
         Assertions.assertThat(base64InputStream0307.skip(7)).isEqualTo(7);
-        Assertions.assertThat(base64InputStream0307).isAllBytesEqualTo(189);
+        Assertions.assertThat(base64InputStream0307).isAllBytesEqualTo(-67);
 
         Base64InputStream base64InputStream0308 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0308).isNextBytesEqualTo(0, 19);
@@ -1238,37 +1238,37 @@ public final class Base64InputStreamTest {
         Base64InputStream base64InputStream0400 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0400).isNextBytesEqualTo(0, 19, 13);
         Assertions.assertThat(base64InputStream0400.skip(0)).isEqualTo(0);
-        Assertions.assertThat(base64InputStream0400).isAllBytesEqualTo(251, 253, 118, 181, 142, 63, 189);
+        Assertions.assertThat(base64InputStream0400).isAllBytesEqualTo(-5, -3, 118, -75, -114, 63, -67);
 
         Base64InputStream base64InputStream0401 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0401).isNextBytesEqualTo(0, 19, 13);
         Assertions.assertThat(base64InputStream0401.skip(1)).isEqualTo(1);
-        Assertions.assertThat(base64InputStream0401).isAllBytesEqualTo(253, 118, 181, 142, 63, 189);
+        Assertions.assertThat(base64InputStream0401).isAllBytesEqualTo(-3, 118, -75, -114, 63, -67);
 
         Base64InputStream base64InputStream0402 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0402).isNextBytesEqualTo(0, 19, 13);
         Assertions.assertThat(base64InputStream0402.skip(2)).isEqualTo(2);
-        Assertions.assertThat(base64InputStream0402).isAllBytesEqualTo(118, 181, 142, 63, 189);
+        Assertions.assertThat(base64InputStream0402).isAllBytesEqualTo(118, -75, -114, 63, -67);
 
         Base64InputStream base64InputStream0403 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0403).isNextBytesEqualTo(0, 19, 13);
         Assertions.assertThat(base64InputStream0403.skip(3)).isEqualTo(3);
-        Assertions.assertThat(base64InputStream0403).isAllBytesEqualTo(181, 142, 63, 189);
+        Assertions.assertThat(base64InputStream0403).isAllBytesEqualTo(-75, -114, 63, -67);
 
         Base64InputStream base64InputStream0404 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0404).isNextBytesEqualTo(0, 19, 13);
         Assertions.assertThat(base64InputStream0404.skip(4)).isEqualTo(4);
-        Assertions.assertThat(base64InputStream0404).isAllBytesEqualTo(142, 63, 189);
+        Assertions.assertThat(base64InputStream0404).isAllBytesEqualTo(-114, 63, -67);
 
         Base64InputStream base64InputStream0405 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0405).isNextBytesEqualTo(0, 19, 13);
         Assertions.assertThat(base64InputStream0405.skip(5)).isEqualTo(5);
-        Assertions.assertThat(base64InputStream0405).isAllBytesEqualTo(63, 189);
+        Assertions.assertThat(base64InputStream0405).isAllBytesEqualTo(63, -67);
 
         Base64InputStream base64InputStream0406 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0406).isNextBytesEqualTo(0, 19, 13);
         Assertions.assertThat(base64InputStream0406.skip(6)).isEqualTo(6);
-        Assertions.assertThat(base64InputStream0406).isAllBytesEqualTo(189);
+        Assertions.assertThat(base64InputStream0406).isAllBytesEqualTo(-67);
 
         Base64InputStream base64InputStream0407 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0407).isNextBytesEqualTo(0, 19, 13);
@@ -1281,177 +1281,177 @@ public final class Base64InputStreamTest {
         Assertions.assertThat(base64InputStream0408).isAllBytesEqualTo();
 
         Base64InputStream base64InputStream0500 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0500).isNextBytesEqualTo(0, 19, 13, 251);
+        Assertions.assertThat(base64InputStream0500).isNextBytesEqualTo(0, 19, 13, -5);
         Assertions.assertThat(base64InputStream0500.skip(0)).isEqualTo(0);
-        Assertions.assertThat(base64InputStream0500).isAllBytesEqualTo(253, 118, 181, 142, 63, 189);
+        Assertions.assertThat(base64InputStream0500).isAllBytesEqualTo(-3, 118, -75, -114, 63, -67);
 
         Base64InputStream base64InputStream0501 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0501).isNextBytesEqualTo(0, 19, 13, 251);
+        Assertions.assertThat(base64InputStream0501).isNextBytesEqualTo(0, 19, 13, -5);
         Assertions.assertThat(base64InputStream0501.skip(1)).isEqualTo(1);
-        Assertions.assertThat(base64InputStream0501).isAllBytesEqualTo(118, 181, 142, 63, 189);
+        Assertions.assertThat(base64InputStream0501).isAllBytesEqualTo(118, -75, -114, 63, -67);
 
         Base64InputStream base64InputStream0502 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0502).isNextBytesEqualTo(0, 19, 13, 251);
+        Assertions.assertThat(base64InputStream0502).isNextBytesEqualTo(0, 19, 13, -5);
         Assertions.assertThat(base64InputStream0502.skip(2)).isEqualTo(2);
-        Assertions.assertThat(base64InputStream0502).isAllBytesEqualTo(181, 142, 63, 189);
+        Assertions.assertThat(base64InputStream0502).isAllBytesEqualTo(-75, -114, 63, -67);
 
         Base64InputStream base64InputStream0503 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0503).isNextBytesEqualTo(0, 19, 13, 251);
+        Assertions.assertThat(base64InputStream0503).isNextBytesEqualTo(0, 19, 13, -5);
         Assertions.assertThat(base64InputStream0503.skip(3)).isEqualTo(3);
-        Assertions.assertThat(base64InputStream0503).isAllBytesEqualTo(142, 63, 189);
+        Assertions.assertThat(base64InputStream0503).isAllBytesEqualTo(-114, 63, -67);
 
         Base64InputStream base64InputStream0504 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0504).isNextBytesEqualTo(0, 19, 13, 251);
+        Assertions.assertThat(base64InputStream0504).isNextBytesEqualTo(0, 19, 13, -5);
         Assertions.assertThat(base64InputStream0504.skip(4)).isEqualTo(4);
-        Assertions.assertThat(base64InputStream0504).isAllBytesEqualTo(63, 189);
+        Assertions.assertThat(base64InputStream0504).isAllBytesEqualTo(63, -67);
 
         Base64InputStream base64InputStream0505 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0505).isNextBytesEqualTo(0, 19, 13, 251);
+        Assertions.assertThat(base64InputStream0505).isNextBytesEqualTo(0, 19, 13, -5);
         Assertions.assertThat(base64InputStream0505.skip(5)).isEqualTo(5);
-        Assertions.assertThat(base64InputStream0505).isAllBytesEqualTo(189);
+        Assertions.assertThat(base64InputStream0505).isAllBytesEqualTo(-67);
 
         Base64InputStream base64InputStream0506 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0506).isNextBytesEqualTo(0, 19, 13, 251);
+        Assertions.assertThat(base64InputStream0506).isNextBytesEqualTo(0, 19, 13, -5);
         Assertions.assertThat(base64InputStream0506.skip(6)).isEqualTo(6);
         Assertions.assertThat(base64InputStream0506).isAllBytesEqualTo();
 
         Base64InputStream base64InputStream0507 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0507).isNextBytesEqualTo(0, 19, 13, 251);
+        Assertions.assertThat(base64InputStream0507).isNextBytesEqualTo(0, 19, 13, -5);
         Assertions.assertThat(base64InputStream0507.skip(7)).isEqualTo(6);
         Assertions.assertThat(base64InputStream0507).isAllBytesEqualTo();
 
         Base64InputStream base64InputStream0600 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0600).isNextBytesEqualTo(0, 19, 13, 251, 253);
+        Assertions.assertThat(base64InputStream0600).isNextBytesEqualTo(0, 19, 13, -5, -3);
         Assertions.assertThat(base64InputStream0600.skip(0)).isEqualTo(0);
-        Assertions.assertThat(base64InputStream0600).isAllBytesEqualTo(118, 181, 142, 63, 189);
+        Assertions.assertThat(base64InputStream0600).isAllBytesEqualTo(118, -75, -114, 63, -67);
 
         Base64InputStream base64InputStream0601 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0601).isNextBytesEqualTo(0, 19, 13, 251, 253);
+        Assertions.assertThat(base64InputStream0601).isNextBytesEqualTo(0, 19, 13, -5, -3);
         Assertions.assertThat(base64InputStream0601.skip(1)).isEqualTo(1);
-        Assertions.assertThat(base64InputStream0601).isAllBytesEqualTo(181, 142, 63, 189);
+        Assertions.assertThat(base64InputStream0601).isAllBytesEqualTo(-75, -114, 63, -67);
 
         Base64InputStream base64InputStream0602 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0602).isNextBytesEqualTo(0, 19, 13, 251, 253);
+        Assertions.assertThat(base64InputStream0602).isNextBytesEqualTo(0, 19, 13, -5, -3);
         Assertions.assertThat(base64InputStream0602.skip(2)).isEqualTo(2);
-        Assertions.assertThat(base64InputStream0602).isAllBytesEqualTo(142, 63, 189);
+        Assertions.assertThat(base64InputStream0602).isAllBytesEqualTo(-114, 63, -67);
 
         Base64InputStream base64InputStream0603 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0603).isNextBytesEqualTo(0, 19, 13, 251, 253);
+        Assertions.assertThat(base64InputStream0603).isNextBytesEqualTo(0, 19, 13, -5, -3);
         Assertions.assertThat(base64InputStream0603.skip(3)).isEqualTo(3);
-        Assertions.assertThat(base64InputStream0603).isAllBytesEqualTo(63, 189);
+        Assertions.assertThat(base64InputStream0603).isAllBytesEqualTo(63, -67);
 
         Base64InputStream base64InputStream0604 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0604).isNextBytesEqualTo(0, 19, 13, 251, 253);
+        Assertions.assertThat(base64InputStream0604).isNextBytesEqualTo(0, 19, 13, -5, -3);
         Assertions.assertThat(base64InputStream0604.skip(4)).isEqualTo(4);
-        Assertions.assertThat(base64InputStream0604).isAllBytesEqualTo(189);
+        Assertions.assertThat(base64InputStream0604).isAllBytesEqualTo(-67);
 
         Base64InputStream base64InputStream0605 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0605).isNextBytesEqualTo(0, 19, 13, 251, 253);
+        Assertions.assertThat(base64InputStream0605).isNextBytesEqualTo(0, 19, 13, -5, -3);
         Assertions.assertThat(base64InputStream0605.skip(5)).isEqualTo(5);
         Assertions.assertThat(base64InputStream0605).isAllBytesEqualTo();
 
         Base64InputStream base64InputStream0606 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0606).isNextBytesEqualTo(0, 19, 13, 251, 253);
+        Assertions.assertThat(base64InputStream0606).isNextBytesEqualTo(0, 19, 13, -5, -3);
         Assertions.assertThat(base64InputStream0606.skip(6)).isEqualTo(5);
         Assertions.assertThat(base64InputStream0606).isAllBytesEqualTo();
 
         Base64InputStream base64InputStream0700 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0700).isNextBytesEqualTo(0, 19, 13, 251, 253, 118);
+        Assertions.assertThat(base64InputStream0700).isNextBytesEqualTo(0, 19, 13, -5, -3, 118);
         Assertions.assertThat(base64InputStream0700.skip(0)).isEqualTo(0);
-        Assertions.assertThat(base64InputStream0700).isAllBytesEqualTo(181, 142, 63, 189);
+        Assertions.assertThat(base64InputStream0700).isAllBytesEqualTo(-75, -114, 63, -67);
 
         Base64InputStream base64InputStream0701 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0701).isNextBytesEqualTo(0, 19, 13, 251, 253, 118);
+        Assertions.assertThat(base64InputStream0701).isNextBytesEqualTo(0, 19, 13, -5, -3, 118);
         Assertions.assertThat(base64InputStream0701.skip(1)).isEqualTo(1);
-        Assertions.assertThat(base64InputStream0701).isAllBytesEqualTo(142, 63, 189);
+        Assertions.assertThat(base64InputStream0701).isAllBytesEqualTo(-114, 63, -67);
 
         Base64InputStream base64InputStream0702 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0702).isNextBytesEqualTo(0, 19, 13, 251, 253, 118);
+        Assertions.assertThat(base64InputStream0702).isNextBytesEqualTo(0, 19, 13, -5, -3, 118);
         Assertions.assertThat(base64InputStream0702.skip(2)).isEqualTo(2);
-        Assertions.assertThat(base64InputStream0702).isAllBytesEqualTo(63, 189);
+        Assertions.assertThat(base64InputStream0702).isAllBytesEqualTo(63, -67);
 
         Base64InputStream base64InputStream0703 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0703).isNextBytesEqualTo(0, 19, 13, 251, 253, 118);
+        Assertions.assertThat(base64InputStream0703).isNextBytesEqualTo(0, 19, 13, -5, -3, 118);
         Assertions.assertThat(base64InputStream0703.skip(3)).isEqualTo(3);
-        Assertions.assertThat(base64InputStream0703).isAllBytesEqualTo(189);
+        Assertions.assertThat(base64InputStream0703).isAllBytesEqualTo(-67);
 
         Base64InputStream base64InputStream0704 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0704).isNextBytesEqualTo(0, 19, 13, 251, 253, 118);
+        Assertions.assertThat(base64InputStream0704).isNextBytesEqualTo(0, 19, 13, -5, -3, 118);
         Assertions.assertThat(base64InputStream0704.skip(4)).isEqualTo(4);
         Assertions.assertThat(base64InputStream0704).isAllBytesEqualTo();
 
         Base64InputStream base64InputStream0705 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0705).isNextBytesEqualTo(0, 19, 13, 251, 253, 118);
+        Assertions.assertThat(base64InputStream0705).isNextBytesEqualTo(0, 19, 13, -5, -3, 118);
         Assertions.assertThat(base64InputStream0705.skip(5)).isEqualTo(4);
         Assertions.assertThat(base64InputStream0705).isAllBytesEqualTo();
 
         Base64InputStream base64InputStream0800 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0800).isNextBytesEqualTo(0, 19, 13, 251, 253, 118, 181);
+        Assertions.assertThat(base64InputStream0800).isNextBytesEqualTo(0, 19, 13, -5, -3, 118, -75);
         Assertions.assertThat(base64InputStream0800.skip(0)).isEqualTo(0);
-        Assertions.assertThat(base64InputStream0800).isAllBytesEqualTo(142, 63, 189);
+        Assertions.assertThat(base64InputStream0800).isAllBytesEqualTo(-114, 63, -67);
 
         Base64InputStream base64InputStream0801 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0801).isNextBytesEqualTo(0, 19, 13, 251, 253, 118, 181);
+        Assertions.assertThat(base64InputStream0801).isNextBytesEqualTo(0, 19, 13, -5, -3, 118, -75);
         Assertions.assertThat(base64InputStream0801.skip(1)).isEqualTo(1);
-        Assertions.assertThat(base64InputStream0801).isAllBytesEqualTo(63, 189);
+        Assertions.assertThat(base64InputStream0801).isAllBytesEqualTo(63, -67);
 
         Base64InputStream base64InputStream0802 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0802).isNextBytesEqualTo(0, 19, 13, 251, 253, 118, 181);
+        Assertions.assertThat(base64InputStream0802).isNextBytesEqualTo(0, 19, 13, -5, -3, 118, -75);
         Assertions.assertThat(base64InputStream0802.skip(2)).isEqualTo(2);
-        Assertions.assertThat(base64InputStream0802).isAllBytesEqualTo(189);
+        Assertions.assertThat(base64InputStream0802).isAllBytesEqualTo(-67);
 
         Base64InputStream base64InputStream0803 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0803).isNextBytesEqualTo(0, 19, 13, 251, 253, 118, 181);
+        Assertions.assertThat(base64InputStream0803).isNextBytesEqualTo(0, 19, 13, -5, -3, 118, -75);
         Assertions.assertThat(base64InputStream0803.skip(3)).isEqualTo(3);
         Assertions.assertThat(base64InputStream0803).isAllBytesEqualTo();
 
         Base64InputStream base64InputStream0804 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0804).isNextBytesEqualTo(0, 19, 13, 251, 253, 118, 181);
+        Assertions.assertThat(base64InputStream0804).isNextBytesEqualTo(0, 19, 13, -5, -3, 118, -75);
         Assertions.assertThat(base64InputStream0804.skip(4)).isEqualTo(3);
         Assertions.assertThat(base64InputStream0804).isAllBytesEqualTo();
 
         Base64InputStream base64InputStream0900 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0900).isNextBytesEqualTo(0, 19, 13, 251, 253, 118, 181, 142);
+        Assertions.assertThat(base64InputStream0900).isNextBytesEqualTo(0, 19, 13, -5, -3, 118, -75, -114);
         Assertions.assertThat(base64InputStream0900.skip(0)).isEqualTo(0);
-        Assertions.assertThat(base64InputStream0900).isAllBytesEqualTo(63, 189);
+        Assertions.assertThat(base64InputStream0900).isAllBytesEqualTo(63, -67);
 
         Base64InputStream base64InputStream0901 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0901).isNextBytesEqualTo(0, 19, 13, 251, 253, 118, 181, 142);
+        Assertions.assertThat(base64InputStream0901).isNextBytesEqualTo(0, 19, 13, -5, -3, 118, -75, -114);
         Assertions.assertThat(base64InputStream0901.skip(1)).isEqualTo(1);
-        Assertions.assertThat(base64InputStream0901).isAllBytesEqualTo(189);
+        Assertions.assertThat(base64InputStream0901).isAllBytesEqualTo(-67);
 
         Base64InputStream base64InputStream0902 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0902).isNextBytesEqualTo(0, 19, 13, 251, 253, 118, 181, 142);
+        Assertions.assertThat(base64InputStream0902).isNextBytesEqualTo(0, 19, 13, -5, -3, 118, -75, -114);
         Assertions.assertThat(base64InputStream0902.skip(2)).isEqualTo(2);
         Assertions.assertThat(base64InputStream0902).isAllBytesEqualTo();
 
         Base64InputStream base64InputStream0903 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0903).isNextBytesEqualTo(0, 19, 13, 251, 253, 118, 181, 142);
+        Assertions.assertThat(base64InputStream0903).isNextBytesEqualTo(0, 19, 13, -5, -3, 118, -75, -114);
         Assertions.assertThat(base64InputStream0903.skip(3)).isEqualTo(2);
         Assertions.assertThat(base64InputStream0903).isAllBytesEqualTo();
 
         Base64InputStream base64InputStream1000 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream1000).isNextBytesEqualTo(0, 19, 13, 251, 253, 118, 181, 142, 63);
+        Assertions.assertThat(base64InputStream1000).isNextBytesEqualTo(0, 19, 13, -5, -3, 118, -75, -114, 63);
         Assertions.assertThat(base64InputStream1000.skip(0)).isEqualTo(0);
-        Assertions.assertThat(base64InputStream1000).isAllBytesEqualTo(189);
+        Assertions.assertThat(base64InputStream1000).isAllBytesEqualTo(-67);
 
         Base64InputStream base64InputStream1001 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream1001).isNextBytesEqualTo(0, 19, 13, 251, 253, 118, 181, 142, 63);
+        Assertions.assertThat(base64InputStream1001).isNextBytesEqualTo(0, 19, 13, -5, -3, 118, -75, -114, 63);
         Assertions.assertThat(base64InputStream1001.skip(1)).isEqualTo(1);
         Assertions.assertThat(base64InputStream1001).isAllBytesEqualTo();
 
         Base64InputStream base64InputStream1002 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream1002).isNextBytesEqualTo(0, 19, 13, 251, 253, 118, 181, 142, 63);
+        Assertions.assertThat(base64InputStream1002).isNextBytesEqualTo(0, 19, 13, -5, -3, 118, -75, -114, 63);
         Assertions.assertThat(base64InputStream1002.skip(2)).isEqualTo(1);
         Assertions.assertThat(base64InputStream1002).isAllBytesEqualTo();
 
         Base64InputStream base64InputStream1100 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream1100).isNextBytesEqualTo(0, 19, 13, 251, 253, 118, 181, 142, 63, 189);
+        Assertions.assertThat(base64InputStream1100).isNextBytesEqualTo(0, 19, 13, -5, -3, 118, -75, -114, 63, -67);
         Assertions.assertThat(base64InputStream1100.skip(0)).isEqualTo(0);
         Assertions.assertThat(base64InputStream1100).isAllBytesEqualTo();
 
         Base64InputStream base64InputStream1101 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream1101).isNextBytesEqualTo(0, 19, 13, 251, 253, 118, 181, 142, 63, 189);
+        Assertions.assertThat(base64InputStream1101).isNextBytesEqualTo(0, 19, 13, -5, -3, 118, -75, -114, 63, -67);
         Assertions.assertThat(base64InputStream1101.skip(1)).isEqualTo(0);
         Assertions.assertThat(base64InputStream1101).isAllBytesEqualTo();
     }
@@ -1466,51 +1466,51 @@ public final class Base64InputStreamTest {
         String base64String = "ABMN+/12tY4/vbQ=";
 
         Base64InputStream base64InputStream = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream).isAllBytesEqualTo(0, 19, 13, 251, 253, 118, 181, 142, 63, 189, 180);
+        Assertions.assertThat(base64InputStream).isAllBytesEqualTo(0, 19, 13, -5, -3, 118, -75, -114, 63, -67, -76);
 
         Base64InputStream base64InputStream0100 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0100.skip(0)).isEqualTo(0);
-        Assertions.assertThat(base64InputStream0100).isAllBytesEqualTo(0, 19, 13, 251, 253, 118, 181, 142, 63, 189, 180);
+        Assertions.assertThat(base64InputStream0100).isAllBytesEqualTo(0, 19, 13, -5, -3, 118, -75, -114, 63, -67, -76);
 
         Base64InputStream base64InputStream0101 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0101.skip(1)).isEqualTo(1);
-        Assertions.assertThat(base64InputStream0101).isAllBytesEqualTo(19, 13, 251, 253, 118, 181, 142, 63, 189, 180);
+        Assertions.assertThat(base64InputStream0101).isAllBytesEqualTo(19, 13, -5, -3, 118, -75, -114, 63, -67, -76);
 
         Base64InputStream base64InputStream0102 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0102.skip(2)).isEqualTo(2);
-        Assertions.assertThat(base64InputStream0102).isAllBytesEqualTo(13, 251, 253, 118, 181, 142, 63, 189, 180);
+        Assertions.assertThat(base64InputStream0102).isAllBytesEqualTo(13, -5, -3, 118, -75, -114, 63, -67, -76);
 
         Base64InputStream base64InputStream0103 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0103.skip(3)).isEqualTo(3);
-        Assertions.assertThat(base64InputStream0103).isAllBytesEqualTo(251, 253, 118, 181, 142, 63, 189, 180);
+        Assertions.assertThat(base64InputStream0103).isAllBytesEqualTo(-5, -3, 118, -75, -114, 63, -67, -76);
 
         Base64InputStream base64InputStream0104 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0104.skip(4)).isEqualTo(4);
-        Assertions.assertThat(base64InputStream0104).isAllBytesEqualTo(253, 118, 181, 142, 63, 189, 180);
+        Assertions.assertThat(base64InputStream0104).isAllBytesEqualTo(-3, 118, -75, -114, 63, -67, -76);
 
         Base64InputStream base64InputStream0105 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0105.skip(5)).isEqualTo(5);
-        Assertions.assertThat(base64InputStream0105).isAllBytesEqualTo(118, 181, 142, 63, 189, 180);
+        Assertions.assertThat(base64InputStream0105).isAllBytesEqualTo(118, -75, -114, 63, -67, -76);
 
         Base64InputStream base64InputStream0106 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0106.skip(6)).isEqualTo(6);
-        Assertions.assertThat(base64InputStream0106).isAllBytesEqualTo(181, 142, 63, 189, 180);
+        Assertions.assertThat(base64InputStream0106).isAllBytesEqualTo(-75, -114, 63, -67, -76);
 
         Base64InputStream base64InputStream0107 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0107.skip(7)).isEqualTo(7);
-        Assertions.assertThat(base64InputStream0107).isAllBytesEqualTo(142, 63, 189, 180);
+        Assertions.assertThat(base64InputStream0107).isAllBytesEqualTo(-114, 63, -67, -76);
 
         Base64InputStream base64InputStream0108 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0108.skip(8)).isEqualTo(8);
-        Assertions.assertThat(base64InputStream0108).isAllBytesEqualTo(63, 189, 180);
+        Assertions.assertThat(base64InputStream0108).isAllBytesEqualTo(63, -67, -76);
 
         Base64InputStream base64InputStream0109 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0109.skip(9)).isEqualTo(9);
-        Assertions.assertThat(base64InputStream0109).isAllBytesEqualTo(189, 180);
+        Assertions.assertThat(base64InputStream0109).isAllBytesEqualTo(-67, -76);
 
         Base64InputStream base64InputStream0110 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0110.skip(10)).isEqualTo(10);
-        Assertions.assertThat(base64InputStream0110).isAllBytesEqualTo(180);
+        Assertions.assertThat(base64InputStream0110).isAllBytesEqualTo(-76);
 
         Base64InputStream base64InputStream0111 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0111.skip(11)).isEqualTo(11);
@@ -1539,52 +1539,52 @@ public final class Base64InputStreamTest {
         Base64InputStream base64InputStream0200 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0200).isNextBytesEqualTo(0);
         Assertions.assertThat(base64InputStream0200.skip(0)).isEqualTo(0);
-        Assertions.assertThat(base64InputStream0200).isAllBytesEqualTo(19, 13, 251, 253, 118, 181, 142, 63, 189, 180);
+        Assertions.assertThat(base64InputStream0200).isAllBytesEqualTo(19, 13, -5, -3, 118, -75, -114, 63, -67, -76);
 
         Base64InputStream base64InputStream0201 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0201).isNextBytesEqualTo(0);
         Assertions.assertThat(base64InputStream0201.skip(1)).isEqualTo(1);
-        Assertions.assertThat(base64InputStream0201).isAllBytesEqualTo(13, 251, 253, 118, 181, 142, 63, 189, 180);
+        Assertions.assertThat(base64InputStream0201).isAllBytesEqualTo(13, -5, -3, 118, -75, -114, 63, -67, -76);
 
         Base64InputStream base64InputStream0202 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0202).isNextBytesEqualTo(0);
         Assertions.assertThat(base64InputStream0202.skip(2)).isEqualTo(2);
-        Assertions.assertThat(base64InputStream0202).isAllBytesEqualTo(251, 253, 118, 181, 142, 63, 189, 180);
+        Assertions.assertThat(base64InputStream0202).isAllBytesEqualTo(-5, -3, 118, -75, -114, 63, -67, -76);
 
         Base64InputStream base64InputStream0203 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0203).isNextBytesEqualTo(0);
         Assertions.assertThat(base64InputStream0203.skip(3)).isEqualTo(3);
-        Assertions.assertThat(base64InputStream0203).isAllBytesEqualTo(253, 118, 181, 142, 63, 189, 180);
+        Assertions.assertThat(base64InputStream0203).isAllBytesEqualTo(-3, 118, -75, -114, 63, -67, -76);
 
         Base64InputStream base64InputStream0204 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0204).isNextBytesEqualTo(0);
         Assertions.assertThat(base64InputStream0204.skip(4)).isEqualTo(4);
-        Assertions.assertThat(base64InputStream0204).isAllBytesEqualTo(118, 181, 142, 63, 189, 180);
+        Assertions.assertThat(base64InputStream0204).isAllBytesEqualTo(118, -75, -114, 63, -67, -76);
 
         Base64InputStream base64InputStream0205 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0205).isNextBytesEqualTo(0);
         Assertions.assertThat(base64InputStream0205.skip(5)).isEqualTo(5);
-        Assertions.assertThat(base64InputStream0205).isAllBytesEqualTo(181, 142, 63, 189, 180);
+        Assertions.assertThat(base64InputStream0205).isAllBytesEqualTo(-75, -114, 63, -67, -76);
 
         Base64InputStream base64InputStream0206 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0206).isNextBytesEqualTo(0);
         Assertions.assertThat(base64InputStream0206.skip(6)).isEqualTo(6);
-        Assertions.assertThat(base64InputStream0206).isAllBytesEqualTo(142, 63, 189, 180);
+        Assertions.assertThat(base64InputStream0206).isAllBytesEqualTo(-114, 63, -67, -76);
 
         Base64InputStream base64InputStream0207 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0207).isNextBytesEqualTo(0);
         Assertions.assertThat(base64InputStream0207.skip(7)).isEqualTo(7);
-        Assertions.assertThat(base64InputStream0207).isAllBytesEqualTo(63, 189, 180);
+        Assertions.assertThat(base64InputStream0207).isAllBytesEqualTo(63, -67, -76);
 
         Base64InputStream base64InputStream0208 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0208).isNextBytesEqualTo(0);
         Assertions.assertThat(base64InputStream0208.skip(8)).isEqualTo(8);
-        Assertions.assertThat(base64InputStream0208).isAllBytesEqualTo(189, 180);
+        Assertions.assertThat(base64InputStream0208).isAllBytesEqualTo(-67, -76);
 
         Base64InputStream base64InputStream0209 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0209).isNextBytesEqualTo(0);
         Assertions.assertThat(base64InputStream0209.skip(9)).isEqualTo(9);
-        Assertions.assertThat(base64InputStream0209).isAllBytesEqualTo(180);
+        Assertions.assertThat(base64InputStream0209).isAllBytesEqualTo(-76);
 
         Base64InputStream base64InputStream0210 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0210).isNextBytesEqualTo(0);
@@ -1604,47 +1604,47 @@ public final class Base64InputStreamTest {
         Base64InputStream base64InputStream0300 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0300).isNextBytesEqualTo(0, 19);
         Assertions.assertThat(base64InputStream0300.skip(0)).isEqualTo(0);
-        Assertions.assertThat(base64InputStream0300).isAllBytesEqualTo(13, 251, 253, 118, 181, 142, 63, 189, 180);
+        Assertions.assertThat(base64InputStream0300).isAllBytesEqualTo(13, -5, -3, 118, -75, -114, 63, -67, -76);
 
         Base64InputStream base64InputStream0301 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0301).isNextBytesEqualTo(0, 19);
         Assertions.assertThat(base64InputStream0301.skip(1)).isEqualTo(1);
-        Assertions.assertThat(base64InputStream0301).isAllBytesEqualTo(251, 253, 118, 181, 142, 63, 189, 180);
+        Assertions.assertThat(base64InputStream0301).isAllBytesEqualTo(-5, -3, 118, -75, -114, 63, -67, -76);
 
         Base64InputStream base64InputStream0302 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0302).isNextBytesEqualTo(0, 19);
         Assertions.assertThat(base64InputStream0302.skip(2)).isEqualTo(2);
-        Assertions.assertThat(base64InputStream0302).isAllBytesEqualTo(253, 118, 181, 142, 63, 189, 180);
+        Assertions.assertThat(base64InputStream0302).isAllBytesEqualTo(-3, 118, -75, -114, 63, -67, -76);
 
         Base64InputStream base64InputStream0303 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0303).isNextBytesEqualTo(0, 19);
         Assertions.assertThat(base64InputStream0303.skip(3)).isEqualTo(3);
-        Assertions.assertThat(base64InputStream0303).isAllBytesEqualTo(118, 181, 142, 63, 189, 180);
+        Assertions.assertThat(base64InputStream0303).isAllBytesEqualTo(118, -75, -114, 63, -67, -76);
 
         Base64InputStream base64InputStream0304 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0304).isNextBytesEqualTo(0, 19);
         Assertions.assertThat(base64InputStream0304.skip(4)).isEqualTo(4);
-        Assertions.assertThat(base64InputStream0304).isAllBytesEqualTo(181, 142, 63, 189, 180);
+        Assertions.assertThat(base64InputStream0304).isAllBytesEqualTo(-75, -114, 63, -67, -76);
 
         Base64InputStream base64InputStream0305 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0305).isNextBytesEqualTo(0, 19);
         Assertions.assertThat(base64InputStream0305.skip(5)).isEqualTo(5);
-        Assertions.assertThat(base64InputStream0305).isAllBytesEqualTo(142, 63, 189, 180);
+        Assertions.assertThat(base64InputStream0305).isAllBytesEqualTo(-114, 63, -67, -76);
 
         Base64InputStream base64InputStream0306 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0306).isNextBytesEqualTo(0, 19);
         Assertions.assertThat(base64InputStream0306.skip(6)).isEqualTo(6);
-        Assertions.assertThat(base64InputStream0306).isAllBytesEqualTo(63, 189, 180);
+        Assertions.assertThat(base64InputStream0306).isAllBytesEqualTo(63, -67, -76);
 
         Base64InputStream base64InputStream0307 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0307).isNextBytesEqualTo(0, 19);
         Assertions.assertThat(base64InputStream0307.skip(7)).isEqualTo(7);
-        Assertions.assertThat(base64InputStream0307).isAllBytesEqualTo(189, 180);
+        Assertions.assertThat(base64InputStream0307).isAllBytesEqualTo(-67, -76);
 
         Base64InputStream base64InputStream0308 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0308).isNextBytesEqualTo(0, 19);
         Assertions.assertThat(base64InputStream0308.skip(8)).isEqualTo(8);
-        Assertions.assertThat(base64InputStream0308).isAllBytesEqualTo(180);
+        Assertions.assertThat(base64InputStream0308).isAllBytesEqualTo(-76);
 
         Base64InputStream base64InputStream0309 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0309).isNextBytesEqualTo(0, 19);
@@ -1664,42 +1664,42 @@ public final class Base64InputStreamTest {
         Base64InputStream base64InputStream0400 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0400).isNextBytesEqualTo(0, 19, 13);
         Assertions.assertThat(base64InputStream0400.skip(0)).isEqualTo(0);
-        Assertions.assertThat(base64InputStream0400).isAllBytesEqualTo(251, 253, 118, 181, 142, 63, 189, 180);
+        Assertions.assertThat(base64InputStream0400).isAllBytesEqualTo(-5, -3, 118, -75, -114, 63, -67, -76);
 
         Base64InputStream base64InputStream0401 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0401).isNextBytesEqualTo(0, 19, 13);
         Assertions.assertThat(base64InputStream0401.skip(1)).isEqualTo(1);
-        Assertions.assertThat(base64InputStream0401).isAllBytesEqualTo(253, 118, 181, 142, 63, 189, 180);
+        Assertions.assertThat(base64InputStream0401).isAllBytesEqualTo(-3, 118, -75, -114, 63, -67, -76);
 
         Base64InputStream base64InputStream0402 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0402).isNextBytesEqualTo(0, 19, 13);
         Assertions.assertThat(base64InputStream0402.skip(2)).isEqualTo(2);
-        Assertions.assertThat(base64InputStream0402).isAllBytesEqualTo(118, 181, 142, 63, 189, 180);
+        Assertions.assertThat(base64InputStream0402).isAllBytesEqualTo(118, -75, -114, 63, -67, -76);
 
         Base64InputStream base64InputStream0403 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0403).isNextBytesEqualTo(0, 19, 13);
         Assertions.assertThat(base64InputStream0403.skip(3)).isEqualTo(3);
-        Assertions.assertThat(base64InputStream0403).isAllBytesEqualTo(181, 142, 63, 189, 180);
+        Assertions.assertThat(base64InputStream0403).isAllBytesEqualTo(-75, -114, 63, -67, -76);
 
         Base64InputStream base64InputStream0404 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0404).isNextBytesEqualTo(0, 19, 13);
         Assertions.assertThat(base64InputStream0404.skip(4)).isEqualTo(4);
-        Assertions.assertThat(base64InputStream0404).isAllBytesEqualTo(142, 63, 189, 180);
+        Assertions.assertThat(base64InputStream0404).isAllBytesEqualTo(-114, 63, -67, -76);
 
         Base64InputStream base64InputStream0405 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0405).isNextBytesEqualTo(0, 19, 13);
         Assertions.assertThat(base64InputStream0405.skip(5)).isEqualTo(5);
-        Assertions.assertThat(base64InputStream0405).isAllBytesEqualTo(63, 189, 180);
+        Assertions.assertThat(base64InputStream0405).isAllBytesEqualTo(63, -67, -76);
 
         Base64InputStream base64InputStream0406 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0406).isNextBytesEqualTo(0, 19, 13);
         Assertions.assertThat(base64InputStream0406.skip(6)).isEqualTo(6);
-        Assertions.assertThat(base64InputStream0406).isAllBytesEqualTo(189, 180);
+        Assertions.assertThat(base64InputStream0406).isAllBytesEqualTo(-67, -76);
 
         Base64InputStream base64InputStream0407 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0407).isNextBytesEqualTo(0, 19, 13);
         Assertions.assertThat(base64InputStream0407.skip(7)).isEqualTo(7);
-        Assertions.assertThat(base64InputStream0407).isAllBytesEqualTo(180);
+        Assertions.assertThat(base64InputStream0407).isAllBytesEqualTo(-76);
 
         Base64InputStream base64InputStream0408 = new Base64InputStream(new InputStreamImpl(base64String));
         Assertions.assertThat(base64InputStream0408).isNextBytesEqualTo(0, 19, 13);
@@ -1717,252 +1717,252 @@ public final class Base64InputStreamTest {
         Assertions.assertThat(base64InputStream0410).isAllBytesEqualTo();
 
         Base64InputStream base64InputStream0500 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0500).isNextBytesEqualTo(0, 19, 13, 251);
+        Assertions.assertThat(base64InputStream0500).isNextBytesEqualTo(0, 19, 13, -5);
         Assertions.assertThat(base64InputStream0500.skip(0)).isEqualTo(0);
-        Assertions.assertThat(base64InputStream0500).isAllBytesEqualTo(253, 118, 181, 142, 63, 189, 180);
+        Assertions.assertThat(base64InputStream0500).isAllBytesEqualTo(-3, 118, -75, -114, 63, -67, -76);
 
         Base64InputStream base64InputStream0501 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0501).isNextBytesEqualTo(0, 19, 13, 251);
+        Assertions.assertThat(base64InputStream0501).isNextBytesEqualTo(0, 19, 13, -5);
         Assertions.assertThat(base64InputStream0501.skip(1)).isEqualTo(1);
-        Assertions.assertThat(base64InputStream0501).isAllBytesEqualTo(118, 181, 142, 63, 189, 180);
+        Assertions.assertThat(base64InputStream0501).isAllBytesEqualTo(118, -75, -114, 63, -67, -76);
 
         Base64InputStream base64InputStream0502 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0502).isNextBytesEqualTo(0, 19, 13, 251);
+        Assertions.assertThat(base64InputStream0502).isNextBytesEqualTo(0, 19, 13, -5);
         Assertions.assertThat(base64InputStream0502.skip(2)).isEqualTo(2);
-        Assertions.assertThat(base64InputStream0502).isAllBytesEqualTo(181, 142, 63, 189, 180);
+        Assertions.assertThat(base64InputStream0502).isAllBytesEqualTo(-75, -114, 63, -67, -76);
 
         Base64InputStream base64InputStream0503 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0503).isNextBytesEqualTo(0, 19, 13, 251);
+        Assertions.assertThat(base64InputStream0503).isNextBytesEqualTo(0, 19, 13, -5);
         Assertions.assertThat(base64InputStream0503.skip(3)).isEqualTo(3);
-        Assertions.assertThat(base64InputStream0503).isAllBytesEqualTo(142, 63, 189, 180);
+        Assertions.assertThat(base64InputStream0503).isAllBytesEqualTo(-114, 63, -67, -76);
 
         Base64InputStream base64InputStream0504 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0504).isNextBytesEqualTo(0, 19, 13, 251);
+        Assertions.assertThat(base64InputStream0504).isNextBytesEqualTo(0, 19, 13, -5);
         Assertions.assertThat(base64InputStream0504.skip(4)).isEqualTo(4);
-        Assertions.assertThat(base64InputStream0504).isAllBytesEqualTo(63, 189, 180);
+        Assertions.assertThat(base64InputStream0504).isAllBytesEqualTo(63, -67, -76);
 
         Base64InputStream base64InputStream0505 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0505).isNextBytesEqualTo(0, 19, 13, 251);
+        Assertions.assertThat(base64InputStream0505).isNextBytesEqualTo(0, 19, 13, -5);
         Assertions.assertThat(base64InputStream0505.skip(5)).isEqualTo(5);
-        Assertions.assertThat(base64InputStream0505).isAllBytesEqualTo(189, 180);
+        Assertions.assertThat(base64InputStream0505).isAllBytesEqualTo(-67, -76);
 
         Base64InputStream base64InputStream0506 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0506).isNextBytesEqualTo(0, 19, 13, 251);
+        Assertions.assertThat(base64InputStream0506).isNextBytesEqualTo(0, 19, 13, -5);
         Assertions.assertThat(base64InputStream0506.skip(6)).isEqualTo(6);
-        Assertions.assertThat(base64InputStream0506).isAllBytesEqualTo(180);
+        Assertions.assertThat(base64InputStream0506).isAllBytesEqualTo(-76);
 
         Base64InputStream base64InputStream0507 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0507).isNextBytesEqualTo(0, 19, 13, 251);
+        Assertions.assertThat(base64InputStream0507).isNextBytesEqualTo(0, 19, 13, -5);
         Assertions.assertThat(base64InputStream0507.skip(7)).isEqualTo(7);
         Assertions.assertThat(base64InputStream0507).isAllBytesEqualTo();
 
         Base64InputStream base64InputStream0508 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0508).isNextBytesEqualTo(0, 19, 13, 251);
+        Assertions.assertThat(base64InputStream0508).isNextBytesEqualTo(0, 19, 13, -5);
         Assertions.assertThat(base64InputStream0508.skip(8)).isEqualTo(8);
         Assertions.assertThat(base64InputStream0508).isAllBytesEqualTo();
 
         Base64InputStream base64InputStream0509 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0509).isNextBytesEqualTo(0, 19, 13, 251);
+        Assertions.assertThat(base64InputStream0509).isNextBytesEqualTo(0, 19, 13, -5);
         Assertions.assertThat(base64InputStream0509.skip(9)).isEqualTo(8);
         Assertions.assertThat(base64InputStream0509).isAllBytesEqualTo();
 
         Base64InputStream base64InputStream0600 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0600).isNextBytesEqualTo(0, 19, 13, 251, 253);
+        Assertions.assertThat(base64InputStream0600).isNextBytesEqualTo(0, 19, 13, -5, -3);
         Assertions.assertThat(base64InputStream0600.skip(0)).isEqualTo(0);
-        Assertions.assertThat(base64InputStream0600).isAllBytesEqualTo(118, 181, 142, 63, 189, 180);
+        Assertions.assertThat(base64InputStream0600).isAllBytesEqualTo(118, -75, -114, 63, -67, -76);
 
         Base64InputStream base64InputStream0601 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0601).isNextBytesEqualTo(0, 19, 13, 251, 253);
+        Assertions.assertThat(base64InputStream0601).isNextBytesEqualTo(0, 19, 13, -5, -3);
         Assertions.assertThat(base64InputStream0601.skip(1)).isEqualTo(1);
-        Assertions.assertThat(base64InputStream0601).isAllBytesEqualTo(181, 142, 63, 189, 180);
+        Assertions.assertThat(base64InputStream0601).isAllBytesEqualTo(-75, -114, 63, -67, -76);
 
         Base64InputStream base64InputStream0602 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0602).isNextBytesEqualTo(0, 19, 13, 251, 253);
+        Assertions.assertThat(base64InputStream0602).isNextBytesEqualTo(0, 19, 13, -5, -3);
         Assertions.assertThat(base64InputStream0602.skip(2)).isEqualTo(2);
-        Assertions.assertThat(base64InputStream0602).isAllBytesEqualTo(142, 63, 189, 180);
+        Assertions.assertThat(base64InputStream0602).isAllBytesEqualTo(-114, 63, -67, -76);
 
         Base64InputStream base64InputStream0603 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0603).isNextBytesEqualTo(0, 19, 13, 251, 253);
+        Assertions.assertThat(base64InputStream0603).isNextBytesEqualTo(0, 19, 13, -5, -3);
         Assertions.assertThat(base64InputStream0603.skip(3)).isEqualTo(3);
-        Assertions.assertThat(base64InputStream0603).isAllBytesEqualTo(63, 189, 180);
+        Assertions.assertThat(base64InputStream0603).isAllBytesEqualTo(63, -67, -76);
 
         Base64InputStream base64InputStream0604 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0604).isNextBytesEqualTo(0, 19, 13, 251, 253);
+        Assertions.assertThat(base64InputStream0604).isNextBytesEqualTo(0, 19, 13, -5, -3);
         Assertions.assertThat(base64InputStream0604.skip(4)).isEqualTo(4);
-        Assertions.assertThat(base64InputStream0604).isAllBytesEqualTo(189, 180);
+        Assertions.assertThat(base64InputStream0604).isAllBytesEqualTo(-67, -76);
 
         Base64InputStream base64InputStream0605 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0605).isNextBytesEqualTo(0, 19, 13, 251, 253);
+        Assertions.assertThat(base64InputStream0605).isNextBytesEqualTo(0, 19, 13, -5, -3);
         Assertions.assertThat(base64InputStream0605.skip(5)).isEqualTo(5);
-        Assertions.assertThat(base64InputStream0605).isAllBytesEqualTo(180);
+        Assertions.assertThat(base64InputStream0605).isAllBytesEqualTo(-76);
 
         Base64InputStream base64InputStream0606 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0606).isNextBytesEqualTo(0, 19, 13, 251, 253);
+        Assertions.assertThat(base64InputStream0606).isNextBytesEqualTo(0, 19, 13, -5, -3);
         Assertions.assertThat(base64InputStream0606.skip(6)).isEqualTo(6);
         Assertions.assertThat(base64InputStream0606).isAllBytesEqualTo();
 
         Base64InputStream base64InputStream0607 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0607).isNextBytesEqualTo(0, 19, 13, 251, 253);
+        Assertions.assertThat(base64InputStream0607).isNextBytesEqualTo(0, 19, 13, -5, -3);
         Assertions.assertThat(base64InputStream0607.skip(7)).isEqualTo(7);
         Assertions.assertThat(base64InputStream0607).isAllBytesEqualTo();
 
         Base64InputStream base64InputStream0608 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0608).isNextBytesEqualTo(0, 19, 13, 251, 253);
+        Assertions.assertThat(base64InputStream0608).isNextBytesEqualTo(0, 19, 13, -5, -3);
         Assertions.assertThat(base64InputStream0608.skip(8)).isEqualTo(7);
         Assertions.assertThat(base64InputStream0608).isAllBytesEqualTo();
 
         Base64InputStream base64InputStream0700 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0700).isNextBytesEqualTo(0, 19, 13, 251, 253, 118);
+        Assertions.assertThat(base64InputStream0700).isNextBytesEqualTo(0, 19, 13, -5, -3, 118);
         Assertions.assertThat(base64InputStream0700.skip(0)).isEqualTo(0);
-        Assertions.assertThat(base64InputStream0700).isAllBytesEqualTo(181, 142, 63, 189, 180);
+        Assertions.assertThat(base64InputStream0700).isAllBytesEqualTo(-75, -114, 63, -67, -76);
 
         Base64InputStream base64InputStream0701 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0701).isNextBytesEqualTo(0, 19, 13, 251, 253, 118);
+        Assertions.assertThat(base64InputStream0701).isNextBytesEqualTo(0, 19, 13, -5, -3, 118);
         Assertions.assertThat(base64InputStream0701.skip(1)).isEqualTo(1);
-        Assertions.assertThat(base64InputStream0701).isAllBytesEqualTo(142, 63, 189, 180);
+        Assertions.assertThat(base64InputStream0701).isAllBytesEqualTo(-114, 63, -67, -76);
 
         Base64InputStream base64InputStream0702 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0702).isNextBytesEqualTo(0, 19, 13, 251, 253, 118);
+        Assertions.assertThat(base64InputStream0702).isNextBytesEqualTo(0, 19, 13, -5, -3, 118);
         Assertions.assertThat(base64InputStream0702.skip(2)).isEqualTo(2);
-        Assertions.assertThat(base64InputStream0702).isAllBytesEqualTo(63, 189, 180);
+        Assertions.assertThat(base64InputStream0702).isAllBytesEqualTo(63, -67, -76);
 
         Base64InputStream base64InputStream0703 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0703).isNextBytesEqualTo(0, 19, 13, 251, 253, 118);
+        Assertions.assertThat(base64InputStream0703).isNextBytesEqualTo(0, 19, 13, -5, -3, 118);
         Assertions.assertThat(base64InputStream0703.skip(3)).isEqualTo(3);
-        Assertions.assertThat(base64InputStream0703).isAllBytesEqualTo(189, 180);
+        Assertions.assertThat(base64InputStream0703).isAllBytesEqualTo(-67, -76);
 
         Base64InputStream base64InputStream0704 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0704).isNextBytesEqualTo(0, 19, 13, 251, 253, 118);
+        Assertions.assertThat(base64InputStream0704).isNextBytesEqualTo(0, 19, 13, -5, -3, 118);
         Assertions.assertThat(base64InputStream0704.skip(4)).isEqualTo(4);
-        Assertions.assertThat(base64InputStream0704).isAllBytesEqualTo(180);
+        Assertions.assertThat(base64InputStream0704).isAllBytesEqualTo(-76);
 
         Base64InputStream base64InputStream0705 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0705).isNextBytesEqualTo(0, 19, 13, 251, 253, 118);
+        Assertions.assertThat(base64InputStream0705).isNextBytesEqualTo(0, 19, 13, -5, -3, 118);
         Assertions.assertThat(base64InputStream0705.skip(5)).isEqualTo(5);
         Assertions.assertThat(base64InputStream0705).isAllBytesEqualTo();
 
         Base64InputStream base64InputStream0706 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0706).isNextBytesEqualTo(0, 19, 13, 251, 253, 118);
+        Assertions.assertThat(base64InputStream0706).isNextBytesEqualTo(0, 19, 13, -5, -3, 118);
         Assertions.assertThat(base64InputStream0706.skip(6)).isEqualTo(6);
         Assertions.assertThat(base64InputStream0706).isAllBytesEqualTo();
 
         Base64InputStream base64InputStream0707 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0707).isNextBytesEqualTo(0, 19, 13, 251, 253, 118);
+        Assertions.assertThat(base64InputStream0707).isNextBytesEqualTo(0, 19, 13, -5, -3, 118);
         Assertions.assertThat(base64InputStream0707.skip(7)).isEqualTo(6);
         Assertions.assertThat(base64InputStream0707).isAllBytesEqualTo();
 
         Base64InputStream base64InputStream0800 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0800).isNextBytesEqualTo(0, 19, 13, 251, 253, 118, 181);
+        Assertions.assertThat(base64InputStream0800).isNextBytesEqualTo(0, 19, 13, -5, -3, 118, -75);
         Assertions.assertThat(base64InputStream0800.skip(0)).isEqualTo(0);
-        Assertions.assertThat(base64InputStream0800).isAllBytesEqualTo(142, 63, 189, 180);
+        Assertions.assertThat(base64InputStream0800).isAllBytesEqualTo(-114, 63, -67, -76);
 
         Base64InputStream base64InputStream0801 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0801).isNextBytesEqualTo(0, 19, 13, 251, 253, 118, 181);
+        Assertions.assertThat(base64InputStream0801).isNextBytesEqualTo(0, 19, 13, -5, -3, 118, -75);
         Assertions.assertThat(base64InputStream0801.skip(1)).isEqualTo(1);
-        Assertions.assertThat(base64InputStream0801).isAllBytesEqualTo(63, 189, 180);
+        Assertions.assertThat(base64InputStream0801).isAllBytesEqualTo(63, -67, -76);
 
         Base64InputStream base64InputStream0802 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0802).isNextBytesEqualTo(0, 19, 13, 251, 253, 118, 181);
+        Assertions.assertThat(base64InputStream0802).isNextBytesEqualTo(0, 19, 13, -5, -3, 118, -75);
         Assertions.assertThat(base64InputStream0802.skip(2)).isEqualTo(2);
-        Assertions.assertThat(base64InputStream0802).isAllBytesEqualTo(189, 180);
+        Assertions.assertThat(base64InputStream0802).isAllBytesEqualTo(-67, -76);
 
         Base64InputStream base64InputStream0803 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0803).isNextBytesEqualTo(0, 19, 13, 251, 253, 118, 181);
+        Assertions.assertThat(base64InputStream0803).isNextBytesEqualTo(0, 19, 13, -5, -3, 118, -75);
         Assertions.assertThat(base64InputStream0803.skip(3)).isEqualTo(3);
-        Assertions.assertThat(base64InputStream0803).isAllBytesEqualTo(180);
+        Assertions.assertThat(base64InputStream0803).isAllBytesEqualTo(-76);
 
         Base64InputStream base64InputStream0804 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0804).isNextBytesEqualTo(0, 19, 13, 251, 253, 118, 181);
+        Assertions.assertThat(base64InputStream0804).isNextBytesEqualTo(0, 19, 13, -5, -3, 118, -75);
         Assertions.assertThat(base64InputStream0804.skip(4)).isEqualTo(4);
         Assertions.assertThat(base64InputStream0804).isAllBytesEqualTo();
 
         Base64InputStream base64InputStream0805 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0805).isNextBytesEqualTo(0, 19, 13, 251, 253, 118, 181);
+        Assertions.assertThat(base64InputStream0805).isNextBytesEqualTo(0, 19, 13, -5, -3, 118, -75);
         Assertions.assertThat(base64InputStream0805.skip(5)).isEqualTo(5);
         Assertions.assertThat(base64InputStream0805).isAllBytesEqualTo();
 
         Base64InputStream base64InputStream0806 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0806).isNextBytesEqualTo(0, 19, 13, 251, 253, 118, 181);
+        Assertions.assertThat(base64InputStream0806).isNextBytesEqualTo(0, 19, 13, -5, -3, 118, -75);
         Assertions.assertThat(base64InputStream0806.skip(6)).isEqualTo(5);
         Assertions.assertThat(base64InputStream0806).isAllBytesEqualTo();
 
         Base64InputStream base64InputStream0900 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0900).isNextBytesEqualTo(0, 19, 13, 251, 253, 118, 181, 142);
+        Assertions.assertThat(base64InputStream0900).isNextBytesEqualTo(0, 19, 13, -5, -3, 118, -75, -114);
         Assertions.assertThat(base64InputStream0900.skip(0)).isEqualTo(0);
-        Assertions.assertThat(base64InputStream0900).isAllBytesEqualTo(63, 189, 180);
+        Assertions.assertThat(base64InputStream0900).isAllBytesEqualTo(63, -67, -76);
 
         Base64InputStream base64InputStream0901 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0901).isNextBytesEqualTo(0, 19, 13, 251, 253, 118, 181, 142);
+        Assertions.assertThat(base64InputStream0901).isNextBytesEqualTo(0, 19, 13, -5, -3, 118, -75, -114);
         Assertions.assertThat(base64InputStream0901.skip(1)).isEqualTo(1);
-        Assertions.assertThat(base64InputStream0901).isAllBytesEqualTo(189, 180);
+        Assertions.assertThat(base64InputStream0901).isAllBytesEqualTo(-67, -76);
 
         Base64InputStream base64InputStream0902 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0902).isNextBytesEqualTo(0, 19, 13, 251, 253, 118, 181, 142);
+        Assertions.assertThat(base64InputStream0902).isNextBytesEqualTo(0, 19, 13, -5, -3, 118, -75, -114);
         Assertions.assertThat(base64InputStream0902.skip(2)).isEqualTo(2);
-        Assertions.assertThat(base64InputStream0902).isAllBytesEqualTo(180);
+        Assertions.assertThat(base64InputStream0902).isAllBytesEqualTo(-76);
 
         Base64InputStream base64InputStream0903 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0903).isNextBytesEqualTo(0, 19, 13, 251, 253, 118, 181, 142);
+        Assertions.assertThat(base64InputStream0903).isNextBytesEqualTo(0, 19, 13, -5, -3, 118, -75, -114);
         Assertions.assertThat(base64InputStream0903.skip(3)).isEqualTo(3);
         Assertions.assertThat(base64InputStream0903).isAllBytesEqualTo();
 
         Base64InputStream base64InputStream0904 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0904).isNextBytesEqualTo(0, 19, 13, 251, 253, 118, 181, 142);
+        Assertions.assertThat(base64InputStream0904).isNextBytesEqualTo(0, 19, 13, -5, -3, 118, -75, -114);
         Assertions.assertThat(base64InputStream0904.skip(4)).isEqualTo(4);
         Assertions.assertThat(base64InputStream0904).isAllBytesEqualTo();
 
         Base64InputStream base64InputStream0905 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream0905).isNextBytesEqualTo(0, 19, 13, 251, 253, 118, 181, 142);
+        Assertions.assertThat(base64InputStream0905).isNextBytesEqualTo(0, 19, 13, -5, -3, 118, -75, -114);
         Assertions.assertThat(base64InputStream0905.skip(5)).isEqualTo(4);
         Assertions.assertThat(base64InputStream0905).isAllBytesEqualTo();
 
         Base64InputStream base64InputStream1000 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream1000).isNextBytesEqualTo(0, 19, 13, 251, 253, 118, 181, 142, 63);
+        Assertions.assertThat(base64InputStream1000).isNextBytesEqualTo(0, 19, 13, -5, -3, 118, -75, -114, 63);
         Assertions.assertThat(base64InputStream1000.skip(0)).isEqualTo(0);
-        Assertions.assertThat(base64InputStream1000).isAllBytesEqualTo(189, 180);
+        Assertions.assertThat(base64InputStream1000).isAllBytesEqualTo(-67, -76);
 
         Base64InputStream base64InputStream1001 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream1001).isNextBytesEqualTo(0, 19, 13, 251, 253, 118, 181, 142, 63);
+        Assertions.assertThat(base64InputStream1001).isNextBytesEqualTo(0, 19, 13, -5, -3, 118, -75, -114, 63);
         Assertions.assertThat(base64InputStream1001.skip(1)).isEqualTo(1);
-        Assertions.assertThat(base64InputStream1001).isAllBytesEqualTo(180);
+        Assertions.assertThat(base64InputStream1001).isAllBytesEqualTo(-76);
 
         Base64InputStream base64InputStream1002 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream1002).isNextBytesEqualTo(0, 19, 13, 251, 253, 118, 181, 142, 63);
+        Assertions.assertThat(base64InputStream1002).isNextBytesEqualTo(0, 19, 13, -5, -3, 118, -75, -114, 63);
         Assertions.assertThat(base64InputStream1002.skip(2)).isEqualTo(2);
         Assertions.assertThat(base64InputStream1002).isAllBytesEqualTo();
 
         Base64InputStream base64InputStream1003 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream1003).isNextBytesEqualTo(0, 19, 13, 251, 253, 118, 181, 142, 63);
+        Assertions.assertThat(base64InputStream1003).isNextBytesEqualTo(0, 19, 13, -5, -3, 118, -75, -114, 63);
         Assertions.assertThat(base64InputStream1003.skip(3)).isEqualTo(3);
         Assertions.assertThat(base64InputStream1003).isAllBytesEqualTo();
 
         Base64InputStream base64InputStream1004 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream1004).isNextBytesEqualTo(0, 19, 13, 251, 253, 118, 181, 142, 63);
+        Assertions.assertThat(base64InputStream1004).isNextBytesEqualTo(0, 19, 13, -5, -3, 118, -75, -114, 63);
         Assertions.assertThat(base64InputStream1004.skip(4)).isEqualTo(3);
         Assertions.assertThat(base64InputStream1004).isAllBytesEqualTo();
 
         Base64InputStream base64InputStream1100 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream1100).isNextBytesEqualTo(0, 19, 13, 251, 253, 118, 181, 142, 63, 189);
+        Assertions.assertThat(base64InputStream1100).isNextBytesEqualTo(0, 19, 13, -5, -3, 118, -75, -114, 63, -67);
         Assertions.assertThat(base64InputStream1100.skip(0)).isEqualTo(0);
-        Assertions.assertThat(base64InputStream1100).isAllBytesEqualTo(180);
+        Assertions.assertThat(base64InputStream1100).isAllBytesEqualTo(-76);
 
         Base64InputStream base64InputStream1101 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream1101).isNextBytesEqualTo(0, 19, 13, 251, 253, 118, 181, 142, 63, 189);
+        Assertions.assertThat(base64InputStream1101).isNextBytesEqualTo(0, 19, 13, -5, -3, 118, -75, -114, 63, -67);
         Assertions.assertThat(base64InputStream1101.skip(1)).isEqualTo(1);
         Assertions.assertThat(base64InputStream1101).isAllBytesEqualTo();
 
         Base64InputStream base64InputStream1102 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream1102).isNextBytesEqualTo(0, 19, 13, 251, 253, 118, 181, 142, 63, 189);
+        Assertions.assertThat(base64InputStream1102).isNextBytesEqualTo(0, 19, 13, -5, -3, 118, -75, -114, 63, -67);
         Assertions.assertThat(base64InputStream1102.skip(2)).isEqualTo(1);
         Assertions.assertThat(base64InputStream1102).isAllBytesEqualTo();
 
         Base64InputStream base64InputStream1200 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream1200).isNextBytesEqualTo(0, 19, 13, 251, 253, 118, 181, 142, 63, 189, 180);
+        Assertions.assertThat(base64InputStream1200).isNextBytesEqualTo(0, 19, 13, -5, -3, 118, -75, -114, 63, -67, -76);
         Assertions.assertThat(base64InputStream1200.skip(0)).isEqualTo(0);
         Assertions.assertThat(base64InputStream1200).isAllBytesEqualTo();
 
         Base64InputStream base64InputStream1201 = new Base64InputStream(new InputStreamImpl(base64String));
-        Assertions.assertThat(base64InputStream1201).isNextBytesEqualTo(0, 19, 13, 251, 253, 118, 181, 142, 63, 189, 180);
+        Assertions.assertThat(base64InputStream1201).isNextBytesEqualTo(0, 19, 13, -5, -3, 118, -75, -114, 63, -67, -76);
         Assertions.assertThat(base64InputStream1201.skip(1)).isEqualTo(0);
         Assertions.assertThat(base64InputStream1201).isAllBytesEqualTo();
     }
@@ -2000,17 +2000,17 @@ public final class Base64InputStreamTest {
         Assertions.assertThat(base64InputStream3).isCompleted();
 
         Base64InputStream base64InputStream4 = new Base64InputStream(new InputStreamImpl("12345678abc"));
-        Assertions.assertThat(base64InputStream4).isNextBytesEqualTo(215, 109, 248);
+        Assertions.assertThat(base64InputStream4).isNextBytesEqualTo(-41, 109, -8);
         Assertions.assertThat(base64InputStream4.skip(6)).isEqualTo(3);
         Assertions.assertThat(base64InputStream4).isCompleted();
 
         Base64InputStream base64InputStream5 = new Base64InputStream(new InputStreamImpl("12345678ab"));
-        Assertions.assertThat(base64InputStream5).isNextBytesEqualTo(215, 109, 248);
+        Assertions.assertThat(base64InputStream5).isNextBytesEqualTo(-41, 109, -8);
         Assertions.assertThat(base64InputStream5.skip(6)).isEqualTo(3);
         Assertions.assertThat(base64InputStream5).isCompleted();
 
         Base64InputStream base64InputStream6 = new Base64InputStream(new InputStreamImpl("12345678a"));
-        Assertions.assertThat(base64InputStream6).isNextBytesEqualTo(215, 109, 248);
+        Assertions.assertThat(base64InputStream6).isNextBytesEqualTo(-41, 109, -8);
         Assertions.assertThat(base64InputStream6.skip(6)).isEqualTo(3);
         Assertions.assertThat(base64InputStream6).isCompleted();
     }
@@ -2046,7 +2046,7 @@ public final class Base64InputStreamTest {
         }
         try {
             Base64InputStream base64InputStream = new Base64InputStream(new InputStreamImpl("12345678abc"));
-            Assertions.assertThat(base64InputStream).isNextBytesEqualTo(215, 109, 248);
+            Assertions.assertThat(base64InputStream).isNextBytesEqualTo(-41, 109, -8);
             base64InputStream.skip(5);
             Assertions.fail("Base64InputStream test fail");
         } catch (IOException ex) {
@@ -2054,7 +2054,7 @@ public final class Base64InputStreamTest {
         }
         try {
             Base64InputStream base64InputStream = new Base64InputStream(new InputStreamImpl("12345678ab"));
-            Assertions.assertThat(base64InputStream).isNextBytesEqualTo(215, 109, 248);
+            Assertions.assertThat(base64InputStream).isNextBytesEqualTo(-41, 109, -8);
             base64InputStream.skip(4);
             Assertions.fail("Base64InputStream test fail");
         } catch (IOException ex) {
@@ -2062,7 +2062,7 @@ public final class Base64InputStreamTest {
         }
         try {
             Base64InputStream base64InputStream = new Base64InputStream(new InputStreamImpl("12345678a"));
-            Assertions.assertThat(base64InputStream).isNextBytesEqualTo(215, 109, 248);
+            Assertions.assertThat(base64InputStream).isNextBytesEqualTo(-41, 109, -8);
             Assertions.assertThat(base64InputStream.skip(3)).isEqualTo(3);
             base64InputStream.read();
             Assertions.fail("Base64InputStream test fail");
@@ -2095,22 +2095,22 @@ public final class Base64InputStreamTest {
         Assertions.assertThat(base64InputStream4).isCompleted();
 
         Base64InputStream base64InputStream5 = new Base64InputStream(new InputStreamImpl("1234?+++1234"));
-        Assertions.assertThat(base64InputStream5).isNextBytesEqualTo(215, 109, 248);
+        Assertions.assertThat(base64InputStream5).isNextBytesEqualTo(-41, 109, -8);
         Assertions.assertThat(base64InputStream5.skip(6)).isEqualTo(6);
         Assertions.assertThat(base64InputStream5).isCompleted();
 
         Base64InputStream base64InputStream6 = new Base64InputStream(new InputStreamImpl("1234+?++1234"));
-        Assertions.assertThat(base64InputStream6).isNextBytesEqualTo(215, 109, 248);
+        Assertions.assertThat(base64InputStream6).isNextBytesEqualTo(-41, 109, -8);
         Assertions.assertThat(base64InputStream6.skip(6)).isEqualTo(6);
         Assertions.assertThat(base64InputStream6).isCompleted();
 
         Base64InputStream base64InputStream7 = new Base64InputStream(new InputStreamImpl("1234++?+1234"));
-        Assertions.assertThat(base64InputStream7).isNextBytesEqualTo(215, 109, 248);
+        Assertions.assertThat(base64InputStream7).isNextBytesEqualTo(-41, 109, -8);
         Assertions.assertThat(base64InputStream7.skip(6)).isEqualTo(6);
         Assertions.assertThat(base64InputStream7).isCompleted();
 
         Base64InputStream base64InputStream8 = new Base64InputStream(new InputStreamImpl("1234+++?1234"));
-        Assertions.assertThat(base64InputStream8).isNextBytesEqualTo(215, 109, 248);
+        Assertions.assertThat(base64InputStream8).isNextBytesEqualTo(-41, 109, -8);
         Assertions.assertThat(base64InputStream8.skip(6)).isEqualTo(6);
         Assertions.assertThat(base64InputStream8).isCompleted();
     }
@@ -2179,13 +2179,13 @@ public final class Base64InputStreamTest {
         Assertions.assertThat(base64InputStream2.available()).isEqualTo(12);
         Assertions.assertThat(base64InputStream2).isNextBytesEqualTo(0, 19);
         Assertions.assertThat(base64InputStream2.available()).isEqualTo(10);
-        Assertions.assertThat(base64InputStream2).isNextBytesEqualTo(13, 251, 253, 118);
+        Assertions.assertThat(base64InputStream2).isNextBytesEqualTo(13, -5, -3, 118);
         Assertions.assertThat(base64InputStream2.available()).isEqualTo(6);
-        Assertions.assertThat(base64InputStream2).isNextBytesEqualTo(181, 142, 63);
+        Assertions.assertThat(base64InputStream2).isNextBytesEqualTo(-75, -114, 63);
         Assertions.assertThat(base64InputStream2.available()).isEqualTo(3);
-        Assertions.assertThat(base64InputStream2).isNextBytesEqualTo(189);
+        Assertions.assertThat(base64InputStream2).isNextBytesEqualTo(-67);
         Assertions.assertThat(base64InputStream2.available()).isEqualTo(2);
-        Assertions.assertThat(base64InputStream2).isNextBytesEqualTo(180, 59);
+        Assertions.assertThat(base64InputStream2).isNextBytesEqualTo(-76, 59);
         Assertions.assertThat(base64InputStream2.available()).isEqualTo(0);
         Assertions.assertThat(base64InputStream2).isCompleted();
     }
@@ -2200,7 +2200,7 @@ public final class Base64InputStreamTest {
         try {
             Base64InputStream base64InputStream = new Base64InputStream(new InputStreamImpl("1234aaaa123"));
             Assertions.assertThat(base64InputStream.available()).isEqualTo(6);
-            Assertions.assertThat(base64InputStream).isNextBytesEqualTo(215, 109, 248, 105, 166, 154);
+            Assertions.assertThat(base64InputStream).isNextBytesEqualTo(-41, 109, -8, 105, -90, -102);
             base64InputStream.read();
             Assertions.fail("Base64InputStream test fail");
         } catch (IOException ex) {
@@ -2209,7 +2209,7 @@ public final class Base64InputStreamTest {
         try {
             Base64InputStream base64InputStream = new Base64InputStream(new InputStreamImpl("1234aaaa12"));
             Assertions.assertThat(base64InputStream.available()).isEqualTo(6);
-            Assertions.assertThat(base64InputStream).isNextBytesEqualTo(215, 109, 248, 105, 166, 154);
+            Assertions.assertThat(base64InputStream).isNextBytesEqualTo(-41, 109, -8, 105, -90, -102);
             base64InputStream.read();
             Assertions.fail("Base64InputStream test fail");
         } catch (IOException ex) {
@@ -2218,7 +2218,7 @@ public final class Base64InputStreamTest {
         try {
             Base64InputStream base64InputStream = new Base64InputStream(new InputStreamImpl("1234aaaa1"));
             Assertions.assertThat(base64InputStream.available()).isEqualTo(6);
-            Assertions.assertThat(base64InputStream).isNextBytesEqualTo(215, 109, 248, 105, 166, 154);
+            Assertions.assertThat(base64InputStream).isNextBytesEqualTo(-41, 109, -8, 105, -90, -102);
             base64InputStream.read();
             Assertions.fail("Base64InputStream test fail");
         } catch (IOException ex) {
@@ -2254,7 +2254,7 @@ public final class Base64InputStreamTest {
         Assertions.assertThat(base64InputStream).isNextBytesEqualTo(49, 63);
 
         base64InputStream.close();
-        Assertions.assertThat(base64InputStream).isAllBytesEqualTo(186, 167);
+        Assertions.assertThat(base64InputStream).isAllBytesEqualTo(-70, -89);
         Assertions.assertThat(inputStream).isCompleted();
     }
 
@@ -2273,10 +2273,10 @@ public final class Base64InputStreamTest {
         Assertions.assertThat(base64InputStream).isNextBytesEqualTo(63);
 
         base64InputStream.close();
-        Assertions.assertThat(base64InputStream).isNextBytesEqualTo(186);
+        Assertions.assertThat(base64InputStream).isNextBytesEqualTo(-70);
 
         base64InputStream.close();
-        Assertions.assertThat(base64InputStream).isNextBytesEqualTo(167);
+        Assertions.assertThat(base64InputStream).isNextBytesEqualTo(-89);
 
         base64InputStream.close();
         Assertions.assertThat(base64InputStream).isCompleted();
