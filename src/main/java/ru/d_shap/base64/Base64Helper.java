@@ -34,6 +34,7 @@ public final class Base64Helper {
      * Convert the byte array to the base64 string.
      *
      * @param bytes the byte array.
+     *
      * @return the base64 string.
      */
     public static String toBase64(final byte[] bytes) {
@@ -46,6 +47,7 @@ public final class Base64Helper {
      * @param bytes       the byte array.
      * @param bytesOffset the offset of the first element in the byte array.
      * @param bytesLength the number of elements in the byte array.
+     *
      * @return the base64 string.
      */
     public static String toBase64(final byte[] bytes, final int bytesOffset, final int bytesLength) {
@@ -149,6 +151,7 @@ public final class Base64Helper {
      *
      * @param base64 the base64 string.
      * @param bytes  the byte array to write the result.
+     *
      * @return the number of bytes affected in the byte array.
      */
     public static int toBytes(final String base64, final byte[] bytes) {
@@ -162,6 +165,7 @@ public final class Base64Helper {
      * @param base64Offset the offset of the first element in the base64 string.
      * @param base64Length the number of elements in the base64 string.
      * @param bytes        the byte array to write the result.
+     *
      * @return the number of bytes affected in the byte array.
      */
     public static int toBytes(final String base64, final int base64Offset, final int base64Length, final byte[] bytes) {
@@ -174,6 +178,7 @@ public final class Base64Helper {
      * @param base64      the base64 string.
      * @param bytes       the byte array to write the result.
      * @param bytesOffset the offset of the first element in the byte array.
+     *
      * @return the number of bytes affected in the byte array.
      */
     public static int toBytes(final String base64, final byte[] bytes, final int bytesOffset) {
@@ -188,6 +193,7 @@ public final class Base64Helper {
      * @param base64Length the number of elements in the base64 string.
      * @param bytes        the byte array to write the result.
      * @param bytesOffset  the offset of the first element in the byte array.
+     *
      * @return the number of bytes affected in the byte array.
      */
     public static int toBytes(final String base64, final int base64Offset, final int base64Length, final byte[] bytes, final int bytesOffset) {
@@ -227,6 +233,7 @@ public final class Base64Helper {
      * Convert the base64 string to the byte array.
      *
      * @param base64 the base64 string.
+     *
      * @return the byte array with the result.
      */
     public static byte[] toBytes(final String base64) {
@@ -239,6 +246,7 @@ public final class Base64Helper {
      * @param base64       the base64 string.
      * @param base64Offset the offset of the first element in the base64 string.
      * @param base64Length the number of elements in the base64 string.
+     *
      * @return the byte array with the result.
      */
     public static byte[] toBytes(final String base64, final int base64Offset, final int base64Length) {
@@ -371,6 +379,7 @@ public final class Base64Helper {
      * Define, whether the base64 string contains only the base64 characters or not.
      *
      * @param base64 the base64 string.
+     *
      * @return true, if the base64 string contains only the base64 characters.
      */
     public static boolean isBase64String(final String base64) {
@@ -383,6 +392,7 @@ public final class Base64Helper {
      * @param base64       the base64 string.
      * @param base64Offset the offset of the first element in the base64 string.
      * @param base64Length the number of elements in the base64 string.
+     *
      * @return true, if the base64 string contains only the base64 characters.
      */
     public static boolean isBase64String(final String base64, final int base64Offset, final int base64Length) {
