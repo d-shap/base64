@@ -44,6 +44,12 @@ try (FileInputStream inputStream = new FileInputStream("input file");
 Each 3 original bytes are represented with 4 base64 characters.
 The base64 representation of bytes increases the original size by 33 percent.
 
+Maven artifact
+==============
+* **groupId**: ru.d-shap
+* **artifactId**: base64
+* **version**: 1.1
+
 Donation
 ========
 If you find my code useful, you can [bye me a coffee](https://www.paypal.me/dshapovalov)
