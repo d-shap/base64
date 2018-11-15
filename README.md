@@ -1,5 +1,4 @@
-Base64 library
-==============
+# Base64 library
 Base64 library converts bytes to the base64 representation and vice versa.
 
 Base64 encoding is described in RFC 1421 and RFC 2045.
@@ -44,12 +43,10 @@ try (FileInputStream inputStream = new FileInputStream("input file");
 Each 3 original bytes are represented with 4 base64 characters.
 The base64 representation of bytes increases the original size by 33 percent.
 
-Latest release
-==============
+# Latest release
 * **&lt;groupId&gt;**: ru.d-shap
 * **&lt;artifactId&gt;**: base64
 * **&lt;version&gt;**: 1.1
 
-Donation
-========
+# Donation
 If you find my code useful, you can [bye me a coffee](https://www.paypal.me/dshapovalov)
