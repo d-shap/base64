@@ -46,10 +46,10 @@ public final class Base64OutputStreamTest {
     /**
      * {@link Base64OutputStream} class test.
      *
-     * @throws IOException IO exception.
+     * @throws Exception exception in test.
      */
     @Test
-    public void writeZeroByteEndingTest() throws IOException {
+    public void writeZeroByteEndingTest() throws Exception {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         Base64OutputStream base64OutputStream = new Base64OutputStream(baos);
         base64OutputStream.write(new byte[]{(byte) 240, 120, 15, 30, (byte) 193, (byte) 201});
@@ -61,10 +61,10 @@ public final class Base64OutputStreamTest {
     /**
      * {@link Base64OutputStream} class test.
      *
-     * @throws IOException IO exception.
+     * @throws Exception exception in test.
      */
     @Test
-    public void writeOneByteEndingTest() throws IOException {
+    public void writeOneByteEndingTest() throws Exception {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         Base64OutputStream base64OutputStream = new Base64OutputStream(baos);
         base64OutputStream.write(new byte[]{(byte) 240, 120, 15, 30});
@@ -76,10 +76,10 @@ public final class Base64OutputStreamTest {
     /**
      * {@link Base64OutputStream} class test.
      *
-     * @throws IOException IO exception.
+     * @throws Exception exception in test.
      */
     @Test
-    public void writeTwoByteEndingTest() throws IOException {
+    public void writeTwoByteEndingTest() throws Exception {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         Base64OutputStream base64OutputStream = new Base64OutputStream(baos);
         base64OutputStream.write(new byte[]{(byte) 240, 120, 15, 30, (byte) 193});
@@ -91,10 +91,10 @@ public final class Base64OutputStreamTest {
     /**
      * {@link Base64OutputStream} class test.
      *
-     * @throws IOException IO exception.
+     * @throws Exception exception in test.
      */
     @Test
-    public void emptyStreamTest() throws IOException {
+    public void emptyStreamTest() throws Exception {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         Base64OutputStream base64OutputStream = new Base64OutputStream(baos);
         base64OutputStream.write(new byte[0]);
@@ -106,10 +106,10 @@ public final class Base64OutputStreamTest {
     /**
      * {@link Base64OutputStream} class test.
      *
-     * @throws IOException IO exception.
+     * @throws Exception exception in test.
      */
     @Test
-    public void flushTest() throws IOException {
+    public void flushTest() throws Exception {
         FlushStream flushStream = new FlushStream();
         Base64OutputStream base64OutputStream = new Base64OutputStream(flushStream);
         base64OutputStream.write(123);
@@ -122,10 +122,10 @@ public final class Base64OutputStreamTest {
     /**
      * {@link Base64OutputStream} class test.
      *
-     * @throws IOException IO exception.
+     * @throws Exception exception in test.
      */
     @Test
-    public void writeToFlushedTest() throws IOException {
+    public void writeToFlushedTest() throws Exception {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         Base64OutputStream base64OutputStream = new Base64OutputStream(baos);
 
@@ -152,10 +152,10 @@ public final class Base64OutputStreamTest {
     /**
      * {@link Base64OutputStream} class test.
      *
-     * @throws IOException IO exception.
+     * @throws Exception exception in test.
      */
     @Test
-    public void closeTest() throws IOException {
+    public void closeTest() throws Exception {
         CloseStream closeStream = new CloseStream();
         Base64OutputStream base64OutputStream = new Base64OutputStream(closeStream);
         base64OutputStream.write(123);
@@ -168,10 +168,10 @@ public final class Base64OutputStreamTest {
     /**
      * {@link Base64OutputStream} class test.
      *
-     * @throws IOException IO exception.
+     * @throws Exception exception in test.
      */
     @Test
-    public void writeToClosedTest() throws IOException {
+    public void writeToClosedTest() throws Exception {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         Base64OutputStream base64OutputStream = new Base64OutputStream(baos);
 
@@ -195,10 +195,10 @@ public final class Base64OutputStreamTest {
     /**
      * {@link Base64OutputStream} class test.
      *
-     * @throws IOException IO exception.
+     * @throws Exception exception in test.
      */
     @Test
-    public void closeClosedTest() throws IOException {
+    public void closeClosedTest() throws Exception {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         Base64OutputStream base64OutputStream = new Base64OutputStream(baos);
         base64OutputStream.write(new byte[]{30, (byte) 193});

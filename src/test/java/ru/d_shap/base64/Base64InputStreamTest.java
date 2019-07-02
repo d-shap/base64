@@ -46,10 +46,10 @@ public final class Base64InputStreamTest {
     /**
      * {@link Base64InputStream} class test.
      *
-     * @throws IOException IO exception.
+     * @throws Exception exception in test.
      */
     @Test
-    public void readZeroByteEndingTest() throws IOException {
+    public void readZeroByteEndingTest() throws Exception {
         InputStreamImpl inputStream1 = new InputStreamImpl("S8RB");
         Base64InputStream base64InputStream1 = new Base64InputStream(inputStream1);
         Assertions.assertThat(base64InputStream1).isAllBytesEqualTo(75, -60, 65);
@@ -62,10 +62,10 @@ public final class Base64InputStreamTest {
     /**
      * {@link Base64InputStream} class test.
      *
-     * @throws IOException IO exception.
+     * @throws Exception exception in test.
      */
     @Test
-    public void readOneByteEndingTest() throws IOException {
+    public void readOneByteEndingTest() throws Exception {
         InputStreamImpl inputStream1 = new InputStreamImpl("pw==");
         Base64InputStream base64InputStream1 = new Base64InputStream(inputStream1);
         Assertions.assertThat(base64InputStream1).isAllBytesEqualTo(-89);
@@ -78,10 +78,10 @@ public final class Base64InputStreamTest {
     /**
      * {@link Base64InputStream} class test.
      *
-     * @throws IOException IO exception.
+     * @throws Exception exception in test.
      */
     @Test
-    public void readTwoByteEndingTest() throws IOException {
+    public void readTwoByteEndingTest() throws Exception {
         InputStreamImpl inputStream1 = new InputStreamImpl("jO4=");
         Base64InputStream base64InputStream1 = new Base64InputStream(inputStream1);
         Assertions.assertThat(base64InputStream1).isAllBytesEqualTo(-116, -18);
@@ -133,10 +133,10 @@ public final class Base64InputStreamTest {
     /**
      * {@link Base64InputStream} class test.
      *
-     * @throws IOException IO exception.
+     * @throws Exception exception in test.
      */
     @Test
-    public void charactersAfterPadTest() throws IOException {
+    public void charactersAfterPadTest() throws Exception {
         InputStreamImpl inputStream1 = new InputStreamImpl("abQ=abcd");
         Base64InputStream base64InputStream1 = new Base64InputStream(inputStream1);
         Assertions.assertThat(base64InputStream1).isAllBytesEqualTo(105, -76, 105, -73, 29);
@@ -509,10 +509,10 @@ public final class Base64InputStreamTest {
     /**
      * {@link Base64InputStream} class test.
      *
-     * @throws IOException IO exception.
+     * @throws Exception exception in test.
      */
     @Test
-    public void emptyStreamTest() throws IOException {
+    public void emptyStreamTest() throws Exception {
         InputStreamImpl inputStream = new InputStreamImpl("");
         Base64InputStream base64InputStream = new Base64InputStream(inputStream);
         Assertions.assertThat(base64InputStream).isCompleted();
@@ -522,10 +522,10 @@ public final class Base64InputStreamTest {
     /**
      * {@link Base64InputStream} class test.
      *
-     * @throws IOException IO exception.
+     * @throws Exception exception in test.
      */
     @Test
-    public void skipZeroByteEndingTest() throws IOException {
+    public void skipZeroByteEndingTest() throws Exception {
         String base64String = "ABMN+/12tY4/vbQ7";
 
         Base64InputStream base64InputStream = new Base64InputStream(new InputStreamImpl(base64String));
@@ -1057,10 +1057,10 @@ public final class Base64InputStreamTest {
     /**
      * {@link Base64InputStream} class test.
      *
-     * @throws IOException IO exception.
+     * @throws Exception exception in test.
      */
     @Test
-    public void skipOneByteEndingTest() throws IOException {
+    public void skipOneByteEndingTest() throws Exception {
         String base64String = "ABMN+/12tY4/vQ==";
 
         Base64InputStream base64InputStream = new Base64InputStream(new InputStreamImpl(base64String));
@@ -1459,10 +1459,10 @@ public final class Base64InputStreamTest {
     /**
      * {@link Base64InputStream} class test.
      *
-     * @throws IOException IO exception.
+     * @throws Exception exception in test.
      */
     @Test
-    public void skipTwoByteEndingTest() throws IOException {
+    public void skipTwoByteEndingTest() throws Exception {
         String base64String = "ABMN+/12tY4/vbQ=";
 
         Base64InputStream base64InputStream = new Base64InputStream(new InputStreamImpl(base64String));
@@ -1970,10 +1970,10 @@ public final class Base64InputStreamTest {
     /**
      * {@link Base64InputStream} class test.
      *
-     * @throws IOException IO exception.
+     * @throws Exception exception in test.
      */
     @Test
-    public void skipNegativeCountTest() throws IOException {
+    public void skipNegativeCountTest() throws Exception {
         Base64InputStream base64InputStream = new Base64InputStream(new InputStreamImpl("ABMN+/12tY4/vbQ7"));
         Assertions.assertThat(base64InputStream.skip(-1)).isEqualTo(-1);
         Assertions.assertThat(base64InputStream.skip(-2)).isEqualTo(-1);
@@ -1983,10 +1983,10 @@ public final class Base64InputStreamTest {
     /**
      * {@link Base64InputStream} class test.
      *
-     * @throws IOException IO exception.
+     * @throws Exception exception in test.
      */
     @Test
-    public void skipWrongCharacterCountBlockModTest() throws IOException {
+    public void skipWrongCharacterCountBlockModTest() throws Exception {
         Base64InputStream base64InputStream1 = new Base64InputStream(new InputStreamImpl("12345678abc"));
         Assertions.assertThat(base64InputStream1.skip(9)).isEqualTo(6);
         Assertions.assertThat(base64InputStream1).isCompleted();
@@ -2018,10 +2018,10 @@ public final class Base64InputStreamTest {
     /**
      * {@link Base64InputStream} class test.
      *
-     * @throws IOException IO exception.
+     * @throws Exception exception in test.
      */
     @Test
-    public void skipWrongCharacterCountNonBlockModTest() throws IOException {
+    public void skipWrongCharacterCountNonBlockModTest() throws Exception {
         try {
             Base64InputStream base64InputStream = new Base64InputStream(new InputStreamImpl("12345678abc"));
             base64InputStream.skip(8);
@@ -2074,10 +2074,10 @@ public final class Base64InputStreamTest {
     /**
      * {@link Base64InputStream} class test.
      *
-     * @throws IOException IO exception.
+     * @throws Exception exception in test.
      */
     @Test
-    public void skipWrongCharacterTest() throws IOException {
+    public void skipWrongCharacterTest() throws Exception {
         Base64InputStream base64InputStream1 = new Base64InputStream(new InputStreamImpl("1234?+++1234"));
         Assertions.assertThat(base64InputStream1.skip(9)).isEqualTo(9);
         Assertions.assertThat(base64InputStream1).isCompleted();
@@ -2118,10 +2118,10 @@ public final class Base64InputStreamTest {
     /**
      * {@link Base64InputStream} class test.
      *
-     * @throws IOException IO exception.
+     * @throws Exception exception in test.
      */
     @Test
-    public void skipWrongCharacterReadTest() throws IOException {
+    public void skipWrongCharacterReadTest() throws Exception {
         try {
             Base64InputStream base64InputStream = new Base64InputStream(new InputStreamImpl("1234?+++1234"));
             Assertions.assertThat(base64InputStream.skip(3)).isEqualTo(3);
@@ -2159,10 +2159,10 @@ public final class Base64InputStreamTest {
     /**
      * {@link Base64InputStream} class test.
      *
-     * @throws IOException IO exception.
+     * @throws Exception exception in test.
      */
     @Test
-    public void availableTest() throws IOException {
+    public void availableTest() throws Exception {
         String base64String1 = "ABMN";
         Base64InputStream base64InputStream1 = new Base64InputStream(new InputStreamImpl(base64String1));
         Assertions.assertThat(base64InputStream1.available()).isEqualTo(3);
@@ -2193,10 +2193,10 @@ public final class Base64InputStreamTest {
     /**
      * {@link Base64InputStream} class test.
      *
-     * @throws IOException IO exception.
+     * @throws Exception exception in test.
      */
     @Test
-    public void availableWrongCharacterCountTest() throws IOException {
+    public void availableWrongCharacterCountTest() throws Exception {
         try {
             Base64InputStream base64InputStream = new Base64InputStream(new InputStreamImpl("1234aaaa123"));
             Assertions.assertThat(base64InputStream.available()).isEqualTo(6);
@@ -2229,10 +2229,10 @@ public final class Base64InputStreamTest {
     /**
      * {@link Base64InputStream} class test.
      *
-     * @throws IOException IO exception.
+     * @throws Exception exception in test.
      */
     @Test
-    public void closeTest() throws IOException {
+    public void closeTest() throws Exception {
         CloseStream closeStream = new CloseStream();
         Base64InputStream base64InputStream = new Base64InputStream(closeStream);
         Assertions.assertThat(base64InputStream).isCompleted();
@@ -2245,10 +2245,10 @@ public final class Base64InputStreamTest {
     /**
      * {@link Base64InputStream} class test.
      *
-     * @throws IOException IO exception.
+     * @throws Exception exception in test.
      */
     @Test
-    public void readFromClosedTest() throws IOException {
+    public void readFromClosedTest() throws Exception {
         InputStreamImpl inputStream = new InputStreamImpl("MT+6pw==");
         Base64InputStream base64InputStream = new Base64InputStream(inputStream);
         Assertions.assertThat(base64InputStream).isNextBytesEqualTo(49, 63);
@@ -2261,10 +2261,10 @@ public final class Base64InputStreamTest {
     /**
      * {@link Base64InputStream} class test.
      *
-     * @throws IOException IO exception.
+     * @throws Exception exception in test.
      */
     @Test
-    public void closeClosedTest() throws IOException {
+    public void closeClosedTest() throws Exception {
         InputStreamImpl inputStream = new InputStreamImpl("MT+6pw==");
         Base64InputStream base64InputStream = new Base64InputStream(inputStream);
         Assertions.assertThat(base64InputStream).isNextBytesEqualTo(49);
