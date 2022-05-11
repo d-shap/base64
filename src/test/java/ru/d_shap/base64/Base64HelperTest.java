@@ -1154,14 +1154,50 @@ public final class Base64HelperTest {
         byte[] bytes13 = Base64Helper.toBytes("aAbB56Y+", 0, 8);
         Assertions.assertThat(bytes13).containsExactlyInOrder(104, 6, -63, -25, -90, 62);
 
-        byte[] bytes21 = Base64Helper.toBytes("aAbB56Y+", 4, 0);
+        byte[] bytes14 = Base64Helper.toBytes("aAbB56Y+", 4, 0);
+        Assertions.assertThat(bytes14).containsExactlyInOrder();
+
+        byte[] bytes15 = Base64Helper.toBytes("aAbB56Y+", 4, 4);
+        Assertions.assertThat(bytes15).containsExactlyInOrder(-25, -90, 62);
+
+        byte[] bytes16 = Base64Helper.toBytes("aAbB56Y+", 8, 0);
+        Assertions.assertThat(bytes16).containsExactlyInOrder();
+
+        byte[] bytes21 = Base64Helper.toBytes("++/2/9k=", 0, 0);
         Assertions.assertThat(bytes21).containsExactlyInOrder();
 
-        byte[] bytes22 = Base64Helper.toBytes("aAbB56Y+", 4, 4);
-        Assertions.assertThat(bytes22).containsExactlyInOrder(-25, -90, 62);
+        byte[] bytes22 = Base64Helper.toBytes("++/2/9k=", 0, 4);
+        Assertions.assertThat(bytes22).containsExactlyInOrder(-5, -17, -10);
 
-        byte[] bytes31 = Base64Helper.toBytes("aAbB56Y+", 8, 0);
-        Assertions.assertThat(bytes31).containsExactlyInOrder();
+        byte[] bytes23 = Base64Helper.toBytes("++/2/9k=", 0, 8);
+        Assertions.assertThat(bytes23).containsExactlyInOrder(-5, -17, -10, -1, -39);
+
+        byte[] bytes24 = Base64Helper.toBytes("++/2/9k=", 4, 0);
+        Assertions.assertThat(bytes24).containsExactlyInOrder();
+
+        byte[] bytes25 = Base64Helper.toBytes("++/2/9k=", 4, 4);
+        Assertions.assertThat(bytes25).containsExactlyInOrder(-1, -39);
+
+        byte[] bytes26 = Base64Helper.toBytes("++/2/9k=", 8, 0);
+        Assertions.assertThat(bytes26).containsExactlyInOrder();
+
+        byte[] bytes51 = Base64Helper.toBytes("3jrR+g==", 0, 0);
+        Assertions.assertThat(bytes51).containsExactlyInOrder();
+
+        byte[] bytes52 = Base64Helper.toBytes("3jrR+g==", 0, 4);
+        Assertions.assertThat(bytes52).containsExactlyInOrder(-34, 58, -47);
+
+        byte[] bytes53 = Base64Helper.toBytes("3jrR+g==", 0, 8);
+        Assertions.assertThat(bytes53).containsExactlyInOrder(-34, 58, -47, -6);
+
+        byte[] bytes54 = Base64Helper.toBytes("3jrR+g==", 4, 0);
+        Assertions.assertThat(bytes54).containsExactlyInOrder();
+
+        byte[] bytes55 = Base64Helper.toBytes("3jrR+g==", 4, 4);
+        Assertions.assertThat(bytes55).containsExactlyInOrder(-6);
+
+        byte[] bytes56 = Base64Helper.toBytes("3jrR+g==", 8, 0);
+        Assertions.assertThat(bytes56).containsExactlyInOrder();
     }
 
     /**
