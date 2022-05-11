@@ -162,6 +162,19 @@ public final class Base64HelperTest {
      * {@link Base64Helper} class test.
      */
     @Test
+    public void toBase64WithBoundsAndTooLargeOffsetAndLengthTest() {
+        try {
+            Base64Helper.toBase64(new byte[]{(byte) 170, (byte) 204, (byte) -31, (byte) 232, 19, 13}, 2, 6);
+            Assertions.fail("Base64Helper test fail");
+        } catch (Base64RuntimeException ex) {
+            Assertions.assertThat(ex).hasMessage("Wrong byte array index (8)");
+        }
+    }
+
+    /**
+     * {@link Base64Helper} class test.
+     */
+    @Test
     public void getBase64StringLengthTest() {
         Assertions.assertThat(Base64Helper.getBase64StringLength(0)).isEqualTo(0);
         Assertions.assertThat(Base64Helper.getBase64StringLength(1)).isEqualTo(4);
@@ -498,28 +511,59 @@ public final class Base64HelperTest {
     @Test
     public void toBytesSpecifiedWithBase64BoundsAndTooLargeLengthTest() {
         try {
-            Base64Helper.toBytes("aAbB56Y+", 4, 9, new byte[9]);
+            Base64Helper.toBytes("aAbB56Y+", 0, 9, new byte[9]);
             Assertions.fail("Base64Helper test fail");
         } catch (Base64RuntimeException ex) {
-            Assertions.assertThat(ex).hasMessage("Wrong base64 string index (13)");
+            Assertions.assertThat(ex).hasMessage("Wrong base64 string index (9)");
         }
         try {
-            Base64Helper.toBytes("aAbB56Y+", 4, 10, new byte[9]);
+            Base64Helper.toBytes("aAbB56Y+", 0, 10, new byte[9]);
             Assertions.fail("Base64Helper test fail");
         } catch (Base64RuntimeException ex) {
-            Assertions.assertThat(ex).hasMessage("Wrong base64 string index (14)");
+            Assertions.assertThat(ex).hasMessage("Wrong base64 string index (10)");
         }
         try {
-            Base64Helper.toBytes("aAbB56Y+", 4, 11, new byte[9]);
+            Base64Helper.toBytes("aAbB56Y+", 0, 11, new byte[9]);
             Assertions.fail("Base64Helper test fail");
         } catch (Base64RuntimeException ex) {
-            Assertions.assertThat(ex).hasMessage("Wrong base64 string index (15)");
+            Assertions.assertThat(ex).hasMessage("Wrong base64 string index (11)");
         }
         try {
-            Base64Helper.toBytes("aAbB56Y+", 4, 12, new byte[9]);
+            Base64Helper.toBytes("aAbB56Y+", 0, 12, new byte[9]);
             Assertions.fail("Base64Helper test fail");
         } catch (Base64RuntimeException ex) {
-            Assertions.assertThat(ex).hasMessage("Wrong base64 string index (16)");
+            Assertions.assertThat(ex).hasMessage("Wrong base64 string index (12)");
+        }
+    }
+
+    /**
+     * {@link Base64Helper} class test.
+     */
+    @Test
+    public void toBytesSpecifiedWithBase64BoundsAndTooLargeOffsetAndLengthTest() {
+        try {
+            Base64Helper.toBytes("aAbB56Y+", 4, 5, new byte[9]);
+            Assertions.fail("Base64Helper test fail");
+        } catch (Base64RuntimeException ex) {
+            Assertions.assertThat(ex).hasMessage("Wrong base64 string index (9)");
+        }
+        try {
+            Base64Helper.toBytes("aAbB56Y+", 4, 6, new byte[9]);
+            Assertions.fail("Base64Helper test fail");
+        } catch (Base64RuntimeException ex) {
+            Assertions.assertThat(ex).hasMessage("Wrong base64 string index (10)");
+        }
+        try {
+            Base64Helper.toBytes("aAbB56Y+", 4, 7, new byte[9]);
+            Assertions.fail("Base64Helper test fail");
+        } catch (Base64RuntimeException ex) {
+            Assertions.assertThat(ex).hasMessage("Wrong base64 string index (11)");
+        }
+        try {
+            Base64Helper.toBytes("aAbB56Y+", 4, 8, new byte[9]);
+            Assertions.fail("Base64Helper test fail");
+        } catch (Base64RuntimeException ex) {
+            Assertions.assertThat(ex).hasMessage("Wrong base64 string index (12)");
         }
     }
 
@@ -857,28 +901,59 @@ public final class Base64HelperTest {
     @Test
     public void toBytesSpecifiedWithBase64BoundsAndByteArrayOffsetAndTooLargeLengthTest() {
         try {
-            Base64Helper.toBytes("aAbB56Y+", 4, 9, new byte[9], 1);
+            Base64Helper.toBytes("aAbB56Y+", 0, 9, new byte[9], 1);
             Assertions.fail("Base64Helper test fail");
         } catch (Base64RuntimeException ex) {
-            Assertions.assertThat(ex).hasMessage("Wrong base64 string index (13)");
+            Assertions.assertThat(ex).hasMessage("Wrong base64 string index (9)");
         }
         try {
-            Base64Helper.toBytes("aAbB56Y+", 4, 10, new byte[9], 1);
+            Base64Helper.toBytes("aAbB56Y+", 0, 10, new byte[9], 1);
             Assertions.fail("Base64Helper test fail");
         } catch (Base64RuntimeException ex) {
-            Assertions.assertThat(ex).hasMessage("Wrong base64 string index (14)");
+            Assertions.assertThat(ex).hasMessage("Wrong base64 string index (10)");
         }
         try {
-            Base64Helper.toBytes("aAbB56Y+", 4, 11, new byte[9], 1);
+            Base64Helper.toBytes("aAbB56Y+", 0, 11, new byte[9], 1);
             Assertions.fail("Base64Helper test fail");
         } catch (Base64RuntimeException ex) {
-            Assertions.assertThat(ex).hasMessage("Wrong base64 string index (15)");
+            Assertions.assertThat(ex).hasMessage("Wrong base64 string index (11)");
         }
         try {
-            Base64Helper.toBytes("aAbB56Y+", 4, 12, new byte[9], 1);
+            Base64Helper.toBytes("aAbB56Y+", 0, 12, new byte[9], 1);
             Assertions.fail("Base64Helper test fail");
         } catch (Base64RuntimeException ex) {
-            Assertions.assertThat(ex).hasMessage("Wrong base64 string index (16)");
+            Assertions.assertThat(ex).hasMessage("Wrong base64 string index (12)");
+        }
+    }
+
+    /**
+     * {@link Base64Helper} class test.
+     */
+    @Test
+    public void toBytesSpecifiedWithBase64BoundsAndByteArrayOffsetAndTooLargeOffsetAndLengthTest() {
+        try {
+            Base64Helper.toBytes("aAbB56Y+", 4, 5, new byte[9], 1);
+            Assertions.fail("Base64Helper test fail");
+        } catch (Base64RuntimeException ex) {
+            Assertions.assertThat(ex).hasMessage("Wrong base64 string index (9)");
+        }
+        try {
+            Base64Helper.toBytes("aAbB56Y+", 4, 6, new byte[9], 1);
+            Assertions.fail("Base64Helper test fail");
+        } catch (Base64RuntimeException ex) {
+            Assertions.assertThat(ex).hasMessage("Wrong base64 string index (10)");
+        }
+        try {
+            Base64Helper.toBytes("aAbB56Y+", 4, 7, new byte[9], 1);
+            Assertions.fail("Base64Helper test fail");
+        } catch (Base64RuntimeException ex) {
+            Assertions.assertThat(ex).hasMessage("Wrong base64 string index (11)");
+        }
+        try {
+            Base64Helper.toBytes("aAbB56Y+", 4, 8, new byte[9], 1);
+            Assertions.fail("Base64Helper test fail");
+        } catch (Base64RuntimeException ex) {
+            Assertions.assertThat(ex).hasMessage("Wrong base64 string index (12)");
         }
     }
 
@@ -1172,28 +1247,59 @@ public final class Base64HelperTest {
     @Test
     public void toBytesCreatedWithBase64BoundsAndTooLargeLengthTest() {
         try {
-            Base64Helper.toBytes("aAbB56Y+", 4, 9);
+            Base64Helper.toBytes("aAbB56Y+", 0, 9);
             Assertions.fail("Base64Helper test fail");
         } catch (Base64RuntimeException ex) {
-            Assertions.assertThat(ex).hasMessage("Wrong base64 string index (13)");
+            Assertions.assertThat(ex).hasMessage("Wrong base64 string index (9)");
         }
         try {
-            Base64Helper.toBytes("aAbB56Y+", 4, 10);
+            Base64Helper.toBytes("aAbB56Y+", 0, 10);
             Assertions.fail("Base64Helper test fail");
         } catch (Base64RuntimeException ex) {
-            Assertions.assertThat(ex).hasMessage("Wrong base64 string index (14)");
+            Assertions.assertThat(ex).hasMessage("Wrong base64 string index (10)");
         }
         try {
-            Base64Helper.toBytes("aAbB56Y+", 4, 11);
+            Base64Helper.toBytes("aAbB56Y+", 0, 11);
             Assertions.fail("Base64Helper test fail");
         } catch (Base64RuntimeException ex) {
-            Assertions.assertThat(ex).hasMessage("Wrong base64 string index (15)");
+            Assertions.assertThat(ex).hasMessage("Wrong base64 string index (11)");
         }
         try {
-            Base64Helper.toBytes("aAbB56Y+", 4, 12);
+            Base64Helper.toBytes("aAbB56Y+", 0, 12);
             Assertions.fail("Base64Helper test fail");
         } catch (Base64RuntimeException ex) {
-            Assertions.assertThat(ex).hasMessage("Wrong base64 string index (16)");
+            Assertions.assertThat(ex).hasMessage("Wrong base64 string index (12)");
+        }
+    }
+
+    /**
+     * {@link Base64Helper} class test.
+     */
+    @Test
+    public void toBytesCreatedWithBase64BoundsAndTooLargeOffsetAndLengthTest() {
+        try {
+            Base64Helper.toBytes("aAbB56Y+", 4, 5);
+            Assertions.fail("Base64Helper test fail");
+        } catch (Base64RuntimeException ex) {
+            Assertions.assertThat(ex).hasMessage("Wrong base64 string index (9)");
+        }
+        try {
+            Base64Helper.toBytes("aAbB56Y+", 4, 6);
+            Assertions.fail("Base64Helper test fail");
+        } catch (Base64RuntimeException ex) {
+            Assertions.assertThat(ex).hasMessage("Wrong base64 string index (10)");
+        }
+        try {
+            Base64Helper.toBytes("aAbB56Y+", 4, 7);
+            Assertions.fail("Base64Helper test fail");
+        } catch (Base64RuntimeException ex) {
+            Assertions.assertThat(ex).hasMessage("Wrong base64 string index (11)");
+        }
+        try {
+            Base64Helper.toBytes("aAbB56Y+", 4, 8);
+            Assertions.fail("Base64Helper test fail");
+        } catch (Base64RuntimeException ex) {
+            Assertions.assertThat(ex).hasMessage("Wrong base64 string index (12)");
         }
     }
 
@@ -1771,6 +1877,37 @@ public final class Base64HelperTest {
         }
         try {
             Base64Helper.isBase64String("12kdId65", 0, 12);
+            Assertions.fail("Base64Helper test fail");
+        } catch (Base64RuntimeException ex) {
+            Assertions.assertThat(ex).hasMessage("Wrong base64 string index (12)");
+        }
+    }
+
+    /**
+     * {@link Base64Helper} class test.
+     */
+    @Test
+    public void isBase64StringWithBoundsAndTooLargeOffsetAndLengthTest() {
+        try {
+            Base64Helper.isBase64String("12kdId65", 4, 5);
+            Assertions.fail("Base64Helper test fail");
+        } catch (Base64RuntimeException ex) {
+            Assertions.assertThat(ex).hasMessage("Wrong base64 string index (9)");
+        }
+        try {
+            Base64Helper.isBase64String("12kdId65", 4, 6);
+            Assertions.fail("Base64Helper test fail");
+        } catch (Base64RuntimeException ex) {
+            Assertions.assertThat(ex).hasMessage("Wrong base64 string index (10)");
+        }
+        try {
+            Base64Helper.isBase64String("12kdId65", 4, 7);
+            Assertions.fail("Base64Helper test fail");
+        } catch (Base64RuntimeException ex) {
+            Assertions.assertThat(ex).hasMessage("Wrong base64 string index (11)");
+        }
+        try {
+            Base64Helper.isBase64String("12kdId65", 4, 8);
             Assertions.fail("Base64Helper test fail");
         } catch (Base64RuntimeException ex) {
             Assertions.assertThat(ex).hasMessage("Wrong base64 string index (12)");
